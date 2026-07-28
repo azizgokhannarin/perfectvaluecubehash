@@ -56,3 +56,15 @@ the distance decreases consistently as resources increase.
 Reachable reverse contexts can contain move-controller aliases. In the sampled
 0.7.0 campaign, 24 of 2,304 contexts contained one alias, with differences 42,
 126, or 196. Foldback must not be described as an injective transition system.
+
+## Version 0.8.0 status
+
+The digest-surface campaign directly searched both same-forward and
+forward-divergent message families. Observed minimum digest distances tracked
+the generic 256-bit Hamming references, and phase-state distance showed near-zero
+linear correlation with final digest distance in the tested domains. No exact
+full-digest collision was found.
+
+These results support treating closure and squeeze as a second measured
+diffusion barrier, but they do not establish collision or preimage resistance.
+The design remains unsuitable for production or security-critical use.

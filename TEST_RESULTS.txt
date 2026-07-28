@@ -1,9 +1,8 @@
-Perfect Value Cube Hash 0.7.0 verification
-==========================================
+PVC-RotHash-1 v0.8.0 verification summary
+Date: 2026-07-28
 
-Canonical algorithm status
---------------------------
-The PVC-RotHash-1 algorithm and known-answer vectors are unchanged from 0.2.0.
+Canonical algorithm changed: no
+Known-answer vectors changed: no
 
 H(""):
 7f01eb3ce13131ef290f8428ed725b849f875e49ad6c646cc9f4f1b1a1e5734b
@@ -11,74 +10,32 @@ H(""):
 H("abc"):
 f32b2241a950d7e7b2b006ff8ae2d0b08f02db23c0d8fde198dfdf9e9642051f
 
-Foldback-distance beam search
------------------------------
-Path levels                            = 16
-Beam width                             = 1,024
-Seed after-foldback distance           = 812 bits
-Global minimum                         = 224 bits / 60 bytes
-Global-minimum level                   = 11
-Digest distance at global minimum      = 119 bits
-Exact after-foldback merge             = no
-Monotonic convergence                  = no
+Digest-guided same-forward beam:
+  pairs evaluated: 42,325
+  generic cumulative minimum: 96 bits
+  observed minimum: 96 bits
+  exact collision: no
 
-Independent-suffix projection search
-------------------------------------
-Inherited pair                         = 176f00 / 179900
-Suffixes per side                      = 8,192
-Logical cross pairs                    = 67,108,864
-Projection candidates                  = 13,040,013
-Minimum state distance                 = 180 bits / 48 bytes
-Exact after-foldback merge             = no
+Forward-divergent digest beam:
+  pairs evaluated: 229,633
+  generic cumulative minimum: 93 bits
+  observed minimum: 94 bits
+  exact collision: no
 
-Local pair                             = af671b / af67df
-Suffixes per side                      = 8,192
-Logical cross pairs                    = 67,108,864
-Projection candidates                  = 13,586,377
-Minimum state distance                 = 578 bits / 140 bytes
-Exact after-foldback merge             = no
+Forward-divergent LSH, 8,192 suffixes per side:
+  logical pairs per domain: 67,108,864
+  generic reference: 84 bits
+  observed minima across four domains: 85, 83, 85, 83 bits
+  exact collisions: 0
+  selected forward-state collisions: 0
 
-Reachable return-alias surface
-------------------------------
-Messages                               = 256
-Message bytes                          = 8
-Reachable reverse contexts             = 2,304
-Contexts with an alias                 = 24 (1.041667%)
-Maximum aliases in one context         = 1
-Delta 42 / 126 / 196                   = 13 / 4 / 7
+Barrier correlation, 10,000 pairs per campaign:
+  digest means: 128.0378, 127.9466, 128.0139 bits
+  exact collisions: 0
+  phase-to-digest correlations: approximately -0.02 to +0.02
 
-Truncated collision campaign
-----------------------------
-24 bits, 8 trials:
-  found                                = 8/8
-  mean first collision                 = 5,400.375
-  birthday expectation                 = 5,133.575
-  mean / expected                      = 1.0520
-
-32 bits, 4 trials:
-  found                                = 4/4
-  mean first collision                 = 92,608.75
-  birthday expectation                 = 82,137.20
-  mean / expected                      = 1.1275
-
-40 and 48 bits:
-  one 100,000-message trial each
-  no collision
-  both runs are censored far below birthday expectation
-
-Unequal-length framing
-----------------------
-Tested lengths                         = 0..64
-After-forward symbol_index             = n
-After-foldback symbol_index            = 2n
-Final symbol_index                     = 2n + 330
-Formula mismatches                     = 0
-Classic identical-state expandable
-message across unequal lengths         = blocked by symbol_index
-
-Interpretation
---------------
-No exact foldback or digest collision was found. Guided searches demonstrate
-that state distance can be reduced, and reachable reverse aliases exist, but no
-monotonic path to zero was observed. These finite results do not prove
-collision, second-preimage, or preimage resistance.
+Build verification:
+  GCC Release + warnings-as-errors: passed
+  Clang Release + warnings-as-errors: passed
+  ASan/UBSan: passed, including new research smoke tools
+  CTest: passed during development

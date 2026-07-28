@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.20)
 
 project(
     PerfectValueCubeHash
-    VERSION 0.7.0
-    DESCRIPTION "Perfect Value Cube hash and structural security campaign"
+    VERSION 0.8.0
+    DESCRIPTION "Perfect Value Cube hash and digest-surface cryptanalysis campaign"
     LANGUAGES CXX
 )
 
@@ -102,6 +102,11 @@ if(PVC_BUILD_TOOLS)
     pvc_add_executable(pvc-return-alias-surface tools/return_alias_surface.cpp)
     pvc_add_executable(pvc-truncated-campaign tools/truncated_campaign.cpp)
     pvc_add_executable(pvc-length-framing-probe tools/length_framing_probe.cpp)
+    pvc_add_executable(pvc-digest-beam-search tools/digest_beam_search.cpp)
+    target_link_libraries(pvc-digest-beam-search PRIVATE Threads::Threads)
+    pvc_add_executable(pvc-divergent-digest-beam tools/divergent_digest_beam.cpp)
+    pvc_add_executable(pvc-digest-lsh-search tools/digest_lsh_search.cpp)
+    pvc_add_executable(pvc-barrier-correlation tools/barrier_correlation.cpp)
 endif()
 
 if(PVC_BUILD_TESTS)

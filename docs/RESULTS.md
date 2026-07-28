@@ -274,3 +274,21 @@ unequal-length digest collision resistance.
 
 Detailed methods, commands, and limitations are in
 `STRUCTURAL_SECURITY_CAMPAIGN.md`.
+
+
+## v0.8.0 digest-surface campaign
+
+The direct same-forward digest beam evaluated 42,325 candidate pairs and found a
+96-bit minimum, equal to the generic 256-bit reference for that candidate count.
+The forward-divergent beam evaluated 229,633 pairs and found 94 bits against a
+93-bit generic reference.
+
+Four digest-LSH domains each represented 67,108,864 logical cross pairs. Their
+best distances were 85, 83, 85, and 83 bits, compared with a generic reference
+of 84 bits. No exact digest collision was found and selected pairs remained
+forward-divergent.
+
+In 10,000-pair phase-correlation campaigns, final digest distance remained
+centered near 128 bits. Pearson correlation between internal-state distance and
+digest distance remained between approximately -0.02 and +0.02 at every tested
+phase. See `DIGEST_SURFACE_RESULTS.md` for full commands and tables.

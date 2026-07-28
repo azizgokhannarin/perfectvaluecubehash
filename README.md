@@ -1,8 +1,11 @@
 # Perfect Value Cube Hash
 
 `PVC-RotHash-1` is a **falsification-oriented cryptographic research prototype**.
-Version 0.7.0 adds a coordinated structural-security campaign without changing
-the canonical hash algorithm or its known-answer vectors. It is not a production hash and makes no security claim.
+Version 0.8.0 adds a digest-surface cryptanalysis campaign without changing
+the canonical hash algorithm or its known-answer vectors. The new tools target
+both same-forward multicollision families and deliberately different forward
+states, and measure whether internal-state closeness predicts final digest
+closeness. It is not a production hash and makes no security claim.
 
 The project studies whether the canonical Perfect Value Cube, a state-dependent
 chain of intersecting line rotations, and an original four-diagonal squeeze can
@@ -102,6 +105,8 @@ snapshots, phase checkpoints, and six reduced-round presets. The normal
 
 See [`docs/CRYPTANALYSIS_FRAMEWORK.md`](docs/CRYPTANALYSIS_FRAMEWORK.md).
 
+Version 0.8.0 results are in [`docs/DIGEST_SURFACE_RESULTS.md`](docs/DIGEST_SURFACE_RESULTS.md).
+
 ## Analysis tools
 
 ```bash
@@ -135,6 +140,10 @@ See [`docs/CRYPTANALYSIS_FRAMEWORK.md`](docs/CRYPTANALYSIS_FRAMEWORK.md).
 ./build/pvc-return-alias-surface --messages 256 --message-bytes 8
 ./build/pvc-truncated-campaign --bits 24,32 --trials 8 --limit 150000
 ./build/pvc-length-framing-probe --max-length 64
+./build/pvc-digest-beam-search --levels 16 --beam 1024 --threads 8
+./build/pvc-divergent-digest-beam --left 000000 --right 000001 --depth 8 --beam 128 --branch 16
+./build/pvc-digest-lsh-search --left 000000 --right 000001 --suffix-bytes 2 --suffix-limit 8192 --projections 32 --projection-bytes 1
+./build/pvc-barrier-correlation --left 000000 --right 000001 --samples 10000 --suffix-bytes 2 --independent-suffix
 ```
 
 These tools are intended to disprove the design. Passing them is not evidence

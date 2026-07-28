@@ -369,6 +369,31 @@ void test_return_symbol_preserves_xor_difference() {
     }
 }
 
+
+void test_digest_surface_regressions() {
+    const auto parameters = pvc::canonical_hash_parameters();
+    const std::array<std::uint8_t, 3> same_forward_left{{0x00U, 0x32U, 0x82U}};
+    const std::array<std::uint8_t, 3> same_forward_right{{0x00U, 0x32U, 0xacU}};
+    check(pvc::forward_state_for_research(same_forward_left, parameters)
+              == pvc::forward_state_for_research(same_forward_right, parameters),
+          "digest-surface regression uses a known forward collision");
+    const auto same_left_digest = pvc::RotHash1::hash(same_forward_left);
+    const auto same_right_digest = pvc::RotHash1::hash(same_forward_right);
+    check(pvc::digest_hamming_distance(same_left_digest, same_right_digest) == 124U,
+          "known forward collision remains 124 digest bits apart");
+
+    const std::array<std::uint8_t, 3> divergent_left{{0x00U, 0x00U, 0x00U}};
+    const std::array<std::uint8_t, 3> divergent_right{{0x00U, 0x00U, 0x01U}};
+    check(pvc::forward_state_for_research(divergent_left, parameters)
+              != pvc::forward_state_for_research(divergent_right, parameters),
+          "digest-surface regression uses different forward states");
+    const auto divergent_left_digest = pvc::RotHash1::hash(divergent_left);
+    const auto divergent_right_digest = pvc::RotHash1::hash(divergent_right);
+    check(pvc::digest_hamming_distance(
+              divergent_left_digest, divergent_right_digest) == 126U,
+          "known divergent seed remains 126 digest bits apart");
+}
+
 void print_known_answers() {
     std::cout << "KAT empty: " << pvc::to_hex(pvc::RotHash1::hash("")) << '\n';
     std::cout << "KAT abc  : " << pvc::to_hex(pvc::RotHash1::hash("abc")) << '\n';
@@ -391,6 +416,7 @@ int main() {
         test_eight_way_bridged_forward_multicollision_regression();
         test_length_framing_symbol_indices();
         test_return_symbol_preserves_xor_difference();
+        test_digest_surface_regressions();
         print_known_answers();
 
         if (failures != 0) {

@@ -284,3 +284,22 @@ aligned such an alias into an after-foldback collision.
 
 The attacks improve near-state distances but do not show a stable trajectory to
 zero. The design remains unbroken in these finite domains, not proven secure.
+
+
+## 2026-07-28 — Direct digest-surface searches
+
+**Target:** the v0.7.0 blind spot: collisions between messages that do not share
+a forward state, and the possibility that internal-state closeness provides a
+gradient toward digest closeness.
+
+**Methods:** digest-guided bridged beam, forward-divergent beam, multi-domain
+digest LSH, and phase/digest correlation measurement.
+
+**Result:** no exact digest collision. Observed best Hamming distances matched
+generic multiple-comparison references: 96/96 bits in the same-forward beam,
+94/93 bits in the divergent beam, and 83–85/84 bits across four LSH domains.
+Phase-to-digest correlations stayed close to zero.
+
+**Interpretation:** no measured sub-generic digest attack or useful linear
+state-to-digest gradient in these domains. This is bounded negative evidence,
+not a security proof.

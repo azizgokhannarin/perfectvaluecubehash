@@ -100,3 +100,22 @@ After structural cryptanalysis, choose among:
 - introduce a new original state operation;
 - retain it only as a negative research result;
 - proceed toward a formal specification and independent review.
+
+
+## Completed in v0.8.0
+
+- Direct final-digest beam search over bridged forward multicollisions.
+- Final-digest beam search constrained to different forward states.
+- Multi-domain forward-divergent digest LSH.
+- Phase-distance versus digest-distance correlation measurement.
+- Generic binomial minimum-distance calibration for every search domain.
+
+## Next campaign
+
+- Repeat digest-surface searches over many independently generated bridged paths.
+- Build reduced-round SAT/SMT or finite-domain models for exact digest and state
+  constraints without importing a cryptographic primitive into the candidate.
+- Search nonlinear and higher-order correlations not visible to Pearson analysis.
+- Test differential trails chosen to control emitted diagonal bytes rather than
+  merely internal-state distance.
+- Expand 40/48-bit truncated campaigns to their expected birthday ranges.

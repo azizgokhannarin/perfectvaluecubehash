@@ -1,5 +1,31 @@
 # Changelog
 
+## 0.8.0 — Digest-surface cryptanalysis
+
+- Kept the canonical PVC-RotHash-1 algorithm and known-answer vectors unchanged.
+- Added `pvc-digest-beam-search`, which optimizes final digest distance inside a
+  bridged same-forward multicollision family.
+- Added `pvc-divergent-digest-beam`, which rejects forward-state convergence and
+  directly searches final-digest distance across independently extended messages.
+- Added `pvc-digest-lsh-search` for projection-LSH analysis across large,
+  forward-divergent suffix families.
+- Added `pvc-barrier-correlation` to measure whether forward, foldback, closure,
+  orbit, or final-state Hamming distances predict final digest distance.
+- Added generic 256-bit binomial minimum-distance references to distinguish a
+  real structural advantage from ordinary multiple-comparison effects.
+- Added regression tests for a known same-forward digest pair and a known
+  forward-divergent digest pair.
+- In a 42,325-pair same-forward beam campaign, observed a 96-bit minimum against
+  a generic 96-bit reference; no exact digest collision.
+- In a 229,633-pair forward-divergent beam campaign, observed a 94-bit minimum
+  against a generic 93-bit reference; no exact digest collision.
+- Across four 67,108,864-pair logical LSH domains, observed minima of 83–85 bits
+  against a generic 84-bit reference; no exact collision and no forward-state
+  convergence in the selected pairs.
+- Across three 10,000-pair barrier campaigns, measured phase-to-digest Pearson
+  correlations between approximately -0.02 and +0.02.
+- Documented results and limitations in `docs/DIGEST_SURFACE_RESULTS.md`.
+
 ## 0.7.0 — Structural security campaign
 
 - kept the canonical hash algorithm and known-answer vectors unchanged;
