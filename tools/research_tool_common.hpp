@@ -217,6 +217,41 @@ inline std::size_t cube_byte_distance(const Cube& left, const Cube& right) {
     return differing_bytes(left.storage(), right.storage());
 }
 
+inline std::size_t operational_state_bit_distance(
+    const InternalStateSnapshot& left,
+    const InternalStateSnapshot& right) {
+    std::size_t distance = cube_bit_distance(left.cube, right.cube);
+    distance += static_cast<std::size_t>(
+        std::popcount(static_cast<unsigned>(left.cursor.x ^ right.cursor.x)));
+    distance += static_cast<std::size_t>(
+        std::popcount(static_cast<unsigned>(left.cursor.y ^ right.cursor.y)));
+    distance += static_cast<std::size_t>(
+        std::popcount(static_cast<unsigned>(left.cursor.z ^ right.cursor.z)));
+    distance += static_cast<std::size_t>(
+        std::popcount(static_cast<unsigned>(
+            static_cast<std::uint8_t>(left.previous_axis)
+            ^ static_cast<std::uint8_t>(right.previous_axis))));
+    distance += static_cast<std::size_t>(
+        std::popcount(left.symbol_index ^ right.symbol_index));
+    return distance;
+}
+
+inline std::size_t operational_state_byte_distance(
+    const InternalStateSnapshot& left,
+    const InternalStateSnapshot& right) {
+    std::size_t distance = cube_byte_distance(left.cube, right.cube);
+    distance += left.cursor.x != right.cursor.x ? 1U : 0U;
+    distance += left.cursor.y != right.cursor.y ? 1U : 0U;
+    distance += left.cursor.z != right.cursor.z ? 1U : 0U;
+    distance += left.previous_axis != right.previous_axis ? 1U : 0U;
+    for (std::size_t i = 0U; i < 8U; ++i) {
+        const auto a = static_cast<std::uint8_t>(left.symbol_index >> (i * 8U));
+        const auto b = static_cast<std::uint8_t>(right.symbol_index >> (i * 8U));
+        distance += a != b ? 1U : 0U;
+    }
+    return distance;
+}
+
 inline const NamedHashParameters& find_preset(std::string_view name) {
     static const auto presets = reduced_round_presets();
     for (const auto& preset : presets) {

@@ -76,3 +76,11 @@ collision must be verified against the complete operational snapshot.
 Accepted. Any reported message collision must state the deepest equal phase.
 Forward convergence that is separated by foldback is recorded as a structural
 finding, not presented as a digest collision.
+
+## Decision — do not revise the canonical controller in v0.7.0
+
+The 42/126/196 alias family is now observed in both forward and reachable
+reverse contexts. The project nevertheless keeps the canonical algorithm fixed
+for this campaign so that cryptanalysis remains comparable across releases.
+Controller redesign is deferred until guided searches are repeated across
+multiple paths and independently reviewed.

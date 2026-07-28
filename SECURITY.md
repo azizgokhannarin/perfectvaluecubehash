@@ -43,3 +43,16 @@ multicollision, not a full hash collision: all 65,536 tested paths are distinct
 after foldback and produce distinct digests. The search also found a 32-level
 path representing a theoretical 2^32-message forward family, which was not
 fully materialized. Reports must state the phase at which equality occurs.
+
+
+## Foldback-distance warning
+
+Version 0.7.0 did not find an exact after-foldback collision, but guided searches
+reduced selected state distances to 224 bits in a bridged family and 180 bits in
+a bounded independent-suffix domain. These are near-state measurements, not
+collisions. Reports must include the search domain, scoring method, and whether
+the distance decreases consistently as resources increase.
+
+Reachable reverse contexts can contain move-controller aliases. In the sampled
+0.7.0 campaign, 24 of 2,304 contexts contained one alias, with differences 42,
+126, or 196. Foldback must not be described as an injective transition system.

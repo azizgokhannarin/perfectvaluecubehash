@@ -141,3 +141,35 @@ the most favorable collision.
 
 Repeat for every documented forward-state pair. Record both exact collisions
 and the minimum after-foldback cube distance.
+
+## v0.7.0 structural-security campaign
+
+```bash
+./build/pvc-foldback-beam-search \
+  --levels 16 --beam 1024 --threads 4 --print-limit 3
+
+./build/pvc-foldback-lsh-search \
+  --left 176f00 --right 179900 \
+  --suffix-bytes 2 --suffix-limit 8192 \
+  --projections 16 --projection-bytes 4
+
+./build/pvc-foldback-lsh-search \
+  --left af671b --right af67df \
+  --suffix-bytes 2 --suffix-limit 8192 \
+  --projections 16 --projection-bytes 4
+
+./build/pvc-return-alias-surface \
+  --messages 256 --message-bytes 8 --print-limit 8
+
+./build/pvc-truncated-campaign \
+  --bits 24 --trials 8 --limit 30000 --message-bytes 16
+
+./build/pvc-truncated-campaign \
+  --bits 32 --trials 4 --limit 150000 --message-bytes 16
+
+./build/pvc-length-framing-probe --max-length 64
+```
+
+The LSH search is bounded by `--suffix-limit`; its logical cross-space count is
+reported separately from the number of candidates selected by projections.
+Censored truncated-collision runs must be identified as such.

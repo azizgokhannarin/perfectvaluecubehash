@@ -67,20 +67,29 @@
 - constructed a 32-level forward multicollision path;
 - materialized and checked a 65,536-message forward multicollision family.
 
-## Next — Bidirectional foldback constraint search
+## Completed — Structural security campaign
 
-- independently vary suffixes for the 728 local three-byte alias pairs, not only
-  the three original two-byte prefixes;
-- use the observed low-distance return states as targets for differential and
-  meet-in-the-middle optimization;
-- search two-position chosen differences that cancel during reverse traversal;
-- construct boomerang-style relations spanning forward and return passes;
-- optimize bridged multicollision paths for return-symbol compatibility rather
-  than forward depth alone;
-- investigate expandable-message constructions and unequal-length framing;
+- optimized bridged multicollision branches for after-foldback distance;
+- added projection-LSH search over independent suffix choices;
+- mapped controller aliases in reachable reverse contexts;
+- calibrated 24- and 32-bit collision timing and recorded censored 40/48-bit runs;
+- formalized unequal-length symbol-index framing;
+- retained exact-state verification for every collision candidate.
+
+## Next — Independent cryptanalysis and controller decision
+
+- repeat distance-guided searches across many independently generated bridged
+  paths rather than one deterministic path;
+- classify inherited and local aliases by their minimum achievable foldback
+  distance;
+- search paired reverse aliases that cancel across two or more reverse positions;
+- implement an independent constraint/SAT model for reduced presets without
+  sharing the C++ move-controller implementation;
 - search cycles and fixed points in reduced operational state graphs;
-- calibrate 24-, 32-, 40-, and 48-bit collision distributions over many trials;
-- obtain independent source-level review of the move controller.
+- expand 32-bit campaigns and raise 40-bit coverage toward its birthday scale;
+- obtain independent source-level and mathematical review of the move controller;
+- decide whether to freeze the specification or redesign amount/axis derivation
+  to remove the 42/126/196 alias family.
 
 ## Decision gate
 

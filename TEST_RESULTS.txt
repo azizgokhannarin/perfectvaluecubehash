@@ -1,4 +1,4 @@
-Perfect Value Cube Hash 0.6.0 verification
+Perfect Value Cube Hash 0.7.0 verification
 ==========================================
 
 Canonical algorithm status
@@ -11,47 +11,74 @@ H(""):
 H("abc"):
 f32b2241a950d7e7b2b006ff8ae2d0b08f02db23c0d8fde198dfdf9e9642051f
 
-Complete known-catalogue foldback profile
------------------------------------------
-Forward collision pairs                  = 1,496
-Return XOR differences preserved         = 1,496
-Diverged at expected reverse step        = 1,496
-Direct return-transition aliases         = 0
-Later reconvergences                     = 0
-Exact after-foldback merges              = 0
+Foldback-distance beam search
+-----------------------------
+Path levels                            = 16
+Beam width                             = 1,024
+Seed after-foldback distance           = 812 bits
+Global minimum                         = 224 bits / 60 bytes
+Global-minimum level                   = 11
+Digest distance at global minimum      = 119 bits
+Exact after-foldback merge             = no
+Monotonic convergence                  = no
 
-Separation gate distances:
-  cube bits min / mean / max             = 172 / 315.0187 / 390
-  cube cells min / mean / max            = 49 / 73.1130 / 78
+Independent-suffix projection search
+------------------------------------
+Inherited pair                         = 176f00 / 179900
+Suffixes per side                      = 8,192
+Logical cross pairs                    = 67,108,864
+Projection candidates                  = 13,040,013
+Minimum state distance                 = 180 bits / 48 bytes
+Exact after-foldback merge             = no
 
-Complete foldback distances:
-  cube bits min / mean / max             = 310 / 718.5909 / 1,034
-  cube cells min / mean / max            = 67 / 166.9579 / 225
+Local pair                             = af671b / af67df
+Suffixes per side                      = 8,192
+Logical cross pairs                    = 67,108,864
+Projection candidates                  = 13,586,377
+Minimum state distance                 = 578 bits / 140 bytes
+Exact after-foldback merge             = no
 
-Independent one-byte suffix catalogue
--------------------------------------
-Forward collision pairs                  = 1,496
-Logical independent suffix cross pairs   = 98,041,856
-Fingerprint candidate pairs              = 0
-Exact after-foldback merges              = 0
-
-Bridged forward multicollision
+Reachable return-alias surface
 ------------------------------
-Constructed path levels                  = 32
-Theoretical forward family               = 2^32 messages
-Materialized levels                      = 16
-Materialized messages                    = 65,536
-Message length                           = 33 bytes
-Forward-state mismatches                 = 0
-Unique after-foldback states             = 65,536
-After-foldback collisions                = 0
-Unique full digests                      = 65,536
-Full digest collisions                   = 0
+Messages                               = 256
+Message bytes                          = 8
+Reachable reverse contexts             = 2,304
+Contexts with an alias                 = 24 (1.041667%)
+Maximum aliases in one context         = 1
+Delta 42 / 126 / 196                   = 13 / 4 / 7
+
+Truncated collision campaign
+----------------------------
+24 bits, 8 trials:
+  found                                = 8/8
+  mean first collision                 = 5,400.375
+  birthday expectation                 = 5,133.575
+  mean / expected                      = 1.0520
+
+32 bits, 4 trials:
+  found                                = 4/4
+  mean first collision                 = 92,608.75
+  birthday expectation                 = 82,137.20
+  mean / expected                      = 1.1275
+
+40 and 48 bits:
+  one 100,000-message trial each
+  no collision
+  both runs are censored far below birthday expectation
+
+Unequal-length framing
+----------------------
+Tested lengths                         = 0..64
+After-forward symbol_index             = n
+After-foldback symbol_index            = 2n
+Final symbol_index                     = 2n + 330
+Formula mismatches                     = 0
+Classic identical-state expandable
+message across unequal lengths         = blocked by symbol_index
 
 Interpretation
 --------------
-The forward pass supports scalable bridged multicollisions and cannot provide
-collision resistance. In all tested families, foldback separates the complete
-message histories exactly when their differing bytes are processed in reverse.
-This is finite structural evidence, not a proof of collision or preimage
-resistance.
+No exact foldback or digest collision was found. Guided searches demonstrate
+that state distance can be reduced, and reachable reverse aliases exist, but no
+monotonic path to zero was observed. These finite results do not prove
+collision, second-preimage, or preimage resistance.

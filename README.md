@@ -1,9 +1,8 @@
 # Perfect Value Cube Hash
 
 `PVC-RotHash-1` is a **falsification-oriented cryptographic research prototype**.
-Version 0.6.0 adds foldback-separation profiling and bridged forward-
-multicollision analysis without changing the canonical hash algorithm or its
-known-answer vectors. It is not a production hash and makes no security claim.
+Version 0.7.0 adds a coordinated structural-security campaign without changing
+the canonical hash algorithm or its known-answer vectors. It is not a production hash and makes no security claim.
 
 The project studies whether the canonical Perfect Value Cube, a state-dependent
 chain of intersecting line rotations, and an original four-diagonal squeeze can
@@ -131,6 +130,11 @@ See [`docs/CRYPTANALYSIS_FRAMEWORK.md`](docs/CRYPTANALYSIS_FRAMEWORK.md).
 ./build/pvc-foldback-separation-profile --threads 8
 ./build/pvc-independent-suffix-catalog --threads 8
 ./build/pvc-bridged-multicollision --levels 32 --materialize-levels 16 --threads 8
+./build/pvc-foldback-beam-search --levels 16 --beam 1024 --threads 8
+./build/pvc-foldback-lsh-search --left 176f00 --right 179900 --suffix-bytes 2 --suffix-limit 8192 --projections 16 --projection-bytes 4
+./build/pvc-return-alias-surface --messages 256 --message-bytes 8
+./build/pvc-truncated-campaign --bits 24,32 --trials 8 --limit 150000
+./build/pvc-length-framing-probe --max-length 64
 ```
 
 These tools are intended to disprove the design. Passing them is not evidence
@@ -221,6 +225,24 @@ more explicit:
 See [`docs/FOLDBACK_SEPARATION_RESULTS.md`](docs/FOLDBACK_SEPARATION_RESULTS.md)
 and [`docs/BRIDGED_MULTICOLLISION_RESULTS.md`](docs/BRIDGED_MULTICOLLISION_RESULTS.md).
 
+
+Version 0.7.0 targeted foldback directly with distance-guided and
+bidirectional-style searches:
+
+- beam search inside a bridged forward-multicollision family reached a minimum
+  after-foldback distance of 224 bits, with no exact merge and no monotonic
+  convergence toward zero;
+- a bounded independent two-byte suffix search covered 67,108,864 logical
+  pairs for `176f00`/`179900` and reached 180 bits, with no exact merge;
+- 24 aliases were found in 2,304 sampled reachable reverse contexts (1.0417%);
+  all differences were 42, 126, or 196;
+- 24- and 32-bit first-collision samples remained broadly compatible with the
+  generic birthday scale;
+- symbol-index framing prevents identical complete operational states at equal
+  phases for unequal message lengths.
+
+See [`docs/STRUCTURAL_SECURITY_CAMPAIGN.md`](docs/STRUCTURAL_SECURITY_CAMPAIGN.md).
+
 ## Security status
 
 **Do not use this project for passwords, authentication, signatures, file
@@ -235,6 +257,7 @@ See:
 - [`docs/ATTACK_LOG.md`](docs/ATTACK_LOG.md)
 - [`docs/DECISIONS.md`](docs/DECISIONS.md)
 - [`docs/CRYPTANALYSIS_FRAMEWORK.md`](docs/CRYPTANALYSIS_FRAMEWORK.md)
+- [`docs/STRUCTURAL_SECURITY_CAMPAIGN.md`](docs/STRUCTURAL_SECURITY_CAMPAIGN.md)
 - [`docs/REDUCED_ROUND_RESULTS.md`](docs/REDUCED_ROUND_RESULTS.md)
 - [`docs/THREE_BYTE_RESULTS.md`](docs/THREE_BYTE_RESULTS.md)
 - [`docs/FOLDBACK_AWARE_RESULTS.md`](docs/FOLDBACK_AWARE_RESULTS.md)

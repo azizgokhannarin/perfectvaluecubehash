@@ -330,6 +330,27 @@ void test_eight_way_bridged_forward_multicollision_regression() {
     }
 }
 
+void test_length_framing_symbol_indices() {
+    const auto parameters = pvc::canonical_hash_parameters();
+    for (std::size_t length = 0U; length <= 16U; ++length) {
+        std::vector<std::uint8_t> message(length, 0x5aU);
+        const auto forward = pvc::forward_state_for_research(message, parameters);
+        const auto foldback = pvc::foldback_state_for_research(message, parameters);
+        const auto final = pvc::inspect_with_parameters(
+            message, parameters, false, false).final_state;
+        const std::uint64_t fixed = 10U
+            + pvc::kClosureSymbols
+            + pvc::kOrbitSymbols
+            + pvc::kDigestBytes * pvc::kSqueezeSymbolsPerByte;
+        check(forward.symbol_index == length,
+              "forward symbol index binds message length");
+        check(foldback.symbol_index == length * 2U,
+              "foldback symbol index binds twice the message length");
+        check(final.symbol_index == length * 2U + fixed,
+              "final symbol index includes framed message length");
+    }
+}
+
 void test_return_symbol_preserves_xor_difference() {
     for (std::size_t index = 0U; index < 64U; ++index) {
         for (std::uint16_t left = 0U; left < 256U; left += 17U) {
@@ -368,6 +389,7 @@ int main() {
         test_explicit_foldback_api();
         test_four_way_forward_multicollision_regression();
         test_eight_way_bridged_forward_multicollision_regression();
+        test_length_framing_symbol_indices();
         test_return_symbol_preserves_xor_difference();
         print_known_answers();
 

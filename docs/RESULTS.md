@@ -241,3 +241,36 @@ after-foldback states and full digests were distinct.
 The result strengthens two conclusions simultaneously: the forward pass is not
 a collision-resistance boundary, and the tested construction currently relies
 on foldback to separate complete message histories.
+
+## Version 0.7.0 structural security campaign
+
+The canonical algorithm and known-answer vectors remain unchanged.
+
+A distance-guided beam search over one 16-level bridged forward-multicollision
+path reduced the after-foldback operational-state distance from 812 bits at the
+seed to a global minimum of 224 bits at level 11. The distance later increased;
+no exact merge or monotonic convergence was observed.
+
+A projection-LSH search over 8,192 independent two-byte suffixes on each side of
+the inherited `176f00` / `179900` forward collision covered 67,108,864 logical
+cross pairs and evaluated 13,040,013 projected candidates. The nearest state
+was 180 bits apart over the complete operational snapshot. Repeating the same
+bounded campaign for local alias `af671b` / `af67df` reached 578 bits. Neither
+search produced an exact after-foldback or digest collision.
+
+The move controller was enumerated in 2,304 reachable reverse contexts. Twenty-
+four contexts (1.041667%) contained an alias, with at most one pair per context.
+All observed differences were 42, 126, or 196. This demonstrates a sparse but
+non-empty return alias surface.
+
+Truncated first-collision campaigns measured mean/expected ratios of 1.0520 for
+24 bits over eight trials and 1.1275 for 32 bits over four trials. The 40- and
+48-bit 100,000-message runs were censored far below their birthday expectations.
+
+Finally, `symbol_index` equals `n` after forward absorption, `2n` after foldback,
+and `2n + 330` after canonical finalization. This prevents exact complete-state
+equality at equal phases across unequal message lengths, but it does not prove
+unequal-length digest collision resistance.
+
+Detailed methods, commands, and limitations are in
+`STRUCTURAL_SECURITY_CAMPAIGN.md`.

@@ -6,7 +6,7 @@ This document specifies a falsification-oriented prototype, not a standard or
 security claim.
 
 ```text
-PVC-RotHash-1 / canonical algorithm unchanged; research package 0.6.0
+PVC-RotHash-1 / canonical algorithm unchanged; research package 0.7.0
 ```
 
 ## 2. State

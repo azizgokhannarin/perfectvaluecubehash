@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.7.0 — Structural security campaign
+
+- kept the canonical hash algorithm and known-answer vectors unchanged;
+- added a foldback-distance beam search over bridged forward-multicollision
+  families;
+- reduced a selected family's after-foldback distance from 812 to 224 bits,
+  without an exact merge or monotonic convergence;
+- added a projection-LSH search for independently selected suffixes;
+- covered 67,108,864 logical suffix pairs for an inherited collision and found
+  a 180-bit nearest after-foldback state, with zero exact merge;
+- repeated the bounded search for a local third-symbol alias and found a
+  578-bit nearest state;
+- mapped 2,304 reachable reverse contexts and found controller aliases in 24
+  contexts, all with differences 42, 126, or 196;
+- added a multi-trial truncated-collision campaign; 24- and 32-bit results
+  remained compatible with generic birthday scaling;
+- formalized symbol-index framing across unequal lengths and showed why classic
+  identical-operational-state expandable messages cannot cross lengths;
+- added regression coverage and CI smoke jobs for the new tools.
+
 ## 0.6.0 — Foldback separation anatomy and bridged multicollisions
 
 - kept the canonical hash algorithm and known-answer vectors unchanged;

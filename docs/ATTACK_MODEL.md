@@ -135,3 +135,15 @@ The existing 2^32 independent-suffix MITM targeted only the three original
 two-byte prefix collisions. Extend the same strategy to the 728 local
 three-byte aliases, prioritizing pairs with the smallest measured return-state
 distance.
+
+## v0.7 guided-distance attacker
+
+The attacker may construct large exact forward multicollision families, choose
+branches and common bridges, independently vary bounded suffixes, and score the
+complete after-foldback state. Projection or fingerprint matches are only
+candidate filters; exact operational equality is required for a collision.
+
+The attacker also knows that reachable reverse contexts can contain sparse
+controller aliases with differences 42, 126, or 196. A successful structural
+attack must align those symbol pairs with both message history and reverse
+position, or find a different cancellation relation.

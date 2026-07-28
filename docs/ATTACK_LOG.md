@@ -254,3 +254,33 @@ return transition changed at least 49 cube cells.
 All independently selected one-byte suffix pairs were also tested for every
 forward collision pair, covering 98,041,856 logical cross combinations with
 zero exact after-foldback merge.
+
+## v0.7.0 — Guided foldback distance campaign
+
+### Beam-search near state
+
+A beam of 1,024 message pairs was propagated through a fixed 16-level bridged
+forward multicollision path. The smallest complete after-foldback operational
+state distance was 224 bits at level 11. Later levels increased the distance.
+No exact collision was found.
+
+### Independent-suffix LSH
+
+For inherited prefix pair `176f00` / `179900`, 8,192 two-byte suffixes per side
+created 67,108,864 logical pairs. Projection bucketing selected 13,040,013
+candidates for full-state scoring. Minimum distance was 180 bits; no merge.
+
+For local alias `af671b` / `af67df`, the same bounded domain reached 578 bits;
+no merge.
+
+### Reverse-context aliases
+
+Among 2,304 sampled reachable reverse contexts, 24 contained a controller alias.
+All observed differences were 42, 126, or 196. Therefore the reverse transition
+must not be assumed injective, even though no tested complete message pair has
+aligned such an alias into an after-foldback collision.
+
+### Outcome
+
+The attacks improve near-state distances but do not show a stable trajectory to
+zero. The design remains unbroken in these finite domains, not proven secure.
