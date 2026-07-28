@@ -44,16 +44,29 @@
 - delta-42 controller alignment probe;
 - independent two-byte suffix MITM over 2^32 cross pairs for each known prefix.
 
-## Next — Foldback-aware alias construction
+## Completed — First foldback-aware and multicollision stage
 
-- chain multiple controller aliases inside four-byte and longer messages;
-- derive chosen symbol differences that alias in both forward and return passes;
-- construct pairs satisfying forward and foldback constraints simultaneously;
-- search longer equivalent chains without storing complete states;
-- calibrate 24-, 32-, 40-, and 48-bit collision distributions over many trials;
-- add chosen differential cancellation and boomerang-style message relations;
+- coupled every known three-byte forward alias to its differing return symbols;
+- exhausted common zero- and one-byte extensions for all 1,496 pairs;
+- sampled 4,096 common two-byte extensions for every pair;
+- found 15 chainable second-level aliases and explicit four-message forward
+  multicollisions;
+- tested common one-byte and sampled two-byte suffixes against all four-way
+  families;
+- added explicit-state foldback and return-symbol research APIs.
+
+## Next — Bidirectional foldback constraint search
+
+- independently vary suffixes for the 728 local three-byte alias pairs, not only
+  the three original two-byte prefixes;
+- use the observed low-distance return states as targets for differential and
+  meet-in-the-middle optimization;
+- search two-position chosen differences that cancel during reverse traversal;
+- construct boomerang-style relations spanning forward and return passes;
+- explore deeper multicollision trees from longer reachable contexts;
+- investigate expandable-message constructions and unequal-length framing;
 - search cycles and fixed points in reduced operational state graphs;
-- investigate multicollision and expandable-message constructions;
+- calibrate 24-, 32-, 40-, and 48-bit collision distributions over many trials;
 - obtain independent source-level review of the move controller.
 
 ## Decision gate

@@ -28,6 +28,10 @@ void absorb_forward(WorkingState& state,
                     std::span<const std::uint8_t> bytes,
                     const HashParameters& parameters);
 
+[[nodiscard]] std::uint8_t derive_return_symbol(
+    std::uint8_t byte,
+    std::size_t original_index);
+
 void absorb_foldback(WorkingState& state,
                      std::span<const std::uint8_t> bytes,
                      const HashParameters& parameters);

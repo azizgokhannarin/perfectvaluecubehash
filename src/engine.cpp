@@ -323,6 +323,16 @@ void absorb_forward(WorkingState& state,
     }
 }
 
+std::uint8_t derive_return_symbol(std::uint8_t byte,
+                                  std::size_t original_index) {
+    const auto canonical_diagonals = Cube::perfect().body_diagonals();
+    return static_cast<std::uint8_t>(
+        byte
+        ^ canonical_diagonals[original_index & 31U]
+        ^ static_cast<std::uint8_t>(original_index * 8U
+                                  + (original_index >> 3U)));
+}
+
 void absorb_foldback(WorkingState& state,
                      std::span<const std::uint8_t> bytes,
                      const HashParameters& parameters) {
@@ -330,15 +340,10 @@ void absorb_foldback(WorkingState& state,
         return;
     }
 
-    const auto canonical_diagonals = Cube::perfect().body_diagonals();
     for (std::size_t reverse = bytes.size(); reverse > 0U; --reverse) {
         const std::size_t original_index = reverse - 1U;
-        const auto return_symbol = static_cast<std::uint8_t>(
-            bytes[original_index]
-            ^ canonical_diagonals[original_index & 31U]
-            ^ static_cast<std::uint8_t>(original_index * 8U
-                                      + (original_index >> 3U)));
-        absorb_symbol(state, return_symbol, parameters);
+        absorb_symbol(
+            state, derive_return_symbol(bytes[original_index], original_index), parameters);
     }
 }
 

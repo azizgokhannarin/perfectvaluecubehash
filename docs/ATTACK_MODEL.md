@@ -101,3 +101,37 @@ closures, or squeeze rather than only measuring random one-bit avalanche.
 
 Measure exact in-degree and merging structure in finite reachable subgraphs as
 preparation for a constrained meet-in-the-middle attack.
+
+
+## Version 0.5 priority attacks
+
+### Bidirectional alias construction
+
+Treat each forward controller alias as one side of a constraint system. Search
+for common or independent suffixes that transform the common forward state into
+a context where the corresponding return symbols also alias exactly.
+
+### Distance-guided return-state search
+
+The minimum measured return-state distance decreased under longer common
+suffixes. Use differential scoring, beam search, and meet-in-the-middle tables to
+optimize this distance rather than waiting for random exact matches.
+
+### Deeper forward multicollisions
+
+Fifteen exact four-message forward multicollisions are known. Search longer
+reachable contexts for third and later alias levels, and determine whether the
+number of branchable common states grows with message length.
+
+### Foldback boomerangs
+
+Use two or more differing positions so that the reverse traversal of one
+difference changes the state in a way that permits a later return-symbol alias.
+This is a chosen-relation attack, not a random avalanche experiment.
+
+### Independent-suffix search over local aliases
+
+The existing 2^32 independent-suffix MITM targeted only the three original
+two-byte prefix collisions. Extend the same strategy to the 728 local
+three-byte aliases, prioritizing pairs with the smallest measured return-state
+distance.

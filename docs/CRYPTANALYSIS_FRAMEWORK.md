@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Version 0.4.0 does not change the canonical `PVC-RotHash-1` algorithm or its
+Version 0.5.0 does not change the canonical `PVC-RotHash-1` algorithm or its
 known-answer vectors. It adds a separate research interface for deliberately
 weakening the construction and observing where structural failures appear.
 
@@ -165,3 +165,31 @@ differences. `pvc-constrained-merge-search` independently varies left and right
 suffixes and matches complete after-foldback states using a meet-in-the-middle
 table. Analysis fingerprints never determine a reported collision: complete
 state equality is required.
+
+
+## Version 0.5 foldback-aware tools
+
+`pvc-foldback-aware-alias` reconstructs the complete three-byte forward
+collision catalogue and applies the corresponding position-dependent return
+symbols from the exact common state. It can insert common suffixes before the
+return-symbol test, directly testing whether controlled forward aliases can also
+alias during reverse traversal.
+
+```bash
+./build/pvc-foldback-aware-alias \
+  --prefix-count 65536 --threads 8 --suffix-bytes 1 --suffix-limit 256
+```
+
+`pvc-multicollision-probe` searches every common three-byte forward state for a
+second one-symbol alias, constructs four-message forward multicollisions, and
+tests their foldback states and digests under common suffix extensions.
+
+```bash
+./build/pvc-multicollision-probe \
+  --prefix-count 65536 --threads 8 --max-levels 5 \
+  --suffix-bytes 1 --suffix-limit 256
+```
+
+Both tools may use non-cryptographic fingerprints only to screen candidates.
+Every reported alias or collision is checked using the complete operational
+state.

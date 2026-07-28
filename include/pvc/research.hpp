@@ -94,6 +94,20 @@ void validate_hash_parameters(const HashParameters& parameters);
     std::span<const std::uint8_t> bytes,
     const HashParameters& parameters);
 
+// Applies the reverse foldback pass to an explicit state that already
+// represents forward absorption of the same message. This avoids recomputing
+// the forward pass in targeted cryptanalysis tools.
+[[nodiscard]] InternalStateSnapshot foldback_from_forward_state_for_research(
+    const InternalStateSnapshot& forward_state,
+    std::span<const std::uint8_t> bytes,
+    const HashParameters& parameters,
+    std::vector<Move>* trace = nullptr);
+
+// Public research view of the original foldback symbol derivation.
+[[nodiscard]] std::uint8_t return_symbol_for_research(
+    std::uint8_t byte,
+    std::size_t original_index);
+
 [[nodiscard]] ResearchHashResult inspect_with_parameters(
     std::span<const std::uint8_t> bytes,
     const HashParameters& parameters,

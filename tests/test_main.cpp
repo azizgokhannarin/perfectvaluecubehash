@@ -224,6 +224,62 @@ void test_foldback_state_api() {
           "foldback-only research API matches the full phase checkpoint");
 }
 
+void test_explicit_foldback_api() {
+    const std::array<std::uint8_t, 4> message{{0x17U, 0x6fU, 0x42U, 0xa5U}};
+    const auto parameters = pvc::canonical_hash_parameters();
+    const auto forward = pvc::forward_state_for_research(message, parameters);
+    const auto explicit_foldback = pvc::foldback_from_forward_state_for_research(
+        forward, message, parameters);
+    const auto direct = pvc::foldback_state_for_research(message, parameters);
+    check(explicit_foldback == direct,
+          "explicit-state foldback matches direct forward-plus-foldback");
+
+    check(pvc::return_symbol_for_research(0x42U, 2U) == 0x74U,
+          "return-symbol research derivation matches the canonical formula");
+
+    const std::array<std::uint8_t, 2> prefix{{0xafU, 0x67U}};
+    const auto context = pvc::forward_state_for_research(prefix, parameters);
+    const auto left_forward = pvc::absorb_symbol_for_research(
+        context, 0x1bU, parameters);
+    const auto right_forward = pvc::absorb_symbol_for_research(
+        context, 0xdfU, parameters);
+    check(left_forward == right_forward,
+          "foldback-aware regression starts from a known forward alias");
+    const auto left_return = pvc::return_symbol_for_research(0x1bU, 2U);
+    const auto right_return = pvc::return_symbol_for_research(0xdfU, 2U);
+    check(pvc::absorb_symbol_for_research(left_forward, left_return, parameters)
+              != pvc::absorb_symbol_for_research(right_forward, right_return, parameters),
+          "known forward alias is not also a one-step return alias");
+}
+
+void test_four_way_forward_multicollision_regression() {
+    const auto parameters = pvc::canonical_hash_parameters();
+    const std::array<std::array<std::uint8_t, 4>, 4> messages{{
+        {{0x17U, 0x6fU, 0x11U, 0x5bU}},
+        {{0x17U, 0x6fU, 0x11U, 0x85U}},
+        {{0x17U, 0x99U, 0x11U, 0x5bU}},
+        {{0x17U, 0x99U, 0x11U, 0x85U}},
+    }};
+
+    const auto common = pvc::forward_state_for_research(messages[0], parameters);
+    std::vector<pvc::InternalStateSnapshot> foldback_states;
+    std::vector<std::vector<std::uint8_t>> digests;
+    for (const auto& message : messages) {
+        check(pvc::forward_state_for_research(message, parameters) == common,
+              "known four-message construction has one forward state");
+        const auto foldback = pvc::foldback_state_for_research(message, parameters);
+        check(std::find(foldback_states.begin(), foldback_states.end(), foldback)
+                  == foldback_states.end(),
+              "foldback separates every member of the four-way forward multicollision");
+        foldback_states.push_back(foldback);
+
+        const auto digest = pvc::hash_with_parameters(message, parameters);
+        check(std::find(digests.begin(), digests.end(), digest) == digests.end(),
+              "full digest separates every member of the four-way forward multicollision");
+        digests.push_back(digest);
+    }
+}
+
 void print_known_answers() {
     std::cout << "KAT empty: " << pvc::to_hex(pvc::RotHash1::hash("")) << '\n';
     std::cout << "KAT abc  : " << pvc::to_hex(pvc::RotHash1::hash("abc")) << '\n';
@@ -241,6 +297,8 @@ int main() {
         test_forward_collision_foldback_regression();
         test_context_dependent_symbol_alias_regression();
         test_foldback_state_api();
+        test_explicit_foldback_api();
+        test_four_way_forward_multicollision_regression();
         print_known_answers();
 
         if (failures != 0) {

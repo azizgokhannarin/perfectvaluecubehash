@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.5.0 — Foldback-aware aliases and forward multicollisions
+
+- kept the canonical hash algorithm and known-answer vectors unchanged;
+- exposed research-only return-symbol derivation and explicit-state foldback;
+- added a complete catalogue generator for the 1,496 known three-byte forward
+  collision pairs;
+- added a foldback-aware alias attack coupling forward aliases to their return
+  symbols;
+- tested all 1,496 pairs directly and with every common one-byte suffix, finding
+  zero return-transition or after-foldback merge;
+- tested 6,127,616 structured common two-byte extension cases with zero exact
+  merge;
+- discovered 15 chainable second-level controller aliases and constructed exact
+  four-message forward multicollisions;
+- verified that all four branches remain distinct after foldback and in the full
+  digest;
+- exhausted all common one-byte extensions and sampled 4,096 two-byte extensions
+  for all 15 four-way families without an after-foldback or digest collision;
+- added regression coverage for the explicit foldback API and a known four-way
+  forward multicollision;
+- documented the increasing concentration of security in the reverse foldback
+  pass.
+
 ## 0.4.0 — Three-byte structural and constrained-merge analysis
 
 - kept the canonical hash algorithm and known-answer vectors unchanged;

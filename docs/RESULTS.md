@@ -179,3 +179,43 @@ and also found zero after-foldback merge.
 
 Detailed classifications, commands, and limitations are in
 `THREE_BYTE_RESULTS.md`.
+
+
+## Version 0.5.0 foldback-aware and multicollision results
+
+The canonical algorithm and known-answer vectors remain unchanged. Every one of
+the 1,496 known three-byte forward collision pairs was tested against the
+position-dependent return-symbol transition. No direct dual alias was found.
+All common one-byte suffixes produced 382,976 structured extension cases with
+zero after-foldback merge. The first 4,096 common two-byte suffixes for every
+pair produced 6,127,616 additional cases with zero exact merge.
+
+The minimum cube bit distance immediately after the two differing return
+symbols decreased as controlled suffix length increased:
+
+```text
+no suffix             = 172 bits
+one common byte        = 114 bits
+4,096 two-byte samples =  78 bits
+```
+
+This does not constitute a collision, but it identifies distance-guided
+foldback optimization as a higher-priority attack.
+
+A separate multicollision probe found that 15 of the 1,496 common forward states
+contain another symbol alias. Each such relation produces four distinct
+messages with one complete forward state. One example is:
+
+```text
+176f115b
+176f1185
+1799115b
+17991185
+```
+
+All four after-foldback states and full digests are distinct. Exhaustive common
+one-byte suffix extension and a 4,096-value two-byte suffix sample for all 15
+families found zero after-foldback or digest collision.
+
+Detailed commands, counts, and limitations are in
+`FOLDBACK_AWARE_RESULTS.md`.

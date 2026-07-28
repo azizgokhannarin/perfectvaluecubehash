@@ -1,4 +1,4 @@
-Perfect Value Cube Hash 0.4.0 verification
+Perfect Value Cube Hash 0.5.0 verification
 ==========================================
 
 Canonical algorithm status
@@ -11,53 +11,58 @@ H(""):
 H("abc"):
 f32b2241a950d7e7b2b006ff8ae2d0b08f02db23c0d8fde198dfdf9e9642051f
 
-Three-byte exhaustive forward scan
-----------------------------------
-Domain                              = 16,777,216
-Exact forward-state groups          = 1,496
-Exact forward-state pairs           = 1,496
-Inherited common-third-byte pairs   = 768
-New context-dependent aliases       = 728
-New aliases with identical move path= 728
-New aliases with distinct move path = 0
-After-foldback survivors            = 0
+Foldback-aware direct alias test
+--------------------------------
+Forward collision pairs tested      = 1,496
+Return-transition exact merges      = 0
+Exact after-foldback merges          = 0
+Minimum return cube bit distance     = 172
 
-New third-symbol absolute differences:
-  42  -> 542 pairs
-  126 ->  89 pairs
-  196 ->  97 pairs
+Exhaustive common one-byte extension
+------------------------------------
+Structured extension cases          = 382,976
+Return-transition exact merges      = 0
+Exact after-foldback merges          = 0
+Minimum return cube bit distance     = 114
 
-Three-byte exhaustive foldback scan
------------------------------------
-Domain                              = 16,777,216
-Exact after-foldback state pairs    = 0
+Sampled common two-byte extension
+---------------------------------
+Suffixes tested per pair             = 4,096
+Structured extension cases          = 6,127,616
+Return-transition exact merges      = 0
+Exact after-foldback merges          = 0
+Minimum return cube bit distance     = 78
 
-Delta-42 alignment probe
-------------------------
-One-byte reachable contexts, non-wrapping symbol pairs:
-Tested pairs                        = 54,784
-Pairs sharing at least one move     = 45,775
-Exact six-move aliases              = 3
+Forward multicollision probe
+----------------------------
+Three-byte collision seeds          = 1,496
+Seeds with a second symbol alias     = 15
+Maximum observed collision levels    = 2
+Constructed forward branches         = 4
+Unique after-foldback states         = 4
+Unique full digests                  = 4
 
-Exact aliases:
-  context 17: 6f / 99
-  context 25: 1c / 46
-  context a2: 6f / 99
+Example exact forward multicollision:
+  176f115b
+  176f1185
+  1799115b
+  17991185
 
-Constrained independent-suffix MITM
------------------------------------
-Suffix bytes per side               = 2
-Domain per side                     = 65,536
-Cross combinations per prefix pair  = 4,294,967,296
+Four-way common suffix tests
+----------------------------
+All 256 one-byte suffixes:
+  extension cases                    = 3,840
+  after-foldback collision cases     = 0
+  digest collision cases             = 0
 
-176f / 1799 exact foldback merges   = 0
-251c / 2546 exact foldback merges   = 0
-a26f / a299 exact foldback merges   = 0
+First 4,096 two-byte suffixes:
+  extension cases                    = 61,440
+  after-foldback collision cases     = 0
+  digest collision cases             = 0
 
 Interpretation
 --------------
-Forward absorption is increasingly non-injective as reachable contexts grow.
-All newly observed three-byte aliases are controller aliases that execute the
-same physical moves. Foldback separated every observed alias and was injective
-on the complete three-byte domain. These are finite empirical results, not a
-collision-resistance or preimage-resistance proof.
+Forward controller aliases are composable and therefore the forward pass alone
+is not collision resistant. No tested forward multicollision survived the
+position-dependent reverse foldback. These are finite structured attacks, not a
+proof of collision or preimage resistance.

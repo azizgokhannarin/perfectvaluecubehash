@@ -32,3 +32,11 @@ collisions. They exist only for cryptanalysis. The presence of an
 
 Forward-state equality must not be reported as a full hash collision unless the
 pair also survives foldback, finalization, and digest comparison.
+
+
+## Forward multicollision warning
+
+Version 0.5.0 documents four distinct messages that reach one exact state at
+the end of forward absorption. This is a forward-pass multicollision, not a full
+hash collision: the four paths are distinct after foldback and produce distinct
+digests. Reports must state the phase at which equality occurs.

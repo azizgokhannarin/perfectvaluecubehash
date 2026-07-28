@@ -1,8 +1,7 @@
 # Perfect Value Cube Hash
 
 `PVC-RotHash-1` is a **falsification-oriented cryptographic research prototype**.
-Version 0.4.0 adds exhaustive three-byte and constrained-merge analysis without changing the
-canonical hash algorithm or its known-answer vectors. It is not a production
+Version 0.5.0 adds foldback-aware alias and forward-multicollision analysis without changing the canonical hash algorithm or its known-answer vectors. It is not a production
 hash and makes no security claim.
 
 The project studies whether the canonical Perfect Value Cube, a state-dependent
@@ -126,6 +125,8 @@ See [`docs/CRYPTANALYSIS_FRAMEWORK.md`](docs/CRYPTANALYSIS_FRAMEWORK.md).
 ./build/pvc-three-byte-collision --phase foldback --threads 4
 ./build/pvc-alignment-probe --delta 42
 ./build/pvc-constrained-merge-search --left 176f --right 1799 --suffix-bytes 2
+./build/pvc-foldback-aware-alias --suffix-bytes 1 --suffix-limit 256 --threads 8
+./build/pvc-multicollision-probe --suffix-bytes 1 --suffix-limit 256 --threads 8
 ```
 
 These tools are intended to disprove the design. Passing them is not evidence
@@ -183,6 +184,22 @@ Version 0.4.0 extended the structural search to the full three-byte domain:
 
 See [`docs/THREE_BYTE_RESULTS.md`](docs/THREE_BYTE_RESULTS.md).
 
+Version 0.5.0 coupled the forward aliases to the foldback equations:
+
+- none of the 1,496 known three-byte forward pairs was also a direct return-
+  transition alias;
+- every common one-byte suffix was tested for all pairs, covering 382,976
+  structured four-byte cases with zero after-foldback merge;
+- 6,127,616 sampled common two-byte extension cases also produced zero exact
+  merge;
+- 15 common forward states supported a second controller alias, producing
+  explicit four-message forward multicollisions;
+- all four branches remained distinct after foldback and in the full digest;
+- all common one-byte suffixes and the first 4,096 two-byte suffixes were tested
+  for every four-way family with zero collision.
+
+See [`docs/FOLDBACK_AWARE_RESULTS.md`](docs/FOLDBACK_AWARE_RESULTS.md).
+
 ## Security status
 
 **Do not use this project for passwords, authentication, signatures, file
@@ -199,6 +216,7 @@ See:
 - [`docs/CRYPTANALYSIS_FRAMEWORK.md`](docs/CRYPTANALYSIS_FRAMEWORK.md)
 - [`docs/REDUCED_ROUND_RESULTS.md`](docs/REDUCED_ROUND_RESULTS.md)
 - [`docs/THREE_BYTE_RESULTS.md`](docs/THREE_BYTE_RESULTS.md)
+- [`docs/FOLDBACK_AWARE_RESULTS.md`](docs/FOLDBACK_AWARE_RESULTS.md)
 - [`SECURITY.md`](SECURITY.md)
 
 ## Origin

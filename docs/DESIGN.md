@@ -6,7 +6,7 @@ This document specifies a falsification-oriented prototype, not a standard or
 security claim.
 
 ```text
-PVC-RotHash-1 / canonical algorithm unchanged; research package 0.4.0
+PVC-RotHash-1 / canonical algorithm unchanged; research package 0.5.0
 ```
 
 ## 2. State
@@ -150,3 +150,22 @@ a proposed stable hash API.
 The canonical forward transition is now known not to be injective over all
 two-symbol messages. The reverse foldback is therefore an active collision-
 separation layer, not merely additional diffusion.
+
+
+## 13. Version 0.5 structural interpretation
+
+The forward controller is now known to support composable aliases. Fifteen
+three-byte common forward states contain a second one-symbol alias, allowing
+four distinct messages to reach one exact forward state. This does not change
+the canonical algorithm; it changes the threat model.
+
+The reverse foldback is therefore the first tested phase that separates known
+forward multicollisions. Research-only APIs expose the return-symbol derivation
+and allow foldback to be applied to an explicit common forward state. These APIs
+are for attack construction and do not belong to the proposed public hash
+interface.
+
+The design still claims no collision resistance. In particular, any message
+family that satisfies both the forward controller aliases and the position-
+dependent return-symbol aliases would pass identical states into deterministic
+closure and squeeze processing.

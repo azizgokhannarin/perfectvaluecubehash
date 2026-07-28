@@ -119,6 +119,23 @@ InternalStateSnapshot foldback_state_for_research(
     return detail::snapshot(state);
 }
 
+InternalStateSnapshot foldback_from_forward_state_for_research(
+    const InternalStateSnapshot& forward_state,
+    std::span<const std::uint8_t> bytes,
+    const HashParameters& parameters,
+    std::vector<Move>* trace) {
+    validate_hash_parameters(parameters);
+    auto working = detail::working_state_from(forward_state, trace);
+    detail::absorb_foldback(working, bytes, parameters);
+    return detail::snapshot(working);
+}
+
+std::uint8_t return_symbol_for_research(
+    std::uint8_t byte,
+    std::size_t original_index) {
+    return detail::derive_return_symbol(byte, original_index);
+}
+
 ResearchHashResult inspect_with_parameters(
     std::span<const std::uint8_t> bytes,
     const HashParameters& parameters,

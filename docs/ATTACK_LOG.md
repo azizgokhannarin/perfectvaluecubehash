@@ -179,3 +179,46 @@ cross combinations per prefix pair.
 No exact state merge was found. Equal after-foldback states for these
 equal-length messages would have implied identical remaining finalization and a
 full digest collision. Longer suffixes and other collision prefixes remain open.
+
+
+## A-008 — Foldback-aware dual-alias search
+
+**Affected component:** interaction between forward aliases and reverse foldback
+**Status:** attack unsuccessful in the tested structured domains
+
+Every known three-byte forward collision was tested to determine whether the
+two differing original bytes also generate an exact return-transition alias
+from the common forward state. No direct dual alias was found. Exhaustive common
+one-byte suffix extension covered 382,976 cases with zero after-foldback merge.
+The first 4,096 two-byte suffixes for every pair covered 6,127,616 additional
+cases with zero exact merge.
+
+The minimum return-state cube distance decreased from 172 bits without a suffix
+to 114 bits with one-byte extensions and 78 bits in the sampled two-byte run.
+This trend motivates distance-guided attacks even though exact equality was not
+observed.
+
+## A-009 — Four-message forward multicollisions
+
+**Affected component:** canonical forward absorption in PVC-RotHash-1 0.5.0
+**Status:** open structural weakness; separated by foldback in tested families
+
+Fifteen of the 1,496 known three-byte common forward states contain a second
+one-symbol controller alias. Chaining the two aliases creates four distinct
+messages with one exact complete forward state. One example is:
+
+```text
+176f115b
+176f1185
+1799115b
+17991185
+```
+
+All four after-foldback states and full digests are distinct. All common one-byte
+suffixes and the first 4,096 common two-byte suffixes were tested for every one
+of the fifteen four-way families without an after-foldback or digest collision.
+No third collision level was found from these states in the bounded search.
+
+This demonstrates that forward aliases are composable. A deeper alias tree or a
+construction that also satisfies return-symbol constraints remains a direct
+collision threat.

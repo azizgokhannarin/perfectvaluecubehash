@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 
 project(
     PerfectValueCubeHash
-    VERSION 0.4.0
+    VERSION 0.5.0
     DESCRIPTION "Perfect Value Cube hash and structural collision cryptanalysis framework"
     LANGUAGES CXX
 )
@@ -86,6 +86,10 @@ if(PVC_BUILD_TOOLS)
     target_link_libraries(pvc-three-byte-collision PRIVATE Threads::Threads)
     pvc_add_executable(pvc-alignment-probe tools/alignment_probe.cpp)
     pvc_add_executable(pvc-constrained-merge-search tools/constrained_merge_search.cpp)
+    pvc_add_executable(pvc-foldback-aware-alias tools/foldback_aware_alias.cpp)
+    target_link_libraries(pvc-foldback-aware-alias PRIVATE Threads::Threads)
+    pvc_add_executable(pvc-multicollision-probe tools/multicollision_probe.cpp)
+    target_link_libraries(pvc-multicollision-probe PRIVATE Threads::Threads)
 endif()
 
 if(PVC_BUILD_TESTS)
