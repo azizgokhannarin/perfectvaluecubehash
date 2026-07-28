@@ -35,11 +35,20 @@
 - finite reachable predecessor in-degree measurement;
 - reverse, complement, rotation, and multiset-permutation probes.
 
-## Next — Constrained meet-in-the-middle
+## Completed — Three-byte and first constrained MITM stage
 
-- extend known forward merges with common suffixes (two-byte exhaustive
-  search completed; longer and asymmetric constructions remain);
-- construct pairs satisfying both forward and foldback constraints;
+- exhaustive full three-byte forward-state scan;
+- exhaustive full three-byte after-foldback-state scan;
+- classification of inherited and new context-dependent aliases;
+- exact physical-move trace comparison for all new three-byte aliases;
+- delta-42 controller alignment probe;
+- independent two-byte suffix MITM over 2^32 cross pairs for each known prefix.
+
+## Next — Foldback-aware alias construction
+
+- chain multiple controller aliases inside four-byte and longer messages;
+- derive chosen symbol differences that alias in both forward and return passes;
+- construct pairs satisfying forward and foldback constraints simultaneously;
 - search longer equivalent chains without storing complete states;
 - calibrate 24-, 32-, 40-, and 48-bit collision distributions over many trials;
 - add chosen differential cancellation and boomerang-style message relations;

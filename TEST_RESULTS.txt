@@ -1,4 +1,4 @@
-Perfect Value Cube Hash 0.3.0 verification
+Perfect Value Cube Hash 0.4.0 verification
 ==========================================
 
 Canonical algorithm status
@@ -11,98 +11,53 @@ H(""):
 H("abc"):
 f32b2241a950d7e7b2b006ff8ae2d0b08f02db23c0d8fde198dfdf9e9642051f
 
-Build verification
-------------------
-- GCC 14.2.0 Release, warnings as errors: passed
-- Clang 17 Release, warnings as errors: passed
-- GCC 14.2.0 Debug with ASan/UBSan: passed
-- CTest: all tests passed
+Three-byte exhaustive forward scan
+----------------------------------
+Domain                              = 16,777,216
+Exact forward-state groups          = 1,496
+Exact forward-state pairs           = 1,496
+Inherited common-third-byte pairs   = 768
+New context-dependent aliases       = 728
+New aliases with identical move path= 728
+New aliases with distinct move path = 0
+After-foldback survivors            = 0
 
-Regression tests include the known canonical forward convergence:
-  17 6f == 17 99 after forward absorption
-and verify that the pair differs after foldback, finalization, and digest output.
+New third-symbol absolute differences:
+  42  -> 542 pairs
+  126 ->  89 pairs
+  196 ->  97 pairs
 
-Reduced-round one-byte matrix
------------------------------
-preset         digestB  digest-col  state-col  avalanche
-R0-minimal     4        242         242        15.947 / 32
-R1-foldback    8        42          42         31.990 / 64
-R2-small       8        3           3          31.891 / 64
-R3-medium      16       0           0          64.068 / 128
-R4-near        16       0           0          63.928 / 128
-R5-canonical   32       0           0          127.738 / 256
+Three-byte exhaustive foldback scan
+-----------------------------------
+Domain                              = 16,777,216
+Exact after-foldback state pairs    = 0
 
-Canonical two-byte phase enumeration
-------------------------------------
-Domain: all 65,536 two-byte messages
+Delta-42 alignment probe
+------------------------
+One-byte reachable contexts, non-wrapping symbol pairs:
+Tested pairs                        = 54,784
+Pairs sharing at least one move     = 45,775
+Exact six-move aliases              = 3
 
-after-forward collisions          = 3
-after-foldback collisions         = 0
-after-diagonal-closure collisions = 0
-after-orbit-closure collisions    = 0
-final-state collisions            = 0
-digest collisions                 = 0
+Exact aliases:
+  context 17: 6f / 99
+  context 25: 1c / 46
+  context a2: 6f / 99
 
-Forward-state pairs:
-  17 6f / 17 99
-  25 1c / 25 46
-  a2 6f / a2 99
+Constrained independent-suffix MITM
+-----------------------------------
+Suffix bytes per side               = 2
+Domain per side                     = 65,536
+Cross combinations per prefix pair  = 4,294,967,296
 
-All 65,536 common two-byte suffixes were tested for each pair.
-After-foldback collisions found = 0
-Minimum observed foldback cube bit distances = 244, 208, 258
-
-Reachable predecessor sample
-----------------------------
-256 one-byte prefixes x 256 next symbols:
-transitions                        = 65,536
-distinct target states             = 65,533
-targets with multiple predecessors = 3
-maximum observed indegree          = 2
-
-Truncated collision scaling
----------------------------
-R5, 24-bit truncation, 20 deterministic domains:
-mean first collision messages = 4,692.70
-birthday expectation          = 5,133.57
-mean observed/expected ratio  = 0.9140
-minimum / maximum ratio       = 0.1900 / 2.0700
-
-No full digest equality occurred in the documented R3-R5 truncated examples.
-R0-R2 produced full digest collisions, consistent with exact-state collapse.
-
-Differential phase search
--------------------------
-R5, four 16-byte base messages, 512 single-bit comparisons:
-
-after-forward mean cube bits          = 1,400.4062 / 4,096
-after-foldback mean cube bits         = 1,985.5000 / 4,096
-after-diagonal-closure mean cube bits = 2,047.7227 / 4,096
-after-orbit-closure mean cube bits    = 2,048.0156 / 4,096
-final mean cube bits                  = 2,047.8438 / 4,096
-final mean differing cube bytes       = 510.0156 / 512
-digest mean                           = 127.5742 / 256
-digest minimum / maximum              = 100 / 156
-exact digest matches                  = 0
-
-Paired-difference digest mean = 128.8438 / 256; exact digest matches = 0.
-
-Related-input tests
--------------------
-256 deterministic 16-byte messages:
-reverse mean digest distance          = 128.0195; matches = 0
-complement mean digest distance       = 128.1914; matches = 0
-cyclic-rotation mean digest distance  = 128.8594; matches = 0
-
-Complete permutation domains:
-ABCDEFGH  : 40,320 messages, 0 digest/state collisions
-AABBCCDD  :  2,520 messages, 0 digest/state collisions
-00001111  :     70 messages, 0 digest/state collisions
+176f / 1799 exact foldback merges   = 0
+251c / 2546 exact foldback merges   = 0
+a26f / a299 exact foldback merges   = 0
 
 Interpretation
 --------------
-The canonical forward transition is not injective. The tested foldback pass
-separates all observed two-byte forward merges. This is a limited empirical
-result, not a security proof. The next target is a constrained meet-in-the-
-middle or equivalent-chain attack that satisfies both forward and foldback
-conditions.
+Forward absorption is increasingly non-injective as reachable contexts grow.
+All newly observed three-byte aliases are controller aliases that execute the
+same physical moves. Foldback separated every observed alias and was injective
+on the complete three-byte domain. These are finite empirical results, not a
+collision-resistance or preimage-resistance proof.

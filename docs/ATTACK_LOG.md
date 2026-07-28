@@ -143,3 +143,39 @@ R5 final-state collisions =      0
 R0–R2 also produced full digest collisions. The reduced-round suite therefore
 provides a measurable transition between clearly broken and not-yet-broken
 configurations in this small domain.
+
+
+## A-006 — Context-dependent move-controller aliases
+
+**Affected component:** canonical forward absorption in PVC-RotHash-1 0.4.0
+**Status:** open structural property; no after-foldback collision in the full
+three-byte domain
+
+Exhaustive enumeration of all 16,777,216 three-byte messages produced 1,496
+exact forward-state pairs. Of these, 768 are the three known two-byte merges
+extended by a common third byte. The remaining 728 use the same first two bytes
+and different third bytes.
+
+Every new pair generates an identical six-move physical trace. Absolute symbol
+differences are 42, 126, or 196, all even multiples of seven. This shows that
+the forward non-injectivity is caused by aliases in the move controller rather
+than only by distinct rotation paths converging.
+
+No pair survived foldback. A separate exhaustive scan of all three-byte
+after-foldback states also found zero collision. The property remains a design
+risk because forward uniqueness is absent and the tested collision resistance
+therefore depends strongly on foldback.
+
+## A-007 — Independent-suffix constrained MITM attempt
+
+**Affected component:** foldback stage in PVC-RotHash-1 0.4.0
+**Status:** attack unsuccessful in the tested domains
+
+For each of the three known two-byte forward-collision prefix pairs, every
+two-byte suffix on the left was compared against every two-byte suffix on the
+right at the after-foldback state. The meet-in-the-middle search covered 2^32
+cross combinations per prefix pair.
+
+No exact state merge was found. Equal after-foldback states for these
+equal-length messages would have implied identical remaining finalization and a
+full digest collision. Longer suffixes and other collision prefixes remain open.

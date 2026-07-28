@@ -315,6 +315,33 @@ void absorb_symbol(WorkingState& state,
     ++state.symbol_index;
 }
 
+void absorb_forward(WorkingState& state,
+                    std::span<const std::uint8_t> bytes,
+                    const HashParameters& parameters) {
+    for (const auto byte : bytes) {
+        absorb_symbol(state, byte, parameters);
+    }
+}
+
+void absorb_foldback(WorkingState& state,
+                     std::span<const std::uint8_t> bytes,
+                     const HashParameters& parameters) {
+    if (!parameters.enable_foldback) {
+        return;
+    }
+
+    const auto canonical_diagonals = Cube::perfect().body_diagonals();
+    for (std::size_t reverse = bytes.size(); reverse > 0U; --reverse) {
+        const std::size_t original_index = reverse - 1U;
+        const auto return_symbol = static_cast<std::uint8_t>(
+            bytes[original_index]
+            ^ canonical_diagonals[original_index & 31U]
+            ^ static_cast<std::uint8_t>(original_index * 8U
+                                      + (original_index >> 3U)));
+        absorb_symbol(state, return_symbol, parameters);
+    }
+}
+
 ResearchHashResult compute(std::span<const std::uint8_t> bytes,
                            const HashParameters& parameters,
                            bool keep_trace,
@@ -345,23 +372,10 @@ ResearchHashResult compute(std::span<const std::uint8_t> bytes,
 
     add_checkpoint(checkpoint_target, ResearchPhase::Initial, 0U, state);
 
-    for (const auto byte : bytes) {
-        absorb_symbol(state, byte, parameters);
-    }
+    absorb_forward(state, bytes, parameters);
     add_checkpoint(checkpoint_target, ResearchPhase::AfterForward, bytes.size(), state);
 
-    if (parameters.enable_foldback) {
-        const auto canonical_diagonals = Cube::perfect().body_diagonals();
-        for (std::size_t reverse = bytes.size(); reverse > 0U; --reverse) {
-            const std::size_t original_index = reverse - 1U;
-            const auto return_symbol = static_cast<std::uint8_t>(
-                bytes[original_index]
-                ^ canonical_diagonals[original_index & 31U]
-                ^ static_cast<std::uint8_t>(original_index * 8U
-                                          + (original_index >> 3U)));
-            absorb_symbol(state, return_symbol, parameters);
-        }
-    }
+    absorb_foldback(state, bytes, parameters);
     add_checkpoint(checkpoint_target, ResearchPhase::AfterFoldback, bytes.size(), state);
 
     const auto input_size = static_cast<std::uint64_t>(bytes.size());

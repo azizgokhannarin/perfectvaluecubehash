@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.4.0 — Three-byte structural and constrained-merge analysis
+
+- kept the canonical hash algorithm and known-answer vectors unchanged;
+- added an exhaustive multithreaded three-byte state scanner with exact
+  candidate verification;
+- enumerated all 16,777,216 three-byte forward states and found 1,496 exact
+  forward-state collision pairs;
+- classified 768 pairs as inherited common-suffix extensions and 728 as new
+  context-dependent third-symbol aliases;
+- verified that all 728 new aliases generate identical six-move physical paths;
+- identified third-symbol differences 42, 126, and 196;
+- exhausted the complete three-byte after-foldback domain with zero exact state
+  collisions;
+- added a controller-alignment probe and independently reproduced the three
+  canonical delta-42 aliases;
+- added an independent-suffix constrained meet-in-the-middle search;
+- covered 2^32 suffix combinations for each of the three known forward-collision
+  prefixes with zero after-foldback merges;
+- added a foldback-only research API and new regression tests;
+- documented the finite-domain results and remaining concentration of security
+  in the foldback stage.
+
 ## 0.3.0 — PVC-RotHash-1 cryptanalysis framework
 
 - kept the canonical hash algorithm and known-answer vectors unchanged;

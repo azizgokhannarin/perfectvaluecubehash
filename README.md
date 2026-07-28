@@ -1,7 +1,7 @@
 # Perfect Value Cube Hash
 
 `PVC-RotHash-1` is a **falsification-oriented cryptographic research prototype**.
-Version 0.3.0 adds a reduced-round cryptanalysis framework without changing the
+Version 0.4.0 adds exhaustive three-byte and constrained-merge analysis without changing the
 canonical hash algorithm or its known-answer vectors. It is not a production
 hash and makes no security claim.
 
@@ -122,6 +122,10 @@ See [`docs/CRYPTANALYSIS_FRAMEWORK.md`](docs/CRYPTANALYSIS_FRAMEWORK.md).
 ./build/pvc-predecessor-enumerator --preset R5-canonical
 ./build/pvc-related-input-probe --preset R5-canonical
 ./build/pvc-foldback-merge-search --left 176f --right 1799 --suffix-bytes 2
+./build/pvc-three-byte-collision --phase forward --threads 4
+./build/pvc-three-byte-collision --phase foldback --threads 4
+./build/pvc-alignment-probe --delta 42
+./build/pvc-constrained-merge-search --left 176f --right 1799 --suffix-bytes 2
 ```
 
 These tools are intended to disprove the design. Passing them is not evidence
@@ -165,6 +169,20 @@ Version 0.3.0 structural analysis additionally found:
 
 See [`docs/REDUCED_ROUND_RESULTS.md`](docs/REDUCED_ROUND_RESULTS.md).
 
+Version 0.4.0 extended the structural search to the full three-byte domain:
+
+- 1,496 exact forward-state pairs were found among all 16,777,216 messages;
+- 768 are inherited extensions of the three known two-byte merges;
+- 728 are new context-dependent third-symbol aliases;
+- all 728 new aliases execute identical six-move physical paths, with byte
+  differences 42, 126, or 196;
+- the complete three-byte after-foldback domain contained zero exact state
+  collisions;
+- independent two-byte suffix MITM searches covered 2^32 cross combinations
+  for each known prefix pair and found zero after-foldback merges.
+
+See [`docs/THREE_BYTE_RESULTS.md`](docs/THREE_BYTE_RESULTS.md).
+
 ## Security status
 
 **Do not use this project for passwords, authentication, signatures, file
@@ -180,6 +198,7 @@ See:
 - [`docs/DECISIONS.md`](docs/DECISIONS.md)
 - [`docs/CRYPTANALYSIS_FRAMEWORK.md`](docs/CRYPTANALYSIS_FRAMEWORK.md)
 - [`docs/REDUCED_ROUND_RESULTS.md`](docs/REDUCED_ROUND_RESULTS.md)
+- [`docs/THREE_BYTE_RESULTS.md`](docs/THREE_BYTE_RESULTS.md)
 - [`SECURITY.md`](SECURITY.md)
 
 ## Origin

@@ -173,6 +173,57 @@ void test_forward_collision_foldback_regression() {
           "known forward convergence is not a digest collision");
 }
 
+
+bool same_physical_move(const pvc::Move& left, const pvc::Move& right) {
+    return left.axis == right.axis
+        && left.intersection_before == right.intersection_before
+        && left.intersection_after == right.intersection_after
+        && left.amount == right.amount
+        && left.phase == right.phase
+        && left.symbol_index == right.symbol_index;
+}
+
+void test_context_dependent_symbol_alias_regression() {
+    const std::array<std::uint8_t, 2> prefix{{0xafU, 0x67U}};
+    const auto parameters = pvc::canonical_hash_parameters();
+    const auto context = pvc::forward_state_for_research(prefix, parameters);
+
+    std::vector<pvc::Move> left_trace;
+    std::vector<pvc::Move> right_trace;
+    const auto left = pvc::absorb_symbol_for_research(
+        context, 0x1bU, parameters, &left_trace);
+    const auto right = pvc::absorb_symbol_for_research(
+        context, 0xdfU, parameters, &right_trace);
+
+    check(left == right,
+          "known context-dependent symbol alias reaches the same forward state");
+    check(left_trace.size() == pvc::kMovesPerSymbol
+              && right_trace.size() == pvc::kMovesPerSymbol,
+          "known symbol alias records one complete move sequence per symbol");
+    bool same_trace = left_trace.size() == right_trace.size();
+    for (std::size_t i = 0; same_trace && i < left_trace.size(); ++i) {
+        same_trace = same_physical_move(left_trace[i], right_trace[i]);
+    }
+    check(same_trace,
+          "known context-dependent symbol alias generates identical physical moves");
+
+    const std::array<std::uint8_t, 3> left_message{{0xafU, 0x67U, 0x1bU}};
+    const std::array<std::uint8_t, 3> right_message{{0xafU, 0x67U, 0xdfU}};
+    check(pvc::foldback_state_for_research(left_message, parameters)
+              != pvc::foldback_state_for_research(right_message, parameters),
+          "foldback separates the known three-byte symbol alias");
+}
+
+void test_foldback_state_api() {
+    const std::array<std::uint8_t, 3> message{{'a', 'b', 'c'}};
+    const auto parameters = pvc::canonical_hash_parameters();
+    const auto direct = pvc::foldback_state_for_research(message, parameters);
+    const auto inspected = pvc::inspect_with_parameters(
+        message, parameters, false, true);
+    check(direct == checkpoint_for(inspected, pvc::ResearchPhase::AfterFoldback),
+          "foldback-only research API matches the full phase checkpoint");
+}
+
 void print_known_answers() {
     std::cout << "KAT empty: " << pvc::to_hex(pvc::RotHash1::hash("")) << '\n';
     std::cout << "KAT abc  : " << pvc::to_hex(pvc::RotHash1::hash("abc")) << '\n';
@@ -188,6 +239,8 @@ int main() {
         test_trace_chain();
         test_research_framework();
         test_forward_collision_foldback_regression();
+        test_context_dependent_symbol_alias_regression();
+        test_foldback_state_api();
         print_known_answers();
 
         if (failures != 0) {

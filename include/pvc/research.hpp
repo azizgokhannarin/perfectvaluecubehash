@@ -87,6 +87,13 @@ void validate_hash_parameters(const HashParameters& parameters);
     std::span<const std::uint8_t> bytes,
     const HashParameters& parameters);
 
+// State after forward absorption and the optional reverse foldback. No closure
+// or squeeze is performed. Equal snapshots for equal-length messages imply
+// identical remaining finalization and therefore a full digest collision.
+[[nodiscard]] InternalStateSnapshot foldback_state_for_research(
+    std::span<const std::uint8_t> bytes,
+    const HashParameters& parameters);
+
 [[nodiscard]] ResearchHashResult inspect_with_parameters(
     std::span<const std::uint8_t> bytes,
     const HashParameters& parameters,

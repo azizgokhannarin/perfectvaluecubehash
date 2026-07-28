@@ -105,9 +105,17 @@ InternalStateSnapshot forward_state_for_research(
     const HashParameters& parameters) {
     validate_hash_parameters(parameters);
     detail::WorkingState state;
-    for (const auto byte : bytes) {
-        detail::absorb_symbol(state, byte, parameters);
-    }
+    detail::absorb_forward(state, bytes, parameters);
+    return detail::snapshot(state);
+}
+
+InternalStateSnapshot foldback_state_for_research(
+    std::span<const std::uint8_t> bytes,
+    const HashParameters& parameters) {
+    validate_hash_parameters(parameters);
+    detail::WorkingState state;
+    detail::absorb_forward(state, bytes, parameters);
+    detail::absorb_foldback(state, bytes, parameters);
     return detail::snapshot(state);
 }
 

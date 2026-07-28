@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Version 0.3.0 does not change the canonical `PVC-RotHash-1` algorithm or its
+Version 0.4.0 does not change the canonical `PVC-RotHash-1` algorithm or its
 known-answer vectors. It adds a separate research interface for deliberately
 weakening the construction and observing where structural failures appear.
 
@@ -151,3 +151,17 @@ The next stage is a targeted meet-in-the-middle experiment that uses the
 observed forward transition merges while preserving foldback constraints. The
 current results show that a naive split at the end of forward absorption is not
 enough, because foldback deliberately separates the known convergent prefixes.
+
+
+## Version 0.4 exhaustive and MITM tools
+
+`pvc-three-byte-collision` uses a research-only 64-bit screening fingerprint,
+a radix sort, and complete state verification to make the full 2^24 domain
+practical. `--phase forward` classifies controller aliases; `--phase foldback`
+searches the complete equal-length state domain immediately before finalization.
+
+`pvc-alignment-probe` compares physical move prefixes for controlled symbol
+differences. `pvc-constrained-merge-search` independently varies left and right
+suffixes and matches complete after-foldback states using a meet-in-the-middle
+table. Analysis fingerprints never determine a reported collision: complete
+state equality is required.

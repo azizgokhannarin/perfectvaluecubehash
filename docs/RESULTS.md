@@ -161,3 +161,21 @@ expectation, with a broad range from `0.1900` to `2.0700`. This sample does not
 establish a sub-birthday attack.
 
 Detailed tables and commands are in `REDUCED_ROUND_RESULTS.md`.
+
+## Version 0.4.0 three-byte structural results
+
+The canonical algorithm and all previous known-answer vectors remain unchanged.
+The complete three-byte forward-state domain contained 1,496 exact collision
+pairs: 768 inherited common-suffix extensions of the three known two-byte
+pairs, and 728 new context-dependent third-symbol aliases.
+
+All 728 new aliases used an identical physical six-move trace. Their absolute
+symbol differences were 42, 126, or 196. No pair survived foldback.
+
+A separate exhaustive enumeration of all 16,777,216 three-byte after-foldback
+states found zero exact collision. Independent two-byte suffix MITM searches
+for each known forward-collision prefix pair covered 2^32 cross combinations
+and also found zero after-foldback merge.
+
+Detailed classifications, commands, and limitations are in
+`THREE_BYTE_RESULTS.md`.

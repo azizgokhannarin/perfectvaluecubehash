@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.20)
 
 project(
     PerfectValueCubeHash
-    VERSION 0.3.0
-    DESCRIPTION "Perfect Value Cube hash and reduced-round cryptanalysis framework"
+    VERSION 0.4.0
+    DESCRIPTION "Perfect Value Cube hash and structural collision cryptanalysis framework"
     LANGUAGES CXX
 )
 
@@ -11,6 +11,8 @@ option(PVC_BUILD_TESTS "Build the test suite" ON)
 option(PVC_BUILD_TOOLS "Build cryptanalysis tools" ON)
 option(PVC_ENABLE_SANITIZERS "Enable AddressSanitizer and UndefinedBehaviorSanitizer" OFF)
 option(PVC_WARNINGS_AS_ERRORS "Treat compiler warnings as errors" OFF)
+
+find_package(Threads REQUIRED)
 
 add_library(pvc_project_options INTERFACE)
 target_compile_features(pvc_project_options INTERFACE cxx_std_20)
@@ -80,6 +82,10 @@ if(PVC_BUILD_TOOLS)
     pvc_add_executable(pvc-related-input-probe tools/related_input_probe.cpp)
     pvc_add_executable(pvc-phase-collision tools/phase_collision.cpp)
     pvc_add_executable(pvc-foldback-merge-search tools/foldback_merge_search.cpp)
+    pvc_add_executable(pvc-three-byte-collision tools/three_byte_collision.cpp)
+    target_link_libraries(pvc-three-byte-collision PRIVATE Threads::Threads)
+    pvc_add_executable(pvc-alignment-probe tools/alignment_probe.cpp)
+    pvc_add_executable(pvc-constrained-merge-search tools/constrained_merge_search.cpp)
 endif()
 
 if(PVC_BUILD_TESTS)

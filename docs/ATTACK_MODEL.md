@@ -73,7 +73,7 @@ security. Any practical shortcut, collision, invariant, or distinguisher is a
 successful project result and must be documented.
 
 
-## Version 0.3 priority attacks
+## Version 0.4 priority attacks
 
 ### Transition injectivity
 

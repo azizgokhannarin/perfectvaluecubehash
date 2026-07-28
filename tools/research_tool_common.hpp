@@ -6,6 +6,7 @@
 #include <bit>
 #include <cstddef>
 #include <cstdint>
+#include <cstring>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
@@ -71,6 +72,36 @@ inline StateFingerprint analysis_fingerprint(const InternalStateSnapshot& state)
         ++index;
     }
     return result;
+}
+
+
+inline std::uint64_t fast_state_fingerprint64(const InternalStateSnapshot& state) {
+    // Research-only screening fingerprint. Exact state equality is always
+    // checked before a collision is reported. Process eight bytes at a time
+    // to keep exhaustive domain scans practical.
+    std::uint64_t hash = 0x243f6a8885a308d3ULL;
+    const auto& storage = state.cube.storage();
+    for (std::size_t offset = 0; offset < storage.size(); offset += 8U) {
+        std::uint64_t word = 0;
+        std::memcpy(&word, storage.data() + offset, sizeof(word));
+        word += 0x9e3779b97f4a7c15ULL
+              + static_cast<std::uint64_t>(offset) * 0x100000001b3ULL;
+        word ^= word >> 29U;
+        word *= 0xbf58476d1ce4e5b9ULL;
+        word ^= word >> 31U;
+        hash ^= std::rotl(word, static_cast<int>((offset / 8U) & 63U));
+        hash = std::rotl(hash, 17) * 0x94d049bb133111ebULL;
+    }
+    const auto geometry = static_cast<std::uint64_t>(state.cursor.x)
+                        | (static_cast<std::uint64_t>(state.cursor.y) << 8U)
+                        | (static_cast<std::uint64_t>(state.cursor.z) << 16U)
+                        | (static_cast<std::uint64_t>(state.previous_axis) << 24U);
+    hash ^= geometry * 0xd6e8feb86659fd93ULL;
+    hash ^= std::rotl(state.symbol_index * 0xa0761d6478bd642fULL, 23);
+    hash ^= hash >> 32U;
+    hash *= 0xe7037ed1a0b428dbULL;
+    hash ^= hash >> 29U;
+    return hash;
 }
 
 struct StateKeyLess {

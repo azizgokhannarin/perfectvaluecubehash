@@ -24,6 +24,14 @@ void absorb_symbol(WorkingState& state,
                    std::uint8_t symbol,
                    const HashParameters& parameters);
 
+void absorb_forward(WorkingState& state,
+                    std::span<const std::uint8_t> bytes,
+                    const HashParameters& parameters);
+
+void absorb_foldback(WorkingState& state,
+                     std::span<const std::uint8_t> bytes,
+                     const HashParameters& parameters);
+
 [[nodiscard]] ResearchHashResult compute(std::span<const std::uint8_t> bytes,
                                          const HashParameters& parameters,
                                          bool keep_trace,
