@@ -1,70 +1,42 @@
 # Security Policy
 
-## Experimental status
+## Candidate status
 
-PVC-RotHash-1 is an unreviewed research prototype. Its statistical results are
-not a security proof.
+PVC-RotHash-1 1.0.0-rc1 is a frozen, unproven research candidate published for
+independent cryptanalysis. Statistical and bounded attack results are not a
+security proof.
 
-Do not use it for password storage, signatures, certificates, software-update
-verification, file integrity, authentication, key derivation, proof-of-work, or
-any production security boundary.
+Do not use it for password storage, signatures, certificates, updates, file
+integrity, authentication, key derivation, commitments, proof-of-work, or any
+production security boundary.
 
-## Reporting a weakness
+## Reporting
 
-Open a GitHub issue containing:
+Use the GitHub `Cryptanalysis finding` issue template for public results. A
+practical full-candidate break may be reported privately to the repository
+maintainer before publication. Include:
 
-- affected version or commit;
-- attack class;
-- exact inputs or reproduction procedure;
-- measured complexity;
+- candidate version and commit;
+- strongest affected phase;
+- exact messages or deterministic generation procedure;
+- time, memory, and number of evaluations;
 - expected generic complexity;
-- source code or script when available.
+- exact-state verification after any fingerprint/LSH filter;
+- source code and reproduction commands.
 
-A weakness is a successful project result. Distinguishers and negative results
-must be reported even when they do not immediately produce collisions.
+A weakness is a successful project result. Reviewers receive public credit in
+the attack log and later paper according to their preferred attribution.
 
+## Interpretation rules
 
-## Research parameter warning
+- Forward-state equality is known and is not a full hash collision.
+- Reduced-round collisions are known and must name the preset.
+- Near-state or near-digest measurements are not collisions.
+- Foldback is not globally injective; sampled reverse contexts contain sparse
+  controller aliases.
+- No full 256-bit digest collision, preimage, or second preimage is currently
+  known to this project.
+- Passing the included tools is not evidence of cryptographic security.
 
-Reduced-round presets are intentionally weak and several have documented full
-collisions. They exist only for cryptanalysis. The presence of an
-`R5-canonical` preset does not imply that R5 is secure.
-
-Forward-state equality must not be reported as a full hash collision unless the
-pair also survives foldback, finalization, and digest comparison.
-
-
-## Forward multicollision warning
-
-Version 0.6.0 documents constructible exponentially large forward families. A
-fully materialized example contains 65,536 distinct messages that reach one
-exact state at the end of forward absorption. This is a forward-pass
-multicollision, not a full hash collision: all 65,536 tested paths are distinct
-after foldback and produce distinct digests. The search also found a 32-level
-path representing a theoretical 2^32-message forward family, which was not
-fully materialized. Reports must state the phase at which equality occurs.
-
-
-## Foldback-distance warning
-
-Version 0.7.0 did not find an exact after-foldback collision, but guided searches
-reduced selected state distances to 224 bits in a bridged family and 180 bits in
-a bounded independent-suffix domain. These are near-state measurements, not
-collisions. Reports must include the search domain, scoring method, and whether
-the distance decreases consistently as resources increase.
-
-Reachable reverse contexts can contain move-controller aliases. In the sampled
-0.7.0 campaign, 24 of 2,304 contexts contained one alias, with differences 42,
-126, or 196. Foldback must not be described as an injective transition system.
-
-## Version 0.8.0 status
-
-The digest-surface campaign directly searched both same-forward and
-forward-divergent message families. Observed minimum digest distances tracked
-the generic 256-bit Hamming references, and phase-state distance showed near-zero
-linear correlation with final digest distance in the tested domains. No exact
-full-digest collision was found.
-
-These results support treating closure and squeeze as a second measured
-diffusion barrier, but they do not establish collision or preimage resistance.
-The design remains unsuitable for production or security-critical use.
+See `docs/SECURITY_TARGET.md`, `docs/KNOWN_CRYPTOANALYSIS.md`, and
+`CRYPTANALYSIS_CHALLENGE.md`.

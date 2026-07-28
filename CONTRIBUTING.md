@@ -7,7 +7,7 @@ claims.
 
 1. Do not add an existing cryptographic primitive to the candidate algorithm.
 2. Analysis tools may use general programming and statistical techniques.
-3. Every algorithm change must update `docs/DESIGN.md`.
+3. The 1.0.0-rc1 candidate is frozen. Algorithm changes require a new candidate identifier and must update `SPECIFICATION.md` and `docs/DESIGN.md`.
 4. Every discovered weakness must be recorded.
 5. Avoid claims such as "secure", "quantum-safe", or "collision-resistant"
    without evidence and independent review.
@@ -31,3 +31,13 @@ ctest --test-dir build --output-on-failure
 - Compact indexing fingerprints are permitted only when reported collisions are
   verified against the complete operational state.
 - Include the exact command, preset, input domain, and colliding messages.
+
+## Candidate conformance
+
+Before submitting a change against the frozen candidate:
+
+```bash
+./scripts/release_check.sh
+```
+
+The official digest and phase vectors must remain byte-for-byte unchanged.

@@ -1,11 +1,26 @@
 # Perfect Value Cube Hash
 
-`PVC-RotHash-1` is a **falsification-oriented cryptographic research prototype**.
-Version 0.8.0 adds a digest-surface cryptanalysis campaign without changing
-the canonical hash algorithm or its known-answer vectors. The new tools target
-both same-forward multicollision families and deliberately different forward
-states, and measure whether internal-state closeness predicts final digest
-closeness. It is not a production hash and makes no security claim.
+`PVC-RotHash-1 1.0.0-rc1` is a **frozen, falsification-oriented hash candidate
+published for independent cryptanalysis**. The algorithm is unchanged from the
+analyzed PVC-RotHash-1 line; this release adds a normative specification, an
+independent pure-Python implementation, official digest and phase vectors, and
+a public-review package.
+
+It is not a production hash and makes no security claim.
+
+## Public-review entry points
+
+- [`SPECIFICATION.md`](SPECIFICATION.md) — frozen normative candidate.
+- [`CRYPTANALYSIS_CHALLENGE.md`](CRYPTANALYSIS_CHALLENGE.md) — high-value attack targets.
+- [`docs/INDEPENDENT_REVIEW.md`](docs/INDEPENDENT_REVIEW.md) — reviewer workflow.
+- [`docs/KNOWN_CRYPTOANALYSIS.md`](docs/KNOWN_CRYPTOANALYSIS.md) — consolidated findings.
+- [`docs/SECURITY_TARGET.md`](docs/SECURITY_TARGET.md) — targets and explicit non-claims.
+- [`test-vectors/`](test-vectors/) — official digest and phase vectors.
+- [`reference/python/`](reference/python/) — independent standard-library reference.
+
+The candidate is frozen under [`docs/SPEC_FREEZE.md`](docs/SPEC_FREEZE.md).
+Algorithm changes require a new candidate identifier; analysis and portability
+improvements may continue without changing the official vectors.
 
 The project studies whether the canonical Perfect Value Cube, a state-dependent
 chain of intersecting line rotations, and an original four-diagonal squeeze can
@@ -75,6 +90,20 @@ cmake -S . -B build -DCMAKE_BUILD_TYPE=Release \
   -DPVC_WARNINGS_AS_ERRORS=ON
 cmake --build build
 ctest --test-dir build --output-on-failure
+```
+
+Cross-implementation conformance:
+
+```bash
+python3 scripts/verify_vectors.py \
+  --cpp build/pvc-hash \
+  --vector-dump build/pvc-vector-dump
+```
+
+Expected output:
+
+```text
+verified 32 digest vectors and 5 phase vectors
 ```
 
 Sanitizer build:

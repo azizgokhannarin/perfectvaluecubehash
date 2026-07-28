@@ -15,7 +15,27 @@ void print_usage(const char* program) {
     std::cerr
         << "Usage:\n"
         << "  " << program << " --text <message> [--dump-cube] [--trace]\n"
-        << "  " << program << " --file <path>    [--dump-cube] [--trace]\n";
+        << "  " << program << " --file <path>    [--dump-cube] [--trace]\n"
+        << "  " << program << " --hex <bytes>    [--dump-cube] [--trace]\n";
+}
+
+std::vector<std::uint8_t> parse_hex(const std::string& text) {
+    if ((text.size() & 1U) != 0U) {
+        throw std::invalid_argument("Hex input must contain an even number of characters");
+    }
+    const auto nibble = [](char value) -> std::uint8_t {
+        if (value >= '0' && value <= '9') return static_cast<std::uint8_t>(value - '0');
+        if (value >= 'a' && value <= 'f') return static_cast<std::uint8_t>(value - 'a' + 10);
+        if (value >= 'A' && value <= 'F') return static_cast<std::uint8_t>(value - 'A' + 10);
+        throw std::invalid_argument("Hex input contains a non-hexadecimal character");
+    };
+
+    std::vector<std::uint8_t> result(text.size() / 2U);
+    for (std::size_t i = 0; i < result.size(); ++i) {
+        result[i] = static_cast<std::uint8_t>((nibble(text[i * 2U]) << 4U)
+                                            | nibble(text[i * 2U + 1U]));
+    }
+    return result;
 }
 
 std::vector<std::uint8_t> read_file(const std::string& path) {
@@ -46,6 +66,9 @@ int main(int argc, char** argv) {
                 have_input = true;
             } else if (arg == "--file" && i + 1 < argc) {
                 message = read_file(argv[++i]);
+                have_input = true;
+            } else if (arg == "--hex" && i + 1 < argc) {
+                message = parse_hex(argv[++i]);
                 have_input = true;
             } else if (arg == "--dump-cube") {
                 dump_cube = true;

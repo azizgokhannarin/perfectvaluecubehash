@@ -1,0 +1,232 @@
+{
+  "algorithm": "PVC-RotHash-1",
+  "candidate": "1.0.0-rc1",
+  "digest_bytes": 32,
+  "encoding": "input_hex is the exact byte string; digest_hex is lowercase hexadecimal",
+  "vectors": [
+    {
+      "id": "empty",
+      "note": "Empty message",
+      "input_length": 0,
+      "input_hex": "",
+      "digest_hex": "7f01eb3ce13131ef290f8428ed725b849f875e49ad6c646cc9f4f1b1a1e5734b"
+    },
+    {
+      "id": "single-00",
+      "note": "Single zero byte",
+      "input_length": 1,
+      "input_hex": "00",
+      "digest_hex": "987d73511cd4ff30e4a2235497576f1ae553aa86069c06e09936cfe2890009ff"
+    },
+    {
+      "id": "single-ff",
+      "note": "Single 0xff byte",
+      "input_length": 1,
+      "input_hex": "ff",
+      "digest_hex": "ca97ebe2eea660111e31a5327070656530d26b863597f8ac6dcac0ef814afa90"
+    },
+    {
+      "id": "two-0001",
+      "note": "Two-byte ascending boundary",
+      "input_length": 2,
+      "input_hex": "0001",
+      "digest_hex": "341857582c4df95c2b6e2ca09e061b8f5a7065d820e1d239bb9c08f95e67e183"
+    },
+    {
+      "id": "two-0100",
+      "note": "Two-byte reversed boundary",
+      "input_length": 2,
+      "input_hex": "0100",
+      "digest_hex": "930fccc0c96de67310937d68bad9d4dd837d530c524449b1eba7a060c65e3965"
+    },
+    {
+      "id": "ascii-a",
+      "note": "ASCII a",
+      "input_length": 1,
+      "input_hex": "61",
+      "digest_hex": "2d4867236ccaed2dfa3f4804dc6fb3444b1e142a5c4cfee2c9fdcb05d590cb76"
+    },
+    {
+      "id": "ascii-abc",
+      "note": "ASCII abc",
+      "input_length": 3,
+      "input_hex": "616263",
+      "digest_hex": "f32b2241a950d7e7b2b006ff8ae2d0b08f02db23c0d8fde198dfdf9e9642051f"
+    },
+    {
+      "id": "ascii-message-digest",
+      "note": "Classic short ASCII phrase",
+      "input_length": 14,
+      "input_hex": "6d65737361676520646967657374",
+      "digest_hex": "f6beedecedaf58628d42a2a82ab45d1fc198afdf75884de122397fe6946024a4"
+    },
+    {
+      "id": "ascii-pvc",
+      "note": "Project name",
+      "input_length": 18,
+      "input_hex": "506572666563742056616c75652043756265",
+      "digest_hex": "ea3cf546291874656dd454e2481fc530fe1c4b2783ad101cf7af4a5521aa3775"
+    },
+    {
+      "id": "ascii-quick-fox",
+      "note": "Classic sentence",
+      "input_length": 43,
+      "input_hex": "54686520717569636b2062726f776e20666f78206a756d7073206f76657220746865206c617a7920646f67",
+      "digest_hex": "7afe7b40b3f36656ef2726e3af2a33304a3c7f6fce89d162cb1df398470abf2c"
+    },
+    {
+      "id": "utf8-turkish",
+      "note": "UTF-8 Turkish phrase",
+      "input_length": 23,
+      "input_hex": "4dc3bc6b656d6d656c204465c49f6572204bc3bc70c3bc",
+      "digest_hex": "75879cf1140c3030c500b93d1a198237bfb7ed61ac607e6ab5fbeb7ffa07708c"
+    },
+    {
+      "id": "zeros-8",
+      "note": "Eight zero bytes",
+      "input_length": 8,
+      "input_hex": "0000000000000000",
+      "digest_hex": "54f44f8ef3a7588965132a8e972e60507e9e53cb01fe7074fc19d308c7e4d375"
+    },
+    {
+      "id": "zeros-32",
+      "note": "Thirty-two zero bytes",
+      "input_length": 32,
+      "input_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+      "digest_hex": "839fea3ba9573eeddd0e8211ec19a8adfe3ec8d85711cfe204204f88745c3e4c"
+    },
+    {
+      "id": "zeros-64",
+      "note": "Sixty-four zero bytes",
+      "input_length": 64,
+      "input_hex": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "digest_hex": "5c212054407e9f3a3676b4e7b8c880600d478dc64ea8c158c51d9e12d242e620"
+    },
+    {
+      "id": "ff-8",
+      "note": "Eight 0xff bytes",
+      "input_length": 8,
+      "input_hex": "ffffffffffffffff",
+      "digest_hex": "4b23f3aa2159b2ee5be563b83599e023c491e7bc038f935ecf3dcd3bff01267e"
+    },
+    {
+      "id": "ff-32",
+      "note": "Thirty-two 0xff bytes",
+      "input_length": 32,
+      "input_hex": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "digest_hex": "9ffc84ebb9616d192620b541ba54d276f99694cd8fc98495235b9a80c50ebdb1"
+    },
+    {
+      "id": "incrementing-8",
+      "note": "00..07",
+      "input_length": 8,
+      "input_hex": "0001020304050607",
+      "digest_hex": "33b8fff9c2bb791101dec73d8be1169caf622b647bb87af83a5736e0498b5d56"
+    },
+    {
+      "id": "incrementing-16",
+      "note": "00..0f",
+      "input_length": 16,
+      "input_hex": "000102030405060708090a0b0c0d0e0f",
+      "digest_hex": "0f638f8aac119035bfc05f534be27ca14d4099e02e59f663f385d024bbb682c6"
+    },
+    {
+      "id": "incrementing-32",
+      "note": "00..1f",
+      "input_length": 32,
+      "input_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+      "digest_hex": "871cf64e95e0b508243fd1b97b4693837e1767e6ad2c5b6e740029864ec4f15e"
+    },
+    {
+      "id": "incrementing-64",
+      "note": "00..3f",
+      "input_length": 64,
+      "input_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f",
+      "digest_hex": "18d0bd3d89bcd825f20e56fc55326f86788f7d64b97882e7a573cfc7216af349"
+    },
+    {
+      "id": "incrementing-128",
+      "note": "00..7f",
+      "input_length": 128,
+      "input_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f",
+      "digest_hex": "6a20b026f2f24a653aeff76ff0ba10cdfec89e34efa4041dc21d1955ddc33701"
+    },
+    {
+      "id": "incrementing-256",
+      "note": "00..ff",
+      "input_length": 256,
+      "input_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafbfcfdfeff",
+      "digest_hex": "9588ef2e326d0c345771a7e10f453408ec96eadbc29c9a665a0ddf4a49843ba4"
+    },
+    {
+      "id": "decrementing-32",
+      "note": "1f..00",
+      "input_length": 32,
+      "input_hex": "1f1e1d1c1b1a191817161514131211100f0e0d0c0b0a09080706050403020100",
+      "digest_hex": "c4de36b9cf3d0ca45bde4b89aeb6675cbc11494f157be7727887d2acfbf7bb13"
+    },
+    {
+      "id": "alternating-aa55-32",
+      "note": "Alternating aa55",
+      "input_length": 32,
+      "input_hex": "aa55aa55aa55aa55aa55aa55aa55aa55aa55aa55aa55aa55aa55aa55aa55aa55",
+      "digest_hex": "4277b793c0bb2d4c5b6aa2bd88348d709cf74f702beb1b4676d74b2e5a871fcb"
+    },
+    {
+      "id": "forward-alias-left",
+      "note": "Known forward-state alias left",
+      "input_length": 2,
+      "input_hex": "176f",
+      "digest_hex": "cf026d1830e2cc99dd429f8178c1fdab30e04df2f134a220bde50072364a3d4e"
+    },
+    {
+      "id": "forward-alias-right",
+      "note": "Known forward-state alias right",
+      "input_length": 2,
+      "input_hex": "1799",
+      "digest_hex": "150ddb151462810f239aa05a5381d1e0ed9050ff87029943970fdf25a2e72d12"
+    },
+    {
+      "id": "context-alias-left",
+      "note": "Known context alias left",
+      "input_length": 3,
+      "input_hex": "af671b",
+      "digest_hex": "963c5fe8e9fd5f4c5378cda37d5fd71d86deb78c0e25f7de1940a7d6c7eb31c6"
+    },
+    {
+      "id": "context-alias-right",
+      "note": "Known context alias right",
+      "input_length": 3,
+      "input_hex": "af67df",
+      "digest_hex": "79d763a90766441c29b025cf34de87b545896d23430794485c3c72562538795d"
+    },
+    {
+      "id": "four-way-1",
+      "note": "Known four-way forward family member 1",
+      "input_length": 4,
+      "input_hex": "176f115b",
+      "digest_hex": "43ed5a0c5a9b654a2eb5a76a67f82bcd7ec53718f2c4cd664762c45319eeb42e"
+    },
+    {
+      "id": "four-way-2",
+      "note": "Known four-way forward family member 2",
+      "input_length": 4,
+      "input_hex": "176f1185",
+      "digest_hex": "9b3c522c08591f941a97faa39d2d93b8a10184a64dc2433d629da57104a67315"
+    },
+    {
+      "id": "four-way-3",
+      "note": "Known four-way forward family member 3",
+      "input_length": 4,
+      "input_hex": "1799115b",
+      "digest_hex": "c6f4125384babbc63f465e60445c529c7b2529a90159a955be8c5e1fde38dd5e"
+    },
+    {
+      "id": "four-way-4",
+      "note": "Known four-way forward family member 4",
+      "input_length": 4,
+      "input_hex": "17991185",
+      "digest_hex": "ec1fe76a0eb4f91c476920168f1ded7a035d4adc463ca06c40d78ceb14b16423"
+    }
+  ]
+}

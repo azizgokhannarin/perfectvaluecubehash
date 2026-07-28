@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use or analyze this candidate, cite the repository and frozen candidate version."
+title: "PVC-RotHash-1: Perfect Value Cube Rotation Hash Candidate"
+type: software
+authors:
+  - family-names: Narin
+    given-names: Aziz Gökhan
+version: "1.0.0-rc1"
+date-released: 2026-07-28
+license: Apache-2.0
+repository-code: "https://github.com/azizgokhannarin/perfectvaluecubehash"
+abstract: >-
+  Frozen experimental 256-bit hash candidate based on a canonical Perfect Value
+  Cube, state-dependent intersecting line rotations, reverse foldback, full-cube
+  closure, and a four-diagonal squeeze. Published for independent cryptanalysis;
+  no security claim is made.
+keywords:
+  - cryptographic hash
+  - experimental cryptography
+  - cryptanalysis
+  - perfect value cube
+  - rotation-based hash

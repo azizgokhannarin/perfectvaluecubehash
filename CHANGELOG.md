@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.0.0-rc1 — Frozen public cryptanalysis candidate
+
+- froze the PVC-RotHash-1 algorithm without changing canonical digests;
+- added the normative `SPECIFICATION.md` with exact arithmetic, state,
+  constants, phases, and conformance requirements;
+- added an independent pure-Python implementation using no third-party package;
+- added 32 official digest vectors and five full phase-state vectors;
+- added cross-implementation vector verification and CTest/CI conformance;
+- added the public cryptanalysis challenge, independent-review guide, security
+  target, candidate-freeze policy, consolidated cryptanalysis summary, and
+  reproducibility guide;
+- added issue templates for cryptanalysis and conformance reports;
+- added citation, authorship, AI-assistance, and review-credit disclosures;
+- added a deterministic release-check script and public-review checklist;
+- retained the complete historical attack tooling and documented weaknesses;
+- continued to prohibit production use and made no collision/preimage claim.
+
 ## 0.8.0 — Digest-surface cryptanalysis
 
 - Kept the canonical PVC-RotHash-1 algorithm and known-answer vectors unchanged.

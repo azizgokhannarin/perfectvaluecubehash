@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.20)
 
 project(
     PerfectValueCubeHash
-    VERSION 0.8.0
-    DESCRIPTION "Perfect Value Cube hash and digest-surface cryptanalysis campaign"
+    VERSION 1.0.0
+    DESCRIPTION "PVC-RotHash-1 frozen candidate and independent cryptanalysis package"
     LANGUAGES CXX
 )
 
@@ -107,6 +107,7 @@ if(PVC_BUILD_TOOLS)
     pvc_add_executable(pvc-divergent-digest-beam tools/divergent_digest_beam.cpp)
     pvc_add_executable(pvc-digest-lsh-search tools/digest_lsh_search.cpp)
     pvc_add_executable(pvc-barrier-correlation tools/barrier_correlation.cpp)
+    pvc_add_executable(pvc-vector-dump tools/vector_dump.cpp)
 endif()
 
 if(PVC_BUILD_TESTS)
@@ -115,4 +116,16 @@ if(PVC_BUILD_TESTS)
 
     pvc_add_executable(pvc-tests tests/test_main.cpp)
     add_test(NAME pvc-tests COMMAND pvc-tests)
+
+    find_package(Python3 COMPONENTS Interpreter QUIET)
+    if(Python3_Interpreter_FOUND AND PVC_BUILD_TOOLS)
+        add_test(
+            NAME pvc-cross-implementation-vectors
+            COMMAND
+                ${Python3_EXECUTABLE}
+                ${CMAKE_CURRENT_SOURCE_DIR}/scripts/verify_vectors.py
+                --cpp $<TARGET_FILE:pvc-hash>
+                --vector-dump $<TARGET_FILE:pvc-vector-dump>
+        )
+    endif()
 endif()
