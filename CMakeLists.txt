@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.20)
 
 project(
     PerfectValueCubeHash
-    VERSION 0.2.0
-    DESCRIPTION "Experimental four-diagonal squeeze hash based on the Perfect Value Cube"
+    VERSION 0.3.0
+    DESCRIPTION "Perfect Value Cube hash and reduced-round cryptanalysis framework"
     LANGUAGES CXX
 )
 
@@ -43,8 +43,10 @@ endif()
 
 add_library(pvc_hash
     src/cube.cpp
+    src/engine.cpp
     src/hash.cpp
     src/hex.cpp
+    src/research.cpp
 )
 add_library(PVC::Hash ALIAS pvc_hash)
 
@@ -70,6 +72,14 @@ if(PVC_BUILD_TOOLS)
     pvc_add_executable(pvc-distribution-probe tools/distribution_probe.cpp)
     pvc_add_executable(pvc-state-bias-probe tools/state_bias_probe.cpp)
     pvc_add_executable(pvc-structure-probe tools/structure_probe.cpp)
+    pvc_add_executable(pvc-reduced-round-probe tools/reduced_round_probe.cpp)
+    pvc_add_executable(pvc-transition-collision tools/transition_collision.cpp)
+    pvc_add_executable(pvc-truncated-collision tools/truncated_collision.cpp)
+    pvc_add_executable(pvc-differential-search tools/differential_search.cpp)
+    pvc_add_executable(pvc-predecessor-enumerator tools/predecessor_enumerator.cpp)
+    pvc_add_executable(pvc-related-input-probe tools/related_input_probe.cpp)
+    pvc_add_executable(pvc-phase-collision tools/phase_collision.cpp)
+    pvc_add_executable(pvc-foldback-merge-search tools/foldback_merge_search.cpp)
 endif()
 
 if(PVC_BUILD_TESTS)

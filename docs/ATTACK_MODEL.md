@@ -71,3 +71,33 @@ Version 1 passes simple marginal byte and bit tests. Continue with:
 Experiments can falsify the construction. They cannot establish cryptographic
 security. Any practical shortcut, collision, invariant, or distinguisher is a
 successful project result and must be documented.
+
+
+## Version 0.3 priority attacks
+
+### Transition injectivity
+
+Search exact operational-state equality after one, two, and longer symbol
+sequences from identical or different reachable predecessor states.
+
+### Forward-plus-foldback collision
+
+Forward equality alone is insufficient because the reverse message pass can
+separate convergent prefixes. Construct message pairs that collide after both
+forward absorption and foldback.
+
+### Truncated collision scaling
+
+Measure whether reduced and canonical configurations follow the generic
+birthday curve from 16 through 64 output bits. A consistent sub-birthday trend
+would be evidence of exploitable structure.
+
+### Differential cancellation
+
+Search chosen low-weight differences that become small again after foldback,
+closures, or squeeze rather than only measuring random one-bit avalanche.
+
+### Reachable predecessor graph
+
+Measure exact in-degree and merging structure in finite reachable subgraphs as
+preparation for a constrained meet-in-the-middle attack.

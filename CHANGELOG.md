@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.3.0 — PVC-RotHash-1 cryptanalysis framework
+
+- kept the canonical hash algorithm and known-answer vectors unchanged;
+- added runtime research parameters and six reduced-round presets;
+- added exact operational snapshots and phase checkpoints;
+- added reduced-round, transition-collision, phase-collision, truncated-
+  collision, differential, predecessor, and related-input tools;
+- documented the canonical two-symbol forward convergence `17 6f` / `17 99`;
+- verified that foldback separates all three forward merges in the exhaustive
+  canonical two-byte domain;
+- documented full-state and digest collapse in reduced presets R0–R2;
+- added a foldback merge-extension search and exhausted all common two-byte
+  suffixes for the three canonical forward-collision pairs;
+- added regression tests preserving both the canonical KATs and the known
+  forward-convergence/foldback-separation result;
+- expanded CI with research smoke tests.
+
 ## 0.2.0 — PVC-RotHash-1
 
 - replaced direct concatenation of one cube's four body diagonals;

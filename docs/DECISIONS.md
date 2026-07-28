@@ -53,3 +53,26 @@ full state sufficiently.
 
 All versions remain explicitly experimental. Statistical test results are
 reported as rejection of specific attacks, never as proof of security.
+
+
+## D-007 — Freeze canonical version-1 output during cryptanalysis
+
+Accepted. Version 0.3.0 adds research APIs and tools but does not alter the
+canonical constants, operational path, or known-answer vectors.
+
+## D-008 — Runtime parameters are research-only
+
+Accepted. Reduced-round parameters are exposed through `pvc/research.hpp`.
+Production-facing `RotHash1` always uses `R5-canonical`.
+
+## D-009 — Exact collision verification
+
+Accepted. Analysis tools may index large state sets with compact,
+non-cryptographic fingerprints for memory efficiency, but every reported state
+collision must be verified against the complete operational snapshot.
+
+## D-010 — Forward equality is not a full collision
+
+Accepted. Any reported message collision must state the deepest equal phase.
+Forward convergence that is separated by foldback is recorded as a structural
+finding, not presented as a digest collision.

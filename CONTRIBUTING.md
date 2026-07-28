@@ -19,3 +19,15 @@ cmake -S . -B build -DPVC_WARNINGS_AS_ERRORS=ON
 cmake --build build
 ctest --test-dir build --output-on-failure
 ```
+
+
+## Cryptanalysis contributions
+
+- Keep the canonical `RotHash1` parameters unchanged unless a separate design
+  revision is explicitly proposed.
+- Use `pvc/research.hpp` for reduced-round experiments.
+- Distinguish forward-state convergence, after-foldback state collision, final-
+  state collision, truncated digest collision, and full digest collision.
+- Compact indexing fingerprints are permitted only when reported collisions are
+  verified against the complete operational state.
+- Include the exact command, preset, input domain, and colliding messages.

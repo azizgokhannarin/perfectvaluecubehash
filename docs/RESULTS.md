@@ -1,4 +1,4 @@
-# Results for PVC-RotHash-1 0.2.0
+# Results for PVC-RotHash-1
 
 Environment:
 
@@ -132,3 +132,32 @@ Version 1 removes the two known version-0 distinguishers in the measured test
 domains while retaining strong avalanche behavior. It remains vulnerable in
 principle to untested algebraic, higher-order statistical, symmetry,
 meet-in-the-middle, and multicollision attacks. No security level is claimed.
+
+
+## Version 0.3.0 structural results
+
+The canonical algorithm and statistical results from version 0.2.0 are
+unchanged. New reduced-round and exact-state experiments found that the
+canonical forward path is not injective over two symbols.
+
+```text
+17 6f == 17 99
+25 1c == 25 46
+a2 6f == a2 99
+(after forward absorption only)
+```
+
+Exhaustive canonical two-byte phase enumeration found three forward-state
+merges, then zero collisions after foldback, diagonal closure, orbit closure,
+final state, or digest. Testing every common two-byte suffix for each of the
+three pairs also produced no after-foldback collision.
+
+Reduced presets R0, R1, and R2 produced full two-byte collisions. R3, R4, and
+R5 had forward merges but no after-foldback or final collision in that domain.
+
+Initial 24-bit truncated testing over 20 deterministic canonical domains had a
+mean first-collision ratio of `0.9140` relative to the generic birthday
+expectation, with a broad range from `0.1900` to `2.0700`. This sample does not
+establish a sub-birthday attack.
+
+Detailed tables and commands are in `REDUCED_ROUND_RESULTS.md`.

@@ -1,7 +1,9 @@
 # Perfect Value Cube Hash
 
 `PVC-RotHash-1` is a **falsification-oriented cryptographic research prototype**.
-It is not a production hash and makes no security claim.
+Version 0.3.0 adds a reduced-round cryptanalysis framework without changing the
+canonical hash algorithm or its known-answer vectors. It is not a production
+hash and makes no security claim.
 
 The project studies whether the canonical Perfect Value Cube, a state-dependent
 chain of intersecting line rotations, and an original four-diagonal squeeze can
@@ -62,7 +64,7 @@ rotations, byte addition, the squeeze chain value, and the output position.
 After the byte is emitted, four diagonal-rooted symbols are absorbed into the
 same intersecting rotation chain before the next output byte is produced.
 
-The operational definition is `src/hash.cpp`.
+The operational definition is `src/engine.cpp`; `src/hash.cpp` fixes the public API to the canonical parameters.
 
 ## Build
 
@@ -93,6 +95,14 @@ ctest --test-dir build-san --output-on-failure
 ./build/pvc-hash --text "hello" --dump-cube
 ```
 
+## Reduced-round research interface
+
+`include/pvc/research.hpp` exposes runtime parameters, exact operational-state
+snapshots, phase checkpoints, and six reduced-round presets. The normal
+`RotHash1` API remains fixed to the canonical configuration.
+
+See [`docs/CRYPTANALYSIS_FRAMEWORK.md`](docs/CRYPTANALYSIS_FRAMEWORK.md).
+
 ## Analysis tools
 
 ```bash
@@ -104,6 +114,14 @@ ctest --test-dir build-san --output-on-failure
 ./build/pvc-distribution-probe 100000 16
 ./build/pvc-state-bias-probe 50000 16
 ./build/pvc-structure-probe "Perfect Value Cube"
+./build/pvc-reduced-round-probe
+./build/pvc-transition-collision --preset R5-canonical --depth 2
+./build/pvc-phase-collision --preset R5-canonical --message-bytes 2
+./build/pvc-truncated-collision --preset R5-canonical --bits 24 --limit 50000
+./build/pvc-differential-search --preset R5-canonical --samples 4
+./build/pvc-predecessor-enumerator --preset R5-canonical
+./build/pvc-related-input-probe --preset R5-canonical
+./build/pvc-foldback-merge-search --left 176f --right 1799 --suffix-bytes 2
 ```
 
 These tools are intended to disprove the design. Passing them is not evidence
@@ -130,6 +148,23 @@ On the documented GCC 14.2.0 test environment:
 These results only reject specific simple distinguishers. They do not establish
 preimage, second-preimage, or collision resistance.
 
+Version 0.3.0 structural analysis additionally found:
+
+- three exact forward-state merges among all 65,536 canonical two-byte messages;
+- the three pairs are `17 6f`/`17 99`, `25 1c`/`25 46`, and
+  `a2 6f`/`a2 99`;
+- reverse foldback separates all three merges in that finite domain;
+- appending every possible common two-byte suffix to each pair found no
+  after-foldback collision;
+- no after-foldback, closure, final-state, or digest collision was found in the
+  complete two-byte domain;
+- reduced presets R0 through R2 produce full collisions, while R3 through R5 do
+  not in the same exhaustive two-byte experiment;
+- 24-bit truncated collision times for R5 remain broadly compatible with the
+  generic birthday scale in the initial 20-trial sample.
+
+See [`docs/REDUCED_ROUND_RESULTS.md`](docs/REDUCED_ROUND_RESULTS.md).
+
 ## Security status
 
 **Do not use this project for passwords, authentication, signatures, file
@@ -143,6 +178,8 @@ See:
 - [`docs/RESULTS.md`](docs/RESULTS.md)
 - [`docs/ATTACK_LOG.md`](docs/ATTACK_LOG.md)
 - [`docs/DECISIONS.md`](docs/DECISIONS.md)
+- [`docs/CRYPTANALYSIS_FRAMEWORK.md`](docs/CRYPTANALYSIS_FRAMEWORK.md)
+- [`docs/REDUCED_ROUND_RESULTS.md`](docs/REDUCED_ROUND_RESULTS.md)
 - [`SECURITY.md`](SECURITY.md)
 
 ## Origin

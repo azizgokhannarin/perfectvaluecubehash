@@ -1,96 +1,108 @@
-Perfect Value Cube Hash 0.2.0 verification
-===========================================
+Perfect Value Cube Hash 0.3.0 verification
+==========================================
+
+Canonical algorithm status
+--------------------------
+The PVC-RotHash-1 algorithm and known-answer vectors are unchanged from 0.2.0.
+
+H(""):
+7f01eb3ce13131ef290f8428ed725b849f875e49ad6c646cc9f4f1b1a1e5734b
+
+H("abc"):
+f32b2241a950d7e7b2b006ff8ae2d0b08f02db23c0d8fde198dfdf9e9642051f
 
 Build verification
 ------------------
-GCC 14.2.0 Release + warnings-as-errors: passed
-Clang 17 Release + warnings-as-errors: passed
-GCC 14.2.0 ASan/UBSan Debug + warnings-as-errors: passed
-CTest in all three builds: 1/1 passed
+- GCC 14.2.0 Release, warnings as errors: passed
+- Clang 17 Release, warnings as errors: passed
+- GCC 14.2.0 Debug with ASan/UBSan: passed
+- CTest: all tests passed
 
-Regression vectors
-------------------
-H("") =
-7f01eb3ce13131ef290f8428ed725b849f875e49ad6c646cc9f4f1b1a1e5734b
+Regression tests include the known canonical forward convergence:
+  17 6f == 17 99 after forward absorption
+and verify that the pair differs after foldback, finalization, and digest output.
 
-H("abc") =
-f32b2241a950d7e7b2b006ff8ae2d0b08f02db23c0d8fde198dfdf9e9642051f
-
-H("Perfect Value Cube") =
-ea3cf546291874656dd454e2481fc530fe1c4b2783ad101cf7af4a5521aa3775
-
-Structure probe
----------------
-moves                         : 2196
-consecutive axes differ       : yes
-each line meets previous line : yes
-0..255 each still occur twice : yes
-all 192 sums still 1020       : no
-
-Avalanche
----------
-Fixed 18-byte message, all 144 bit flips:
-mean=128.10 min=107 max=152 of 256
-mean changed bytes=31.90 min=31 max=32 of 32
-
-32,000 deterministic 16-byte trials, one bit flip per message:
-mean=127.9508 sd=8.0574 min=94 max=159 of 256
-
-Small-domain collision probes
+Reduced-round one-byte matrix
 -----------------------------
-All 256 one-byte inputs: no collision found
-All 65,536 two-byte inputs: no collision found
+preset         digestB  digest-col  state-col  avalanche
+R0-minimal     4        242         242        15.947 / 32
+R1-foldback    8        42          42         31.990 / 64
+R2-small       8        3           3          31.891 / 64
+R3-medium      16       0           0          64.068 / 128
+R4-near        16       0           0          63.928 / 128
+R5-canonical   32       0           0          127.738 / 256
 
-Exhaustive two-byte digest distribution
----------------------------------------
-mean per-position chi-square    = 255.4556
-minimum / maximum chi-square    = 192.2656 / 292.6719
-support at every position       = 256 of 256
-largest value / expected count  = 1.2656
-maximum output-bit |z|          = 3.1172
-equal byte pairs per digest     = 1.9356 (reference 1.9375)
-complement pairs per digest     = 1.9357 (reference 1.9375)
-digests with a triple byte      = 6.7764%
+Canonical two-byte phase enumeration
+------------------------------------
+Domain: all 65,536 two-byte messages
 
-100,000 deterministic 16-byte messages
---------------------------------------
-mean per-position chi-square    = 254.5854
-minimum / maximum chi-square    = 205.4810 / 301.8291
-support at every position       = 256 of 256
-largest value / expected count  = 1.1981
-maximum output-bit |z|          = 2.7891
-equal byte pairs per digest     = 1.9314 (reference 1.9375)
-complement pairs per digest     = 1.9303 (reference 1.9375)
-digests with a triple byte      = 6.8000%
+after-forward collisions          = 3
+after-foldback collisions         = 0
+after-diagonal-closure collisions = 0
+after-orbit-closure collisions    = 0
+final-state collisions            = 0
+digest collisions                 = 0
 
-100,000 deterministic 64-byte messages
---------------------------------------
-mean per-position chi-square    = 253.9971
-minimum / maximum chi-square    = 206.8378 / 333.8342
-support at every position       = 256 of 256
-largest value / expected count  = 1.2032
-maximum output-bit |z|          = 3.3014
-equal byte pairs per digest     = 1.9396 (reference 1.9375)
-complement pairs per digest     = 1.9406 (reference 1.9375)
-digests with a triple byte      = 6.6110%
+Forward-state pairs:
+  17 6f / 17 99
+  25 1c / 25 46
+  a2 6f / a2 99
 
-Final-state positional bias, 50,000 messages
---------------------------------------------
-16-byte messages:
-mean per-cell chi-square             = 255.3289
-minimum / maximum chi-square         = 198.3846 / 331.8835
-support at every cell                = 256 of 256
-largest value / expected count       = 1.3158
-canonical/complement preferred value = 6 of 512 cells
+All 65,536 common two-byte suffixes were tested for each pair.
+After-foldback collisions found = 0
+Minimum observed foldback cube bit distances = 244, 208, 258
 
-64-byte messages:
-mean per-cell chi-square             = 253.2930
-minimum / maximum chi-square         = 189.0560 / 317.7626
-support at every cell                = 256 of 256
-largest value / expected count       = 1.3670
-canonical/complement preferred value = 4 of 512 cells
+Reachable predecessor sample
+----------------------------
+256 one-byte prefixes x 256 next symbols:
+transitions                        = 65,536
+distinct target states             = 65,533
+targets with multiple predecessors = 3
+maximum observed indegree          = 2
+
+Truncated collision scaling
+---------------------------
+R5, 24-bit truncation, 20 deterministic domains:
+mean first collision messages = 4,692.70
+birthday expectation          = 5,133.57
+mean observed/expected ratio  = 0.9140
+minimum / maximum ratio       = 0.1900 / 2.0700
+
+No full digest equality occurred in the documented R3-R5 truncated examples.
+R0-R2 produced full digest collisions, consistent with exact-state collapse.
+
+Differential phase search
+-------------------------
+R5, four 16-byte base messages, 512 single-bit comparisons:
+
+after-forward mean cube bits          = 1,400.4062 / 4,096
+after-foldback mean cube bits         = 1,985.5000 / 4,096
+after-diagonal-closure mean cube bits = 2,047.7227 / 4,096
+after-orbit-closure mean cube bits    = 2,048.0156 / 4,096
+final mean cube bits                  = 2,047.8438 / 4,096
+final mean differing cube bytes       = 510.0156 / 512
+digest mean                           = 127.5742 / 256
+digest minimum / maximum              = 100 / 156
+exact digest matches                  = 0
+
+Paired-difference digest mean = 128.8438 / 256; exact digest matches = 0.
+
+Related-input tests
+-------------------
+256 deterministic 16-byte messages:
+reverse mean digest distance          = 128.0195; matches = 0
+complement mean digest distance       = 128.1914; matches = 0
+cyclic-rotation mean digest distance  = 128.8594; matches = 0
+
+Complete permutation domains:
+ABCDEFGH  : 40,320 messages, 0 digest/state collisions
+AABBCCDD  :  2,520 messages, 0 digest/state collisions
+00001111  :     70 messages, 0 digest/state collisions
 
 Interpretation
 --------------
-These measurements reject the two simple version-0 distinguishers in the tested
-domains. They do not prove preimage, second-preimage, or collision resistance.
+The canonical forward transition is not injective. The tested foldback pass
+separates all observed two-byte forward merges. This is a limited empirical
+result, not a security proof. The next target is a constrained meet-in-the-
+middle or equivalent-chain attack that satisfies both forward and foldback
+conditions.

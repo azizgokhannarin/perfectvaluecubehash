@@ -24,16 +24,28 @@
 - large avalanche sweep;
 - final-state positional-bias probe.
 
-## Next — Structural cryptanalysis
+## Completed — Initial structural cryptanalysis framework
 
-- reduced-state exhaustive models;
-- automatic equivalent-chain search;
-- pairwise and higher-order digest correlations;
-- differential trail visualization;
-- complement/reflection related-input attacks;
-- meet-in-the-middle experiments;
-- cycle and fixed-point search;
-- multicollision and expandable-message attacks.
+- six parameterized reduced-round presets;
+- exact operational snapshots and phase checkpoints;
+- local one- and two-symbol transition collision search;
+- exhaustive one- and two-byte phase collision enumeration;
+- 1–64 bit truncated collision scaling tool;
+- phase-by-phase single and paired differential search;
+- finite reachable predecessor in-degree measurement;
+- reverse, complement, rotation, and multiset-permutation probes.
+
+## Next — Constrained meet-in-the-middle
+
+- extend known forward merges with common suffixes (two-byte exhaustive
+  search completed; longer and asymmetric constructions remain);
+- construct pairs satisfying both forward and foldback constraints;
+- search longer equivalent chains without storing complete states;
+- calibrate 24-, 32-, 40-, and 48-bit collision distributions over many trials;
+- add chosen differential cancellation and boomerang-style message relations;
+- search cycles and fixed points in reduced operational state graphs;
+- investigate multicollision and expandable-message constructions;
+- obtain independent source-level review of the move controller.
 
 ## Decision gate
 

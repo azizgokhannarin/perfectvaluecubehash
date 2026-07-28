@@ -6,7 +6,7 @@ This document specifies a falsification-oriented prototype, not a standard or
 security claim.
 
 ```text
-PVC-RotHash-1 / 0.2.0
+PVC-RotHash-1 / canonical algorithm unchanged; research package 0.3.0
 ```
 
 ## 2. State
@@ -115,7 +115,7 @@ Thus all 32 output bytes are derived from the four body diagonals, but from 32
 different cube states. The same byte may appear more than twice in the digest,
 although it still appears exactly twice in any individual cube state.
 
-The exact operational definition is `src/hash.cpp`.
+The exact operational definition is `src/engine.cpp`; `src/hash.cpp` fixes the public API to the canonical parameters.
 
 ## 10. Streaming API
 
@@ -134,3 +134,19 @@ Version 1 does not claim:
 - quantum resistance;
 - suitability for production use;
 - compatibility with an existing hash standard.
+
+
+## 12. Reduced-round research boundary
+
+Version 0.3.0 exposes runtime parameters only through `pvc/research.hpp`.
+`RotHash1` still invokes the canonical constants and produces the same known
+answers as version 0.2.0.
+
+An exact operational snapshot contains the cube, cursor, previous axis, and
+symbol index. Checkpoints are emitted at phase boundaries and after each
+squeeze byte. These interfaces exist to construct attacks; they are not part of
+a proposed stable hash API.
+
+The canonical forward transition is now known not to be injective over all
+two-symbol messages. The reverse foldback is therefore an active collision-
+separation layer, not merely additional diffusion.

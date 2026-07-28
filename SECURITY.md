@@ -22,3 +22,13 @@ Open a GitHub issue containing:
 
 A weakness is a successful project result. Distinguishers and negative results
 must be reported even when they do not immediately produce collisions.
+
+
+## Research parameter warning
+
+Reduced-round presets are intentionally weak and several have documented full
+collisions. They exist only for cryptanalysis. The presence of an
+`R5-canonical` preset does not imply that R5 is secure.
+
+Forward-state equality must not be reported as a full hash collision unless the
+pair also survives foldback, finalization, and digest comparison.

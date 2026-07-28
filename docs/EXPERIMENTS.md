@@ -86,13 +86,58 @@ frequent value equals the canonical occupant or its complement.
 Verify the intersecting chain and preserved full-state histogram. Initial line
 balance is expected to be lost.
 
-## Planned experiments
+## E-008 — Reduced-round matrix
 
-- reduced-state exhaustive models;
-- equivalent move-chain search;
-- pairwise and higher-order output correlation;
-- symmetry-generated related inputs;
-- per-stage differential maps;
-- cycle and fixed-point search;
-- multicollision and expandable-message attempts;
-- meet-in-the-middle attacks on message/finalization boundaries.
+```bash
+./build/pvc-reduced-round-probe
+```
+
+Exhausts every one-byte message for all six presets.
+
+## E-009 — Exact transition and phase collision
+
+```bash
+./build/pvc-transition-collision --preset R5-canonical --depth 2
+./build/pvc-phase-collision --preset R5-canonical --message-bytes 2
+```
+
+The first command isolates local transition convergence. The second determines
+whether it survives foldback and finalization over the complete two-byte domain.
+
+## E-010 — Truncated birthday scaling
+
+```bash
+./build/pvc-truncated-collision \
+  --preset R5-canonical --bits 24 --limit 50000 --trial 0
+```
+
+Run multiple `--trial` domains and report the complete distribution, not only
+the most favorable collision.
+
+## E-011 — Differential phase search
+
+```bash
+./build/pvc-differential-search \
+  --preset R5-canonical --samples 4 --message-bytes 16 --mode single
+./build/pvc-differential-search \
+  --preset R5-canonical --samples 4 --message-bytes 16 --mode paired
+```
+
+## E-012 — Reachable predecessor and related inputs
+
+```bash
+./build/pvc-predecessor-enumerator --preset R5-canonical
+./build/pvc-related-input-probe --preset R5-canonical
+```
+
+
+## E-013 — Foldback merge extension
+
+```bash
+./build/pvc-foldback-merge-search \
+  --preset R5-canonical --left 176f --right 1799 \
+  --suffix-bytes 2 --limit 65536
+```
+
+Repeat for every documented forward-state pair. Record both exact collisions
+and the minimum after-foldback cube distance.

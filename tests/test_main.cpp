@@ -1,11 +1,14 @@
 #include "pvc/cube.hpp"
 #include "pvc/hash.hpp"
 #include "pvc/hex.hpp"
+#include "pvc/research.hpp"
 
+#include <algorithm>
 #include <array>
 #include <cstdint>
 #include <exception>
 #include <iostream>
+#include <stdexcept>
 #include <string_view>
 #include <vector>
 
@@ -104,6 +107,72 @@ void test_trace_chain() {
           "digest is a diagonal squeeze, not a raw final-state projection");
 }
 
+
+void test_research_framework() {
+    const std::vector<std::uint8_t> abc{'a', 'b', 'c'};
+    const auto canonical = pvc::canonical_hash_parameters();
+    const auto research = pvc::inspect_with_parameters(abc, canonical, false, true);
+    const auto digest = pvc::RotHash1::hash(abc);
+
+    check(research.digest.size() == pvc::kDigestBytes,
+          "canonical research digest has 32 bytes");
+    check(std::equal(research.digest.begin(), research.digest.end(), digest.begin()),
+          "parameterized canonical path matches RotHash1");
+    check(research.checkpoints.size() == 38U,
+          "canonical research path records phase endpoints and 32 squeeze states");
+    check(research.checkpoints.front().phase == pvc::ResearchPhase::Initial,
+          "first research checkpoint is initial state");
+    check(research.checkpoints.back().phase == pvc::ResearchPhase::Final,
+          "last research checkpoint is final state");
+
+    const auto start = pvc::initial_internal_state();
+    const auto next = pvc::absorb_symbol_for_research(start, 0x42U, canonical);
+    check(next.symbol_index == 1U,
+          "single-symbol research transition increments symbol index");
+    check(next.cube.has_double_byte_histogram(),
+          "single-symbol research transition preserves cube histogram");
+
+    const auto presets = pvc::reduced_round_presets();
+    check(presets.size() == 6U, "six reduced-round presets are available");
+    check(presets.back().parameters == canonical,
+          "last reduced-round preset is canonical");
+}
+
+const pvc::InternalStateSnapshot& checkpoint_for(
+    const pvc::ResearchHashResult& result,
+    pvc::ResearchPhase phase) {
+    if (phase == pvc::ResearchPhase::Final) {
+        return result.final_state;
+    }
+    for (const auto& checkpoint : result.checkpoints) {
+        if (checkpoint.phase == phase) {
+            return checkpoint.state;
+        }
+    }
+    throw std::logic_error("checkpoint missing in test");
+}
+
+void test_forward_collision_foldback_regression() {
+    const std::array<std::uint8_t, 2> left{{0x17U, 0x6fU}};
+    const std::array<std::uint8_t, 2> right{{0x17U, 0x99U}};
+    const auto parameters = pvc::canonical_hash_parameters();
+
+    const auto forward_left = pvc::forward_state_for_research(left, parameters);
+    const auto forward_right = pvc::forward_state_for_research(right, parameters);
+    check(forward_left == forward_right,
+          "known canonical two-symbol forward convergence is reproducible");
+
+    const auto full_left = pvc::inspect_with_parameters(left, parameters, false, true);
+    const auto full_right = pvc::inspect_with_parameters(right, parameters, false, true);
+    check(checkpoint_for(full_left, pvc::ResearchPhase::AfterFoldback)
+              != checkpoint_for(full_right, pvc::ResearchPhase::AfterFoldback),
+          "foldback separates the known forward convergence");
+    check(full_left.final_state != full_right.final_state,
+          "known forward convergence does not survive full finalization");
+    check(full_left.digest != full_right.digest,
+          "known forward convergence is not a digest collision");
+}
+
 void print_known_answers() {
     std::cout << "KAT empty: " << pvc::to_hex(pvc::RotHash1::hash("")) << '\n';
     std::cout << "KAT abc  : " << pvc::to_hex(pvc::RotHash1::hash("abc")) << '\n';
@@ -117,6 +186,8 @@ int main() {
         test_rotation_inverse();
         test_hash_determinism_and_framing();
         test_trace_chain();
+        test_research_framework();
+        test_forward_collision_foldback_regression();
         print_known_answers();
 
         if (failures != 0) {
