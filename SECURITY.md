@@ -36,7 +36,10 @@ pair also survives foldback, finalization, and digest comparison.
 
 ## Forward multicollision warning
 
-Version 0.5.0 documents four distinct messages that reach one exact state at
-the end of forward absorption. This is a forward-pass multicollision, not a full
-hash collision: the four paths are distinct after foldback and produce distinct
-digests. Reports must state the phase at which equality occurs.
+Version 0.6.0 documents constructible exponentially large forward families. A
+fully materialized example contains 65,536 distinct messages that reach one
+exact state at the end of forward absorption. This is a forward-pass
+multicollision, not a full hash collision: all 65,536 tested paths are distinct
+after foldback and produce distinct digests. The search also found a 32-level
+path representing a theoretical 2^32-message forward family, which was not
+fully materialized. Reports must state the phase at which equality occurs.

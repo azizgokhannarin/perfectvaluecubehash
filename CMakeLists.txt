@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.20)
 
 project(
     PerfectValueCubeHash
-    VERSION 0.5.0
-    DESCRIPTION "Perfect Value Cube hash and structural collision cryptanalysis framework"
+    VERSION 0.6.0
+    DESCRIPTION "Perfect Value Cube hash and foldback separation cryptanalysis framework"
     LANGUAGES CXX
 )
 
@@ -90,6 +90,12 @@ if(PVC_BUILD_TOOLS)
     target_link_libraries(pvc-foldback-aware-alias PRIVATE Threads::Threads)
     pvc_add_executable(pvc-multicollision-probe tools/multicollision_probe.cpp)
     target_link_libraries(pvc-multicollision-probe PRIVATE Threads::Threads)
+    pvc_add_executable(pvc-foldback-separation-profile tools/foldback_separation_profile.cpp)
+    target_link_libraries(pvc-foldback-separation-profile PRIVATE Threads::Threads)
+    pvc_add_executable(pvc-independent-suffix-catalog tools/independent_suffix_catalog.cpp)
+    target_link_libraries(pvc-independent-suffix-catalog PRIVATE Threads::Threads)
+    pvc_add_executable(pvc-bridged-multicollision tools/bridged_multicollision.cpp)
+    target_link_libraries(pvc-bridged-multicollision PRIVATE Threads::Threads)
 endif()
 
 if(PVC_BUILD_TESTS)

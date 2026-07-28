@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Version 0.5.0 does not change the canonical `PVC-RotHash-1` algorithm or its
+Version 0.6.0 does not change the canonical `PVC-RotHash-1` algorithm or its
 known-answer vectors. It adds a separate research interface for deliberately
 weakening the construction and observing where structural failures appear.
 

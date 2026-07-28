@@ -1,5 +1,30 @@
 # Changelog
 
+## 0.6.0 — Foldback separation anatomy and bridged multicollisions
+
+- kept the canonical hash algorithm and known-answer vectors unchanged;
+- formalized that the position-dependent return-symbol map is an XOR bijection
+  and preserves byte XOR differences;
+- profiled all 1,496 known three-byte forward collisions step by step through
+  foldback;
+- verified that every pair diverges exactly when the last differing original
+  byte is encountered in reverse, with zero delayed divergences, direct return
+  aliases, or later reconvergences;
+- measured separation-gate and final foldback cube distances and state-component
+  divergence;
+- exhausted independent one-byte suffixes on both sides for all 1,496 pairs,
+  covering 98,041,856 logical cross pairs with zero after-foldback merge;
+- extended multicollision construction with one-byte common bridges;
+- found a 32-level forward alias path representing a theoretical 2^32-message
+  forward multicollision family;
+- fully materialized a 16-level, 65,536-message family and verified one common
+  forward state, 65,536 distinct after-foldback states, and 65,536 distinct
+  full digests;
+- added regression coverage for an eight-way bridged multicollision and the
+  return-symbol XOR-difference invariant;
+- corrected the earlier bounded-search statement: no third immediate alias was
+  found, but bridged alias chains extend far beyond two levels.
+
 ## 0.5.0 — Foldback-aware aliases and forward multicollisions
 
 - kept the canonical hash algorithm and known-answer vectors unchanged;

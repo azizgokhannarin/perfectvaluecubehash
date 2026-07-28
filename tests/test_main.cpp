@@ -280,6 +280,74 @@ void test_four_way_forward_multicollision_regression() {
     }
 }
 
+
+void test_eight_way_bridged_forward_multicollision_regression() {
+    const auto parameters = pvc::canonical_hash_parameters();
+    std::vector<std::vector<std::uint8_t>> messages{
+        {0x00U, 0x32U, 0x82U},
+        {0x00U, 0x32U, 0xacU},
+    };
+
+    const std::array<std::array<std::uint8_t, 3>, 2> steps{{
+        {{0xb8U, 0x37U, 0xfbU}},
+        {{0x30U, 0x21U, 0xe5U}},
+    }};
+    for (const auto& step : steps) {
+        for (auto& message : messages) {
+            message.push_back(step[0]);
+        }
+        std::vector<std::vector<std::uint8_t>> expanded;
+        expanded.reserve(messages.size() * 2U);
+        for (const auto& message : messages) {
+            auto left = message;
+            auto right = message;
+            left.push_back(step[1]);
+            right.push_back(step[2]);
+            expanded.push_back(std::move(left));
+            expanded.push_back(std::move(right));
+        }
+        messages = std::move(expanded);
+    }
+
+    check(messages.size() == 8U,
+          "bridged construction creates an eight-message family");
+    const auto common = pvc::forward_state_for_research(messages.front(), parameters);
+    std::vector<pvc::InternalStateSnapshot> foldback_states;
+    std::vector<std::vector<std::uint8_t>> digests;
+    for (const auto& message : messages) {
+        check(pvc::forward_state_for_research(message, parameters) == common,
+              "bridged eight-message family has one forward state");
+        const auto foldback = pvc::foldback_state_for_research(message, parameters);
+        check(std::find(foldback_states.begin(), foldback_states.end(), foldback)
+                  == foldback_states.end(),
+              "foldback separates every member of the bridged eight-way family");
+        foldback_states.push_back(foldback);
+
+        const auto digest = pvc::hash_with_parameters(message, parameters);
+        check(std::find(digests.begin(), digests.end(), digest) == digests.end(),
+              "full digest separates every member of the bridged eight-way family");
+        digests.push_back(digest);
+    }
+}
+
+void test_return_symbol_preserves_xor_difference() {
+    for (std::size_t index = 0U; index < 64U; ++index) {
+        for (std::uint16_t left = 0U; left < 256U; left += 17U) {
+            for (std::uint16_t right = 0U; right < 256U; right += 29U) {
+                const auto left_byte = static_cast<std::uint8_t>(left);
+                const auto right_byte = static_cast<std::uint8_t>(right);
+                const auto left_return = pvc::return_symbol_for_research(
+                    left_byte, index);
+                const auto right_return = pvc::return_symbol_for_research(
+                    right_byte, index);
+                check(static_cast<std::uint8_t>(left_return ^ right_return)
+                          == static_cast<std::uint8_t>(left_byte ^ right_byte),
+                      "return-symbol framing preserves byte XOR differences");
+            }
+        }
+    }
+}
+
 void print_known_answers() {
     std::cout << "KAT empty: " << pvc::to_hex(pvc::RotHash1::hash("")) << '\n';
     std::cout << "KAT abc  : " << pvc::to_hex(pvc::RotHash1::hash("abc")) << '\n';
@@ -299,6 +367,8 @@ int main() {
         test_foldback_state_api();
         test_explicit_foldback_api();
         test_four_way_forward_multicollision_regression();
+        test_eight_way_bridged_forward_multicollision_regression();
+        test_return_symbol_preserves_xor_difference();
         print_known_answers();
 
         if (failures != 0) {

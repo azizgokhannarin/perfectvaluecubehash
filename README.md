@@ -1,8 +1,9 @@
 # Perfect Value Cube Hash
 
 `PVC-RotHash-1` is a **falsification-oriented cryptographic research prototype**.
-Version 0.5.0 adds foldback-aware alias and forward-multicollision analysis without changing the canonical hash algorithm or its known-answer vectors. It is not a production
-hash and makes no security claim.
+Version 0.6.0 adds foldback-separation profiling and bridged forward-
+multicollision analysis without changing the canonical hash algorithm or its
+known-answer vectors. It is not a production hash and makes no security claim.
 
 The project studies whether the canonical Perfect Value Cube, a state-dependent
 chain of intersecting line rotations, and an original four-diagonal squeeze can
@@ -127,6 +128,9 @@ See [`docs/CRYPTANALYSIS_FRAMEWORK.md`](docs/CRYPTANALYSIS_FRAMEWORK.md).
 ./build/pvc-constrained-merge-search --left 176f --right 1799 --suffix-bytes 2
 ./build/pvc-foldback-aware-alias --suffix-bytes 1 --suffix-limit 256 --threads 8
 ./build/pvc-multicollision-probe --suffix-bytes 1 --suffix-limit 256 --threads 8
+./build/pvc-foldback-separation-profile --threads 8
+./build/pvc-independent-suffix-catalog --threads 8
+./build/pvc-bridged-multicollision --levels 32 --materialize-levels 16 --threads 8
 ```
 
 These tools are intended to disprove the design. Passing them is not evidence
@@ -200,6 +204,23 @@ Version 0.5.0 coupled the forward aliases to the foldback equations:
 
 See [`docs/FOLDBACK_AWARE_RESULTS.md`](docs/FOLDBACK_AWARE_RESULTS.md).
 
+Version 0.6.0 made the foldback boundary and forward multicollision mechanism
+more explicit:
+
+- all 1,496 known forward pairs diverge exactly at the first reverse step that
+  processes their last differing byte;
+- no direct return alias, delayed divergence, or later reconvergence was found;
+- the first differing return transition changes at least 49 cube cells;
+- all 98,041,856 independent one-byte suffix cross pairs for the complete
+  catalogue produced distinct after-foldback states;
+- one-byte common bridges permit a 32-level forward collision path, representing
+  a theoretical 2^32-message forward multicollision family;
+- a fully materialized 65,536-message subset had one forward state but 65,536
+  distinct after-foldback states and digests.
+
+See [`docs/FOLDBACK_SEPARATION_RESULTS.md`](docs/FOLDBACK_SEPARATION_RESULTS.md)
+and [`docs/BRIDGED_MULTICOLLISION_RESULTS.md`](docs/BRIDGED_MULTICOLLISION_RESULTS.md).
+
 ## Security status
 
 **Do not use this project for passwords, authentication, signatures, file
@@ -217,6 +238,8 @@ See:
 - [`docs/REDUCED_ROUND_RESULTS.md`](docs/REDUCED_ROUND_RESULTS.md)
 - [`docs/THREE_BYTE_RESULTS.md`](docs/THREE_BYTE_RESULTS.md)
 - [`docs/FOLDBACK_AWARE_RESULTS.md`](docs/FOLDBACK_AWARE_RESULTS.md)
+- [`docs/FOLDBACK_SEPARATION_RESULTS.md`](docs/FOLDBACK_SEPARATION_RESULTS.md)
+- [`docs/BRIDGED_MULTICOLLISION_RESULTS.md`](docs/BRIDGED_MULTICOLLISION_RESULTS.md)
 - [`SECURITY.md`](SECURITY.md)
 
 ## Origin

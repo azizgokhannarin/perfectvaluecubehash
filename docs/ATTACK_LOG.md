@@ -217,8 +217,40 @@ messages with one exact complete forward state. One example is:
 All four after-foldback states and full digests are distinct. All common one-byte
 suffixes and the first 4,096 common two-byte suffixes were tested for every one
 of the fifteen four-way families without an after-foldback or digest collision.
-No third collision level was found from these states in the bounded search.
+No third immediate collision level was found from these states in the bounded
+search. Version 0.6.0 superseded this limitation by inserting common bridge
+bytes between alias levels.
 
 This demonstrates that forward aliases are composable. A deeper alias tree or a
 construction that also satisfies return-symbol constraints remains a direct
 collision threat.
+
+
+## A-010 — Bridged exponential forward multicollisions
+
+**Affected component:** canonical forward absorption in PVC-RotHash-1 0.6.0
+**Status:** confirmed structural weakness; materialized families separated by foldback
+
+Allowing one shared bridge byte between controller aliases yields a 32-level
+forward collision path. It represents 2^32 distinct messages with one complete
+forward state. The first 16 levels were materialized as 65,536 messages; every
+message reached the same forward state, while all after-foldback states and
+full digests were distinct.
+
+This supersedes the earlier suggestion that multicollision depth was limited to
+two. The forward stage has a scalable Joux-like multicollision mechanism.
+
+## A-011 — Complete known-catalogue foldback separation profile
+
+**Affected component:** reverse foldback in PVC-RotHash-1 0.6.0
+**Status:** attack unsuccessful in tested catalogue; separation mechanism characterized
+
+All 1,496 known three-byte forward collision pairs were traced step by step.
+Every pair diverged exactly when reverse traversal encountered its last
+differing original byte. No differing return-symbol pair aliased at that gate,
+no pair diverged late, and no pair reconverged later. The first differing
+return transition changed at least 49 cube cells.
+
+All independently selected one-byte suffix pairs were also tested for every
+forward collision pair, covering 98,041,856 logical cross combinations with
+zero exact after-foldback merge.

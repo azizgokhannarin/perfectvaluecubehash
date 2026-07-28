@@ -219,3 +219,25 @@ families found zero after-foldback or digest collision.
 
 Detailed commands, counts, and limitations are in
 `FOLDBACK_AWARE_RESULTS.md`.
+
+
+## Version 0.6.0 foldback separation and bridged multicollision results
+
+The complete 1,496-pair three-byte forward collision catalogue was followed
+through foldback one return symbol at a time. Every pair diverged exactly at
+the first reverse step processing its last differing original byte. No direct
+return alias, delayed divergence, later reconvergence, or final foldback merge
+was observed. The initial separation gate changed 49–78 cube cells.
+
+Independent one-byte suffixes were selected on both sides for every pair,
+covering 98,041,856 logical cross combinations with zero after-foldback merge.
+
+A common bridge byte between alias levels made the forward multicollision
+mechanism scalable. A 32-level path representing a theoretical 2^32-message
+forward family was found. The first 16 levels were fully materialized as 65,536
+33-byte messages. All reached one exact forward state, while all 65,536
+after-foldback states and full digests were distinct.
+
+The result strengthens two conclusions simultaneously: the forward pass is not
+a collision-resistance boundary, and the tested construction currently relies
+on foldback to separate complete message histories.

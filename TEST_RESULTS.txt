@@ -1,4 +1,4 @@
-Perfect Value Cube Hash 0.5.0 verification
+Perfect Value Cube Hash 0.6.0 verification
 ==========================================
 
 Canonical algorithm status
@@ -11,58 +11,47 @@ H(""):
 H("abc"):
 f32b2241a950d7e7b2b006ff8ae2d0b08f02db23c0d8fde198dfdf9e9642051f
 
-Foldback-aware direct alias test
---------------------------------
-Forward collision pairs tested      = 1,496
-Return-transition exact merges      = 0
-Exact after-foldback merges          = 0
-Minimum return cube bit distance     = 172
+Complete known-catalogue foldback profile
+-----------------------------------------
+Forward collision pairs                  = 1,496
+Return XOR differences preserved         = 1,496
+Diverged at expected reverse step        = 1,496
+Direct return-transition aliases         = 0
+Later reconvergences                     = 0
+Exact after-foldback merges              = 0
 
-Exhaustive common one-byte extension
-------------------------------------
-Structured extension cases          = 382,976
-Return-transition exact merges      = 0
-Exact after-foldback merges          = 0
-Minimum return cube bit distance     = 114
+Separation gate distances:
+  cube bits min / mean / max             = 172 / 315.0187 / 390
+  cube cells min / mean / max            = 49 / 73.1130 / 78
 
-Sampled common two-byte extension
----------------------------------
-Suffixes tested per pair             = 4,096
-Structured extension cases          = 6,127,616
-Return-transition exact merges      = 0
-Exact after-foldback merges          = 0
-Minimum return cube bit distance     = 78
+Complete foldback distances:
+  cube bits min / mean / max             = 310 / 718.5909 / 1,034
+  cube cells min / mean / max            = 67 / 166.9579 / 225
 
-Forward multicollision probe
-----------------------------
-Three-byte collision seeds          = 1,496
-Seeds with a second symbol alias     = 15
-Maximum observed collision levels    = 2
-Constructed forward branches         = 4
-Unique after-foldback states         = 4
-Unique full digests                  = 4
+Independent one-byte suffix catalogue
+-------------------------------------
+Forward collision pairs                  = 1,496
+Logical independent suffix cross pairs   = 98,041,856
+Fingerprint candidate pairs              = 0
+Exact after-foldback merges              = 0
 
-Example exact forward multicollision:
-  176f115b
-  176f1185
-  1799115b
-  17991185
-
-Four-way common suffix tests
-----------------------------
-All 256 one-byte suffixes:
-  extension cases                    = 3,840
-  after-foldback collision cases     = 0
-  digest collision cases             = 0
-
-First 4,096 two-byte suffixes:
-  extension cases                    = 61,440
-  after-foldback collision cases     = 0
-  digest collision cases             = 0
+Bridged forward multicollision
+------------------------------
+Constructed path levels                  = 32
+Theoretical forward family               = 2^32 messages
+Materialized levels                      = 16
+Materialized messages                    = 65,536
+Message length                           = 33 bytes
+Forward-state mismatches                 = 0
+Unique after-foldback states             = 65,536
+After-foldback collisions                = 0
+Unique full digests                      = 65,536
+Full digest collisions                   = 0
 
 Interpretation
 --------------
-Forward controller aliases are composable and therefore the forward pass alone
-is not collision resistant. No tested forward multicollision survived the
-position-dependent reverse foldback. These are finite structured attacks, not a
-proof of collision or preimage resistance.
+The forward pass supports scalable bridged multicollisions and cannot provide
+collision resistance. In all tested families, foldback separates the complete
+message histories exactly when their differing bytes are processed in reverse.
+This is finite structural evidence, not a proof of collision or preimage
+resistance.

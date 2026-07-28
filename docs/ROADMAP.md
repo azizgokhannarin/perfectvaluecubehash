@@ -55,6 +55,18 @@
   families;
 - added explicit-state foldback and return-symbol research APIs.
 
+
+## Completed — Foldback separation and bridged multicollision stage
+
+- profiled every known three-byte collision through each reverse step;
+- proved the return-symbol map is a position-dependent XOR bijection;
+- measured the exact separation gate, state-component divergence, and absence
+  of later reconvergence in the complete known catalogue;
+- exhausted independent one-byte suffix cross pairs for all 1,496 pairs;
+- introduced common bridge bytes between alias levels;
+- constructed a 32-level forward multicollision path;
+- materialized and checked a 65,536-message forward multicollision family.
+
 ## Next — Bidirectional foldback constraint search
 
 - independently vary suffixes for the 728 local three-byte alias pairs, not only
@@ -63,7 +75,8 @@
   meet-in-the-middle optimization;
 - search two-position chosen differences that cancel during reverse traversal;
 - construct boomerang-style relations spanning forward and return passes;
-- explore deeper multicollision trees from longer reachable contexts;
+- optimize bridged multicollision paths for return-symbol compatibility rather
+  than forward depth alone;
 - investigate expandable-message constructions and unequal-length framing;
 - search cycles and fixed points in reduced operational state graphs;
 - calibrate 24-, 32-, 40-, and 48-bit collision distributions over many trials;

@@ -119,9 +119,10 @@ One explicit four-message forward multicollision is:
 All four messages reach exactly the same complete forward state. Their four
 after-foldback states and four full digests are all distinct.
 
-No third collision level was found from any of the fifteen four-way common
-states in the search bounded to five levels. This is an empirical statement
-about these states, not a proof that longer multicollisions do not exist.
+No third **immediate** collision level was found from those fifteen states in
+the original bounded search. Version 0.6.0 later showed that a shared bridge
+byte can move a common state to another alias-bearing state, producing much
+deeper multicollision chains. See `BRIDGED_MULTICOLLISION_RESULTS.md`.
 
 ## Common-suffix tests against the four-way families
 
