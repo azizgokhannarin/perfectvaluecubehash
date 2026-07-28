@@ -2,47 +2,54 @@
 
 ## D-001 — No established cryptographic primitive
 
-Accepted.
+Accepted. The candidate does not call or embed an existing hash, cipher, S-box,
+KDF, MAC, checksum, or pseudorandom generator.
 
-The candidate algorithm will not call or embed an existing hash, cipher, S-box,
-KDF, MAC, or pseudorandom generator.
-
-Reason: the experiment must measure the Perfect Value Cube rotation design
-without inheriting security from another construction.
+Analysis executables may use standard statistical and test-data generation
+facilities because they are not part of the candidate algorithm.
 
 ## D-002 — Rotation-only state mutation
 
-Accepted for version 0.
+Retained for version 1. Cube cells are moved but never replaced. The complete
+byte histogram is invariant.
 
-Cell values are never replaced, combined, substituted, added, or XORed into
-other cells. Only their positions change through cyclic line rotations.
+The digest extractor may combine observed diagonal bytes using elementary byte
+operations. This does not alter the cube state and is part of the original
+four-diagonal squeeze design.
 
-Reason: isolate the original rotation hypothesis.
+## D-003 — Consecutive lines intersect
 
-Consequence: the complete byte histogram is invariant and may be exploitable.
+Retained. Every move uses a different axis from the prior move and starts on the
+prior line through the moving cursor.
 
-## D-003 — Consecutive lines must intersect
+## D-004 — Four body diagonals remain the output source
 
-Accepted.
+Retained with revision.
 
-Every move uses a different axis from the previous move and passes through the
-cursor moved by that prior rotation.
+Rejected version-0 form:
 
-Reason: create a non-commuting, path-dependent chain.
+```text
+one final cube -> concatenate 32 raw diagonal cells
+```
 
-## D-004 — Digest from four body diagonals
+Accepted version-1 form:
 
-Accepted.
+```text
+32 evolving cube states -> combine all four diagonals -> one byte per state
+```
 
-The 256-bit output consists exactly of the 32 cells on the four body diagonals
-of the final cube.
+Reason: direct concatenation created a byte-multiplicity distinguisher and
+exposed canonical-coordinate bias.
 
-Consequence: the hash is a projection of a 512-byte state. Projection
-collisions are a primary attack target.
+## D-005 — Full-cube orbit before squeeze
 
-## D-005 — Security wording
+Accepted. A 128-symbol closure directly samples every physical cube cell once
+across four 128-cell quarters while the state evolves.
 
-Accepted.
+Reason: short-message tests showed that diagonal-only closure did not mix the
+full state sufficiently.
 
-All versions remain explicitly experimental until substantial independent
-cryptanalysis exists.
+## D-006 — Security wording
+
+All versions remain explicitly experimental. Statistical test results are
+reported as rejection of specific attacks, never as proof of security.

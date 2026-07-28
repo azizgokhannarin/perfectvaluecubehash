@@ -1,41 +1,46 @@
 # Roadmap
 
-## Milestone 0 — Geometry and reference state
+## Completed — Geometry and reference state
 
-- canonical cube;
-- validation;
-- reversible X/Y/Z rotations;
-- body-diagonal extraction.
+- canonical Perfect Value Cube;
+- reversible X/Y/Z line rotations;
+- intersecting cursor chain;
+- body-diagonal access.
 
-## Milestone 1 — PVC-RotHash-0
+## Completed — PVC-RotHash-0 falsification
 
-- state-dependent intersecting chain;
-- message-length closure;
-- self-fed finalization;
-- command-line interface;
-- known-answer outputs.
+- forward and foldback absorption;
+- raw four-diagonal output;
+- immediate collision history;
+- avalanche and small-domain collision probes;
+- discovery of raw-output multiplicity and positional-memory distinguishers.
 
-## Milestone 2 — Immediate falsification
+## Completed — PVC-RotHash-1 revision
 
-- exhaustive one- and two-byte collision probes;
-- avalanche reports;
-- chain-invariant probe;
-- sanitizer and CI builds.
+- 64-symbol diagonal closure;
+- 128-symbol full-cube orbit closure;
+- 32-state four-diagonal squeeze;
+- exhaustive two-byte distribution probe;
+- large avalanche sweep;
+- final-state positional-bias probe.
 
-## Milestone 3 — Structural cryptanalysis
+## Next — Structural cryptanalysis
 
-- reduced-size exhaustive models;
-- equivalent-chain search;
-- diagonal projection collision search;
-- differential and symmetry attacks;
-- meet-in-the-middle experiments.
+- reduced-state exhaustive models;
+- automatic equivalent-chain search;
+- pairwise and higher-order digest correlations;
+- differential trail visualization;
+- complement/reflection related-input attacks;
+- meet-in-the-middle experiments;
+- cycle and fixed-point search;
+- multicollision and expandable-message attacks.
 
-## Milestone 4 — Design decision
+## Decision gate
 
-Based on evidence:
+After structural cryptanalysis, choose among:
 
-- abandon;
-- revise the move rule;
-- revise output extraction;
-- add an original non-permutation operation;
-- proceed to a more formal specification.
+- abandon the construction;
+- revise the move controller;
+- introduce a new original state operation;
+- retain it only as a negative research result;
+- proceed toward a formal specification and independent review.

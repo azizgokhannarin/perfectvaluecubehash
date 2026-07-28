@@ -13,7 +13,9 @@ namespace pvc {
 
 inline constexpr std::size_t kDigestBytes = 32;
 inline constexpr std::size_t kMovesPerSymbol = 6;
-inline constexpr std::size_t kClosureSymbols = 32;
+inline constexpr std::size_t kClosureSymbols = 64;
+inline constexpr std::size_t kOrbitSymbols = 128;
+inline constexpr std::size_t kSqueezeSymbolsPerByte = 4;
 
 using Digest = std::array<std::uint8_t, kDigestBytes>;
 
@@ -34,9 +36,9 @@ struct HashResult {
     std::uint64_t input_size{};
 };
 
-class RotHash0 {
+class RotHash1 {
 public:
-    RotHash0();
+    RotHash1();
 
     void update(std::span<const std::uint8_t> bytes);
     void update(std::string_view text);
@@ -51,6 +53,9 @@ public:
 private:
     std::vector<std::uint8_t> message_{};
 };
+
+// Compatibility alias for experiments built against v0.1.0.
+using RotHash0 = RotHash1;
 
 [[nodiscard]] std::size_t digest_hamming_distance(const Digest& left,
                                                   const Digest& right);

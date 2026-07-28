@@ -65,7 +65,7 @@ int main(int argc, char** argv) {
             return 2;
         }
 
-        const auto result = pvc::RotHash0::inspect(message, show_trace);
+        const auto result = pvc::RotHash1::inspect(message, show_trace);
 
         std::cout << pvc::to_hex(result.digest) << '\n';
 

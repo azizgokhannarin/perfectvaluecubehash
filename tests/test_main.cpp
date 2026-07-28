@@ -51,17 +51,23 @@ void test_rotation_inverse() {
 }
 
 void test_hash_determinism_and_framing() {
-    const auto empty_a = pvc::RotHash0::hash(std::string_view{});
-    const auto empty_b = pvc::RotHash0::hash(std::string_view{});
+    const auto empty_a = pvc::RotHash1::hash(std::string_view{});
+    const auto empty_b = pvc::RotHash1::hash(std::string_view{});
     check(empty_a == empty_b, "empty input is deterministic");
+    check(pvc::to_hex(empty_a)
+              == "7f01eb3ce13131ef290f8428ed725b849f875e49ad6c646cc9f4f1b1a1e5734b",
+          "empty-input regression vector matches");
 
-    const auto abc_a = pvc::RotHash0::hash("abc");
-    const auto abc_b = pvc::RotHash0::hash("abc");
+    const auto abc_a = pvc::RotHash1::hash("abc");
+    const auto abc_b = pvc::RotHash1::hash("abc");
     check(abc_a == abc_b, "same message is deterministic");
+    check(pvc::to_hex(abc_a)
+              == "f32b2241a950d7e7b2b006ff8ae2d0b08f02db23c0d8fde198dfdf9e9642051f",
+          "abc regression vector matches");
 
     const std::array<std::uint8_t, 1> a{{0x61}};
     const std::array<std::uint8_t, 2> a_zero{{0x61, 0x00}};
-    check(pvc::RotHash0::hash(a) != pvc::RotHash0::hash(a_zero),
+    check(pvc::RotHash1::hash(a) != pvc::RotHash1::hash(a_zero),
           "length framing distinguishes a from a||00");
 
     check(empty_a != abc_a, "different messages produce different sample digests");
@@ -69,11 +75,15 @@ void test_hash_determinism_and_framing() {
 
 void test_trace_chain() {
     const std::vector<std::uint8_t> input{'c', 'h', 'a', 'i', 'n'};
-    const auto result = pvc::RotHash0::inspect(input, true);
+    const auto result = pvc::RotHash1::inspect(input, true);
 
     check(!result.trace.empty(), "trace contains moves");
-    check(result.trace.size()
-              == (input.size() * 2U + 2U + 8U + pvc::kClosureSymbols) * pvc::kMovesPerSymbol,
+    const auto expected_symbols = input.size() * 2U
+                                + 2U + 8U
+                                + pvc::kClosureSymbols
+                                + pvc::kOrbitSymbols
+                                + pvc::kDigestBytes * pvc::kSqueezeSymbolsPerByte;
+    check(result.trace.size() == expected_symbols * pvc::kMovesPerSymbol,
           "trace has expected move count");
 
     for (std::size_t i = 1; i < result.trace.size(); ++i) {
@@ -89,12 +99,14 @@ void test_trace_chain() {
     }
 
     check(result.final_cube.has_double_byte_histogram(),
-          "rotation-only hash preserves the byte histogram");
+          "rotation-only state mutation preserves the byte histogram");
+    check(result.digest != result.final_cube.body_diagonals(),
+          "digest is a diagonal squeeze, not a raw final-state projection");
 }
 
 void print_known_answers() {
-    std::cout << "KAT empty: " << pvc::to_hex(pvc::RotHash0::hash("")) << '\n';
-    std::cout << "KAT abc  : " << pvc::to_hex(pvc::RotHash0::hash("abc")) << '\n';
+    std::cout << "KAT empty: " << pvc::to_hex(pvc::RotHash1::hash("")) << '\n';
+    std::cout << "KAT abc  : " << pvc::to_hex(pvc::RotHash1::hash("abc")) << '\n';
 }
 
 } // namespace

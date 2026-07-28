@@ -1,65 +1,73 @@
 # Attack Model
 
-The project follows a public-design model: an attacker knows the complete cube,
-all constants, all equations, and the implementation.
+The design is fully public. An attacker knows the canonical cube, all constants,
+all equations, the output construction, and the implementation.
 
 ## Priority attacks
 
 ### 1. Short algebraic relations
 
-Rotations form permutations. Search for different message encodings that
-produce the same effective cube permutation or the same four diagonal values.
+Line rotations are permutations with inverses and finite order. Search for
+message relations that produce the same operational state or digest.
 
-### 2. Output projection collisions
+### 2. Squeeze collisions
 
-Only 32 of 512 final cells are returned. Two final cubes may differ in 480
-positions and still collide on all four body diagonals.
+Version 1 no longer projects one static 32-cell set. Nevertheless, two distinct
+state trajectories may produce the same 32-byte squeeze sequence. Search for
+relations that control only squeeze observations without matching the full cube.
 
-This is currently one of the strongest structural concerns.
+### 3. Preserved full-state histogram
 
-### 3. Preserved histogram
-
-Every final cube is a permutation of the canonical cube. Each byte value still
-occurs exactly twice. The output is therefore sampled from a constrained state,
-not from an unconstrained 256-bit space.
+Every state remains a permutation of the canonical cube, and every byte still
+occurs exactly twice. Determine whether higher-order statistics, state recovery,
+or trajectory pruning exploit this invariant even when marginal output tests
+look uniform.
 
 ### 4. Symmetry and related-input attacks
 
-The canonical cube has complement and reflection patterns. Test whether related
-messages cause related final cubes or diagonals.
+The canonical cube contains complement and reflection patterns. Test messages
+related through coordinate reflection, byte complement, reversal, rotation, and
+length transformations.
 
-### 5. Differential trails
+### 5. Differential and rotational trails
 
-Flip one input bit and measure, after every move or absorbed symbol:
+Track differences after every absorbed symbol and squeeze step. Search for:
 
-- changed cube cells;
-- changed diagonal cells;
-- changed digest bits;
-- differences confined to a line, plane, or orbit.
+- low-weight differences;
+- line-, plane-, or orbit-confined trails;
+- predictable output differences;
+- cancellation during foldback, closure, orbit, or squeeze.
 
-### 6. Meet-in-the-middle
+### 6. Meet-in-the-middle and state matching
 
-Moves are reversible. Investigate whether the chain can be split around an
-intermediate cube state despite state-dependent move selection.
+Moves are reversible. Investigate whether message and finalization segments can
+be split around a partial cube/cursor/axis state, or whether diagonal
+observations permit partial matching with less memory.
 
 ### 7. Fixed points and short cycles
 
-Search reduced variants for messages or closure states that return the cube or
-cursor to an earlier state.
+Search reduced variants and finalization stages for repeated operational states,
+short cycles, invariant cursor paths, or identical squeeze continuations.
 
-### 8. Length-extension-like behavior
+### 8. Length-extension and multicollision structures
 
-The explicit closure is intended to bind length, but the construction must be
-tested for relations between `H(M)` and `H(M || X)`.
+Explicit length finalization is intended to prevent trivial continuation, but
+Joux-style multicollisions, expandable messages, and prefix/suffix relations
+must be investigated independently.
 
-### 9. State reconstruction
+### 9. Higher-order distinguishers
 
-The digest exposes four full body diagonals. Determine whether those 32 cells
-leak enough information to predict cursor evolution, reconstruct hidden lines,
-or prune message search.
+Version 1 passes simple marginal byte and bit tests. Continue with:
+
+- byte-pair and bit-pair correlation matrices;
+- mutual information between positions;
+- multi-byte pattern frequencies;
+- complement/reflection statistics;
+- large-sample state and digest tests;
+- classifier-based distinguishers trained only on public outputs.
 
 ## Interpretation rule
 
-Experiments can quickly falsify the construction. They cannot establish
-cryptographic security. Any practical collision, shortcut, invariant, or
-distinguishing attack must be documented even if a later version fixes it.
+Experiments can falsify the construction. They cannot establish cryptographic
+security. Any practical shortcut, collision, invariant, or distinguisher is a
+successful project result and must be documented.

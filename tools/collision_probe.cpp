@@ -29,7 +29,7 @@ bool probe_one_byte() {
         const std::vector<std::uint8_t> message{
             static_cast<std::uint8_t>(value)
         };
-        const auto digest = pvc::RotHash0::hash(message);
+        const auto digest = pvc::RotHash1::hash(message);
         const auto [it, inserted] = seen.emplace(digest, message);
         if (!inserted) {
             std::cout << "collision found\n"
@@ -51,7 +51,7 @@ bool probe_two_bytes() {
                 static_cast<std::uint8_t>(first),
                 static_cast<std::uint8_t>(second)
             };
-            const auto digest = pvc::RotHash0::hash(message);
+            const auto digest = pvc::RotHash1::hash(message);
             const auto [it, inserted] = seen.emplace(digest, message);
             if (!inserted) {
                 const std::vector<std::uint8_t> a{it->second[0], it->second[1]};

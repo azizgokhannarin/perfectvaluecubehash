@@ -8,7 +8,7 @@
 int main(int argc, char** argv) {
     const std::string text = argc > 1 ? argv[1] : "Perfect Value Cube";
     const std::vector<std::uint8_t> message(text.begin(), text.end());
-    const auto result = pvc::RotHash0::inspect(message, true);
+    const auto result = pvc::RotHash1::inspect(message, true);
 
     bool axes_alternate = true;
     bool intersections_chain = true;
@@ -30,7 +30,7 @@ int main(int argc, char** argv) {
     const auto histogram_ok = result.final_cube.has_double_byte_histogram();
     const auto still_balanced = result.final_cube.is_balanced();
 
-    std::cout << "PVC-RotHash-0 structure probe\n"
+    std::cout << "PVC-RotHash-1 structure probe\n"
               << "moves                         : " << result.trace.size() << '\n'
               << "consecutive axes differ       : " << (axes_alternate ? "yes" : "no") << '\n'
               << "each line meets previous line : " << (intersections_chain ? "yes" : "no") << '\n'

@@ -1,0 +1,96 @@
+Perfect Value Cube Hash 0.2.0 verification
+===========================================
+
+Build verification
+------------------
+GCC 14.2.0 Release + warnings-as-errors: passed
+Clang 17 Release + warnings-as-errors: passed
+GCC 14.2.0 ASan/UBSan Debug + warnings-as-errors: passed
+CTest in all three builds: 1/1 passed
+
+Regression vectors
+------------------
+H("") =
+7f01eb3ce13131ef290f8428ed725b849f875e49ad6c646cc9f4f1b1a1e5734b
+
+H("abc") =
+f32b2241a950d7e7b2b006ff8ae2d0b08f02db23c0d8fde198dfdf9e9642051f
+
+H("Perfect Value Cube") =
+ea3cf546291874656dd454e2481fc530fe1c4b2783ad101cf7af4a5521aa3775
+
+Structure probe
+---------------
+moves                         : 2196
+consecutive axes differ       : yes
+each line meets previous line : yes
+0..255 each still occur twice : yes
+all 192 sums still 1020       : no
+
+Avalanche
+---------
+Fixed 18-byte message, all 144 bit flips:
+mean=128.10 min=107 max=152 of 256
+mean changed bytes=31.90 min=31 max=32 of 32
+
+32,000 deterministic 16-byte trials, one bit flip per message:
+mean=127.9508 sd=8.0574 min=94 max=159 of 256
+
+Small-domain collision probes
+-----------------------------
+All 256 one-byte inputs: no collision found
+All 65,536 two-byte inputs: no collision found
+
+Exhaustive two-byte digest distribution
+---------------------------------------
+mean per-position chi-square    = 255.4556
+minimum / maximum chi-square    = 192.2656 / 292.6719
+support at every position       = 256 of 256
+largest value / expected count  = 1.2656
+maximum output-bit |z|          = 3.1172
+equal byte pairs per digest     = 1.9356 (reference 1.9375)
+complement pairs per digest     = 1.9357 (reference 1.9375)
+digests with a triple byte      = 6.7764%
+
+100,000 deterministic 16-byte messages
+--------------------------------------
+mean per-position chi-square    = 254.5854
+minimum / maximum chi-square    = 205.4810 / 301.8291
+support at every position       = 256 of 256
+largest value / expected count  = 1.1981
+maximum output-bit |z|          = 2.7891
+equal byte pairs per digest     = 1.9314 (reference 1.9375)
+complement pairs per digest     = 1.9303 (reference 1.9375)
+digests with a triple byte      = 6.8000%
+
+100,000 deterministic 64-byte messages
+--------------------------------------
+mean per-position chi-square    = 253.9971
+minimum / maximum chi-square    = 206.8378 / 333.8342
+support at every position       = 256 of 256
+largest value / expected count  = 1.2032
+maximum output-bit |z|          = 3.3014
+equal byte pairs per digest     = 1.9396 (reference 1.9375)
+complement pairs per digest     = 1.9406 (reference 1.9375)
+digests with a triple byte      = 6.6110%
+
+Final-state positional bias, 50,000 messages
+--------------------------------------------
+16-byte messages:
+mean per-cell chi-square             = 255.3289
+minimum / maximum chi-square         = 198.3846 / 331.8835
+support at every cell                = 256 of 256
+largest value / expected count       = 1.3158
+canonical/complement preferred value = 6 of 512 cells
+
+64-byte messages:
+mean per-cell chi-square             = 253.2930
+minimum / maximum chi-square         = 189.0560 / 317.7626
+support at every cell                = 256 of 256
+largest value / expected count       = 1.3670
+canonical/complement preferred value = 4 of 512 cells
+
+Interpretation
+--------------
+These measurements reject the two simple version-0 distinguishers in the tested
+domains. They do not prove preimage, second-preimage, or collision resistance.

@@ -31,6 +31,14 @@ constexpr std::uint8_t coordinate_code(Coord coord) {
         ^ static_cast<unsigned>(coord.z));
 }
 
+constexpr Coord storage_coord(std::size_t index) {
+    return Coord{
+        static_cast<std::uint8_t>(index & 7U),
+        static_cast<std::uint8_t>((index >> 3U) & 7U),
+        static_cast<std::uint8_t>((index >> 6U) & 7U),
+    };
+}
+
 Axis choose_other_axis(Axis previous, std::uint8_t selector) {
     const bool second = (selector & 1U) != 0U;
     switch (previous) {
@@ -133,26 +141,150 @@ void absorb_closure(WorkingState& state, std::uint64_t input_size) {
 
     absorb_symbol(state, 8U);
 
-    // Self-fed closure: every step samples the current body diagonals, so
-    // subsequent closure moves depend on earlier closure moves.
+    // A longer self-fed diagonal closure is intentionally used in v0.2.0.
+    // Short inputs otherwise retain a measurable memory of the canonical
+    // value originally stored at each output coordinate.
     for (std::size_t i = 0; i < kClosureSymbols; ++i) {
         const auto current = state.cube.body_diagonals();
         const auto length_part = length[i & 7U];
+        const auto first = current[i & 31U];
+        const auto second = current[(i + 11U) & 31U];
+        const auto third = current[(i * 7U + 3U) & 31U];
+        const auto folded = static_cast<std::uint8_t>(
+            rotate_left_byte(first, 1U)
+            + rotate_left_byte(second, 3U)
+            + rotate_left_byte(third, 5U));
         const auto symbol = static_cast<std::uint8_t>(
-            current[i]
-            ^ current[(i + 11U) & 31U]
-            ^ perfect_diagonals[(i * 7U) & 31U]
+            folded
+            ^ perfect_diagonals[(i * 13U) & 31U]
             ^ length_part
             ^ static_cast<std::uint8_t>(i * 8U + (i >> 2U)));
         absorb_symbol(state, symbol);
     }
 }
 
+void absorb_orbit_closure(WorkingState& state, std::uint64_t input_size) {
+    const auto length = encode_length(input_size);
+
+    // 128 steps sample four quarters of the 512-cell cube. Across the full
+    // orbit every physical cell participates once as a direct sample. Since
+    // the cube changes after every step, later samples also observe the path
+    // created by earlier samples.
+    for (std::size_t i = 0; i < kOrbitSymbols; ++i) {
+        const auto p0 = storage_coord(i);
+        const auto p1 = storage_coord(i + 128U);
+        const auto p2 = storage_coord(i + 256U);
+        const auto p3 = storage_coord(i + 384U);
+
+        const auto v0 = state.cube.at(p0);
+        const auto v1 = state.cube.at(p1);
+        const auto v2 = state.cube.at(p2);
+        const auto v3 = state.cube.at(p3);
+        const auto diagonals = state.cube.body_diagonals();
+
+        const auto pair_a = static_cast<std::uint8_t>(
+            rotate_left_byte(v0, 1U) + rotate_left_byte(v1, 3U));
+        const auto pair_b = static_cast<std::uint8_t>(
+            rotate_left_byte(v2, 5U) + rotate_left_byte(v3, 7U));
+        const auto symbol = static_cast<std::uint8_t>(
+            pair_a
+            ^ pair_b
+            ^ diagonals[(i * 5U + (i >> 3U)) & 31U]
+            ^ length[i & 7U]
+            ^ coordinate_code(state.cursor)
+            ^ static_cast<std::uint8_t>(i * 4U + (i >> 5U)));
+
+        absorb_symbol(state, symbol);
+    }
+}
+
+std::uint8_t derive_diagonal_byte(const Cube::DigestCells& diagonals,
+                                  std::size_t output_index,
+                                  std::uint8_t chain) {
+    const std::size_t lane = output_index >> 3U;
+    const std::size_t position = output_index & 7U;
+
+    const auto a = diagonals[((lane + 0U) & 3U) * 8U + position];
+    const auto b = diagonals[((lane + 1U) & 3U) * 8U
+                           + ((position + 1U + lane) & 7U)];
+    const auto c = diagonals[((lane + 2U) & 3U) * 8U
+                           + ((position + 3U + 2U * lane) & 7U)];
+    const auto d = diagonals[((lane + 3U) & 3U) * 8U
+                           + ((position + 5U + 3U * lane) & 7U)];
+
+    const auto pair_a = static_cast<std::uint8_t>(
+        rotate_left_byte(a, 1U) + rotate_left_byte(b, 3U));
+    const auto pair_b = static_cast<std::uint8_t>(
+        rotate_left_byte(c, 5U) + rotate_left_byte(d, 7U));
+    const auto cross = static_cast<std::uint8_t>(
+        diagonals[(output_index * 7U + 3U) & 31U]
+        + diagonals[(output_index * 13U + 1U) & 31U]);
+
+    return static_cast<std::uint8_t>(
+        rotate_left_byte(static_cast<std::uint8_t>(pair_a ^ pair_b ^ chain),
+                         1U + static_cast<unsigned>(position))
+        + rotate_left_byte(cross, 1U + static_cast<unsigned>(lane * 2U))
+        + static_cast<std::uint8_t>(output_index * 8U + lane));
+}
+
+Digest squeeze_diagonals(WorkingState& state, std::uint64_t input_size) {
+    Digest digest{};
+    const auto length = encode_length(input_size);
+    auto initial = state.cube.body_diagonals();
+    std::uint8_t chain = static_cast<std::uint8_t>(
+        initial[0]
+        ^ rotate_left_byte(initial[9], 1U)
+        ^ rotate_left_byte(initial[18], 3U)
+        ^ rotate_left_byte(initial[27], 5U)
+        ^ length[0]);
+
+    for (std::size_t i = 0; i < digest.size(); ++i) {
+        const auto diagonals = state.cube.body_diagonals();
+        const auto output = derive_diagonal_byte(diagonals, i, chain);
+        digest[i] = output;
+
+        // Four state-dependent symbols, one rooted in each body diagonal,
+        // separate consecutive output bytes into distinct cube states.
+        for (std::size_t diagonal = 0; diagonal < kSqueezeSymbolsPerByte; ++diagonal) {
+            const auto current = state.cube.body_diagonals();
+            const std::size_t position = i & 7U;
+            const std::size_t lane = i >> 3U;
+            const auto left = current[diagonal * 8U
+                                    + ((position + diagonal + lane) & 7U)];
+            const auto right = current[((diagonal + 1U) & 3U) * 8U
+                                     + ((7U - position + lane + diagonal) & 7U)];
+            const auto symbol = static_cast<std::uint8_t>(
+                rotate_left_byte(left, 1U + static_cast<unsigned>(2U * diagonal))
+                + rotate_left_byte(right, 7U - static_cast<unsigned>(2U * diagonal))
+                + rotate_left_byte(output, 1U + static_cast<unsigned>(diagonal))
+                + chain
+                + length[(i + diagonal) & 7U]
+                + static_cast<std::uint8_t>(i * 4U + diagonal));
+            absorb_symbol(state, symbol);
+        }
+
+        const auto after = state.cube.body_diagonals();
+        chain = static_cast<std::uint8_t>(
+            rotate_left_byte(chain, 1U + static_cast<unsigned>(i & 7U))
+            + output
+            + after[(i * 5U + 7U) & 31U]
+            + state.cube.at(state.cursor)
+            + coordinate_code(state.cursor));
+    }
+
+    return digest;
+}
+
 HashResult compute(std::span<const std::uint8_t> bytes, bool keep_trace) {
     WorkingState state;
     std::vector<Move> trace;
     if (keep_trace) {
-        trace.reserve((bytes.size() + 42U) * kMovesPerSymbol);
+        const auto symbol_count = bytes.size() * 2U
+                                + 2U + 8U
+                                + kClosureSymbols
+                                + kOrbitSymbols
+                                + kDigestBytes * kSqueezeSymbolsPerByte;
+        trace.reserve(symbol_count * kMovesPerSymbol);
         state.trace = &trace;
     }
 
@@ -160,10 +292,8 @@ HashResult compute(std::span<const std::uint8_t> bytes, bool keep_trace) {
         absorb_symbol(state, byte);
     }
 
-    // Foldback pass: the same message is traversed from the far end back
-    // toward the start.  The canonical diagonal and original byte position
-    // change the return symbol.  This binds the continuation to the exact
-    // path, not only to a possibly convergent forward cube state.
+    // Foldback pass binds the final state to the ordered message path rather
+    // than only to a possibly convergent forward state.
     const auto canonical_diagonals = Cube::perfect().body_diagonals();
     for (std::size_t reverse = bytes.size(); reverse > 0U; --reverse) {
         const std::size_t original_index = reverse - 1U;
@@ -174,12 +304,14 @@ HashResult compute(std::span<const std::uint8_t> bytes, bool keep_trace) {
         absorb_symbol(state, return_symbol);
     }
 
-    absorb_closure(state, static_cast<std::uint64_t>(bytes.size()));
+    const auto input_size = static_cast<std::uint64_t>(bytes.size());
+    absorb_closure(state, input_size);
+    absorb_orbit_closure(state, input_size);
 
     HashResult result;
-    result.digest = state.cube.body_diagonals();
+    result.digest = squeeze_diagonals(state, input_size);
     result.final_cube = state.cube;
-    result.input_size = static_cast<std::uint64_t>(bytes.size());
+    result.input_size = input_size;
     if (keep_trace) {
         result.trace = std::move(trace);
     }
@@ -188,34 +320,34 @@ HashResult compute(std::span<const std::uint8_t> bytes, bool keep_trace) {
 
 } // namespace
 
-RotHash0::RotHash0() = default;
+RotHash1::RotHash1() = default;
 
-void RotHash0::update(std::span<const std::uint8_t> bytes) {
+void RotHash1::update(std::span<const std::uint8_t> bytes) {
     if (bytes.size() > std::numeric_limits<std::size_t>::max() - message_.size()) {
-        throw std::length_error("PVC-RotHash-0 message is too large");
+        throw std::length_error("PVC-RotHash-1 message is too large");
     }
     message_.insert(message_.end(), bytes.begin(), bytes.end());
 }
 
-void RotHash0::update(std::string_view text) {
+void RotHash1::update(std::string_view text) {
     const auto* begin = reinterpret_cast<const std::uint8_t*>(text.data());
     update(std::span<const std::uint8_t>{begin, text.size()});
 }
 
-HashResult RotHash0::finalize(bool keep_trace) const {
+HashResult RotHash1::finalize(bool keep_trace) const {
     return compute(message_, keep_trace);
 }
 
-Digest RotHash0::hash(std::span<const std::uint8_t> bytes) {
+Digest RotHash1::hash(std::span<const std::uint8_t> bytes) {
     return compute(bytes, false).digest;
 }
 
-Digest RotHash0::hash(std::string_view text) {
+Digest RotHash1::hash(std::string_view text) {
     const auto* begin = reinterpret_cast<const std::uint8_t*>(text.data());
     return hash(std::span<const std::uint8_t>{begin, text.size()});
 }
 
-HashResult RotHash0::inspect(std::span<const std::uint8_t> bytes, bool keep_trace) {
+HashResult RotHash1::inspect(std::span<const std::uint8_t> bytes, bool keep_trace) {
     return compute(bytes, keep_trace);
 }
 

@@ -1,14 +1,12 @@
-# PVC-RotHash-0 Design
+# PVC-RotHash-1 Design
 
-## 1. Status
+## 1. Status and identifier
 
-This document specifies the first falsification-oriented prototype. It is not a
-security claim and not a standard.
-
-Version identifier:
+This document specifies a falsification-oriented prototype, not a standard or
+security claim.
 
 ```text
-PVC-RotHash-0 / 0.1.0
+PVC-RotHash-1 / 0.2.0
 ```
 
 ## 2. State
@@ -19,142 +17,120 @@ The state is the canonical Perfect Value Cube:
 C : {0..7}³ -> {0..255}
 ```
 
-It has 512 cells, and each byte value occurs exactly twice.
+It has 512 cells and each byte value occurs exactly twice. Its initial 192
+axis-parallel lines sum to 1020. Hashing may destroy those line sums.
 
-The initial cube has 192 balanced X/Y/Z lines, each with sum 1020. Hashing is
-allowed to destroy these line sums. The value histogram is preserved because
-the transformation uses rotations only.
+State mutation remains rotation-only. Consequently the complete 512-cell byte
+histogram is invariant throughout hashing.
 
 ## 3. Primitive move
 
-A move is:
-
-```text
-(axis, intersection point, amount)
-```
-
-where:
+A move is `(axis, intersection point, amount)`:
 
 - `axis` is X, Y, or Z;
-- the line is the axis-parallel line through the intersection point;
-- `amount` is from 1 to 7;
-- the eight values on that line move cyclically in the positive axis direction.
+- the selected line is the axis-parallel line through the intersection point;
+- `amount` is 1 through 7;
+- the eight cells move cyclically in the positive axis direction.
 
-Every move is invertible. A move by `a` is inverted by a move on the same line
-by `8-a`.
+Every move is invertible. Rotation by `a` is inverted by rotation by `8-a` on
+the same line.
 
 ## 4. Intersecting chain
 
-The state contains a cursor and the previous axis.
+The working state holds a cursor and previous axis. Every next axis differs from
+the previous axis and its line passes through the current cursor. The cursor
+then advances with the rotated intersection value.
 
-A new axis is always selected from the two axes different from the previous
-axis. The new line passes through the cursor. After rotation, the cursor moves
-with the value at the intersection point.
+Therefore consecutive moves intersect and generally do not commute. Move
+selection reads the current cube and is path-dependent.
 
-Therefore:
+## 5. Symbol absorption
 
-1. consecutive axes are different;
-2. the next line intersects the previous line;
-3. the chain bends at a value moved by the previous rotation;
-4. later move selection reads the current cube state.
+Every symbol produces six linked moves. The move controller combines:
 
-This is the central original hypothesis under test.
+- the symbol;
+- symbol index;
+- cursor coordinate;
+- byte currently at the cursor;
+- micro-move phase;
+- previous axis.
 
-## 5. Absorbing one symbol
+It chooses one of the two orthogonal axes and an amount from 1 to 7. No external
+cryptographic primitive or pseudorandom generator is called.
 
-Each input symbol creates six linked moves.
+## 6. Message path
 
-For every move, the implementation combines:
+The input is absorbed in forward order. It is then traversed in reverse through
+a foldback symbol derived from the original byte, original byte position, and a
+canonical body-diagonal value.
 
-- the current symbol;
-- its stream position;
-- the current cursor coordinates;
-- the byte currently at the cursor;
-- the micro-move number.
+The foldback was introduced after a forward-only predecessor produced an exact
+two-byte collision by converging to the same operational state.
 
-These values determine:
+## 7. Length and diagonal closure
 
-- which of the two orthogonal axes is selected;
-- a rotation amount from 1 to 7;
-- the controller value used by the next micro-move.
+The finalization absorbs:
 
-No external hash, cipher, substitution box, or pseudorandom generator is used.
+1. `1020 mod 256 = 252`;
+2. eight little-endian message-length bytes framed by canonical diagonal cells;
+3. the cube side, 8;
+4. 64 self-fed symbols derived from the current body diagonals, canonical
+   diagonals, message length, and step geometry.
 
-The C++ source in `src/hash.cpp` is the normative operational definition for
-version 0.1.0.
+Each closure symbol is absorbed immediately, so later symbols observe all prior
+closure rotations.
 
-## 6. Reverse foldback
+## 8. Full-cube orbit closure
 
-After the forward pass, the message is traversed from its last byte back to its
-first byte. Each return symbol combines:
+Version 0 showed that short-message states remembered the canonical occupant of
+a coordinate. Version 1 therefore adds 128 orbit symbols.
 
-- the original message byte;
-- its original byte position;
-- one canonical body-diagonal byte.
+At orbit index `i`, four coordinates are selected from the four 128-cell
+quarters of the storage order. The four coordinates are sampled directly. Their current values, one current
+body-diagonal value, the length, the cursor, and the orbit index form the next
+symbol.
 
-This return traversal continues the same intersecting rotation chain. Its
-purpose is to prevent two different forward move fragments that converge to the
-same cube/cursor state from automatically sharing the same continuation.
+Across the 128 steps, every physical cube cell participates once as a direct
+sample. Since each symbol immediately changes the cube, later samples observe
+an evolving state rather than one static snapshot.
 
-## 7. Length closure
+## 9. Four-diagonal squeeze
 
-After the forward and foldback passes, the construction absorbs:
+The 256-bit digest is produced in 32 squeeze steps. It is not the raw body
+diagonal of one final cube.
 
-1. `1020 mod 256`, which is 252;
-2. eight little-endian message-length bytes combined with canonical diagonal
-   cells and cube-dimension offsets;
-3. the cube dimension, 8.
+For output position `i`:
 
-This distinguishes byte strings with different lengths.
+1. read all four current body diagonals;
+2. select one lane from each diagonal with position-dependent offsets;
+3. combine the four bytes with odd bit rotations `1,3,5,7`, byte addition,
+   a cross-diagonal pair, the squeeze chain, and the output index;
+4. emit one byte;
+5. derive four further symbols, one rooted in each body diagonal;
+6. absorb those symbols before producing output byte `i+1`;
+7. update the squeeze-chain byte from the emitted byte, new diagonals, cursor
+   value, and cursor geometry.
 
-## 8. Self-fed closure
+Thus all 32 output bytes are derived from the four body diagonals, but from 32
+different cube states. The same byte may appear more than twice in the digest,
+although it still appears exactly twice in any individual cube state.
 
-Thirty-two additional symbols are generated one at a time. Before each symbol,
-the current four body diagonals are read. The closure symbol combines:
+The exact operational definition is `src/hash.cpp`.
 
-- one current diagonal cell;
-- another current diagonal cell;
-- one canonical diagonal cell;
-- one byte of the message length;
-- a geometry-derived step value.
+## 10. Streaming API
 
-The generated symbol is immediately absorbed, so every later closure symbol
-depends on all prior closure rotations.
+Multiple `update()` calls are accepted, but the prototype buffers the message
+and computes the complete path at finalization. This avoids freezing a streaming
+state format while the construction is still under active revision.
 
-## 9. Digest extraction
+## 11. Explicit non-claims
 
-The digest is not computed with a separate algorithm. It is the direct
-concatenation of the four body diagonals of the final cube:
-
-```text
-D0: ( i,   i,   i)
-D1: (7-i,  i,   i)
-D2: ( i,  7-i,  i)
-D3: ( i,   i,  7-i)
-```
-
-for `i = 0..7`.
-
-```text
-digest = D0 || D1 || D2 || D3
-```
-
-The output is 32 bytes / 256 bits.
-
-## 10. Streaming API caveat
-
-The public API accepts multiple `update()` calls, but version 0 buffers the
-message and computes the cube at finalization. This keeps the specification
-simple while the construction is still changing.
-
-## 11. Explicit non-goals
-
-Version 0 does not claim:
+Version 1 does not claim:
 
 - preimage resistance;
 - second-preimage resistance;
 - collision resistance;
-- pseudorandom output;
+- indifferentiability from a random oracle;
 - quantum resistance;
-- suitability as a password hash;
-- compatibility with any existing hash standard.
+- suitability for production use;
+- compatibility with an existing hash standard.

@@ -1,98 +1,134 @@
-# Results for PVC-RotHash-0 0.1.0
+# Results for PVC-RotHash-1 0.2.0
 
 Environment:
 
 ```text
 Compiler: GCC 14.2.0
 Language: C++20
-Builds: Release and ASan/UBSan Debug
+Primary build: Release, warnings as errors
+Additional builds: Clang, ASan/UBSan Debug
 ```
 
-## Build and unit tests
-
-```text
-Release build: passed
-Warnings as errors: passed
-CTest: 1/1 passed
-ASan/UBSan build: passed
-ASan/UBSan CTest: 1/1 passed
-```
-
-## Known-answer samples
+## Regression vectors
 
 ```text
 H("") =
-490f069052e5ac8bababdeeff7c47e4b
-482da201fc7743a9db88c3328cd9da33
+7f01eb3ce13131ef290f8428ed725b84
+9f875e49ad6c646cc9f4f1b1a1e5734b
 
 H("abc") =
-ef1f164375e49a44956adb8714ad35ff
-febd0631abc1b583660497a7c43a8f99
+f32b2241a950d7e7b2b006ff8ae2d0b0
+8f02db23c0d8fde198dfdf9e9642051f
+
+H("Perfect Value Cube") =
+ea3cf546291874656dd454e2481fc530
+fe1c4b2783ad101cf7af4a5521aa3775
 ```
 
-These values are implementation regression vectors, not standard test vectors.
+These are implementation regression vectors, not standardized cryptographic
+test vectors.
 
-## Chain-structure probe
-
-Input:
+## Small-domain collision probes
 
 ```text
-Perfect Value Cube
+All 256 one-byte inputs: no collision found
+All 65,536 two-byte inputs: no collision found
 ```
 
-Result:
+## Avalanche
+
+Single-message, all 144 input bits:
 
 ```text
-moves                         : 468
-consecutive axes differ       : yes
-each line meets previous line : yes
-0..255 each still occur twice : yes
-all 192 sums still 1020       : no
+mean=128.10 min=107 max=152 of 256
 ```
 
-The final line sums are expected to lose the initial balance because individual
-line rotations move values across orthogonal lines.
-
-## Avalanche probe
-
-Input:
+32,000 deterministic 16-byte messages, one flipped bit per message:
 
 ```text
-Perfect Value Cube
+mean=127.9508
+standard deviation=8.0574
+minimum=94
+maximum=159
 ```
 
-Every input bit was flipped independently.
+The binomial reference for 256 independent balanced bits has center 128 and
+standard deviation 8. This agreement is a statistical observation only.
+
+## Exhaustive two-byte output distribution
 
 ```text
-trials        : 144
-bit distance  : mean=128.26 min=106 max=149 of 256
-byte distance : mean=31.87 min=31 max=32 of 32
+samples                         = 65,536
+mean per-position chi-square    = 255.4556
+minimum / maximum chi-square    = 192.2656 / 292.6719
+support at every position       = 256 of 256
+largest value / expected count  = 1.2656
+maximum output-bit |z|          = 3.1172
+equal byte pairs per digest     = 1.9356
+complement pairs per digest     = 1.9357
+digests with a triple byte      = 6.7764%
 ```
 
-This is encouraging statistical behavior for this sample, but it does not
-establish cryptographic security.
+The random-reference expectation for both equal and complementary byte pairs is
+1.9375 per 32-byte string.
 
-## Exhaustive collision probes
+## Randomized test-data distribution
+
+100,000 deterministic test messages of 16 bytes:
 
 ```text
-All 256 one-byte inputs:
-no collision found
-
-All 65,536 two-byte inputs:
-no collision found
+mean per-position chi-square    = 254.5854
+minimum / maximum chi-square    = 205.4810 / 301.8291
+support at every position       = 256 of 256
+largest value / expected count  = 1.1981
+maximum output-bit |z|          = 2.7891
+equal byte pairs per digest     = 1.9314
+complement pairs per digest     = 1.9303
+digests with a triple byte      = 6.8000%
 ```
 
-The forward-only predecessor of this design did have an immediate two-byte
-collision. See `ATTACK_LOG.md`.
+100,000 deterministic test messages of 64 bytes:
 
-## Current interpretation
+```text
+mean per-position chi-square    = 253.9971
+minimum / maximum chi-square    = 206.8378 / 333.8342
+support at every position       = 256 of 256
+largest value / expected count  = 1.2032
+maximum output-bit |z|          = 3.3014
+equal byte pairs per digest     = 1.9396
+complement pairs per digest     = 1.9406
+digests with a triple byte      = 6.6110%
+```
 
-The current prototype passes its first implementation and small-domain tests.
-Its major unresolved risks include:
+## Final-state positional bias
 
-- collisions caused by projecting 512 bytes to 32 diagonal bytes;
-- algebraic relations between rotation chains;
-- preserved full-state histogram;
-- symmetry attacks inherited from the canonical cube;
-- meet-in-the-middle attacks on reversible move sequences;
-- distinguishers caused by the constrained output distribution.
+50,000 deterministic 16-byte messages, all 512 final-cube positions:
+
+```text
+mean per-cell chi-square             = 255.3289
+minimum / maximum chi-square         = 198.3846 / 331.8835
+support at every cell                = 256 of 256
+largest value / expected count       = 1.3158
+canonical/complement preferred value = 6 of 512 cells
+```
+
+50,000 deterministic 64-byte messages, all 512 final-cube positions:
+
+```text
+mean per-cell chi-square             = 253.2930
+minimum / maximum chi-square         = 189.0560 / 317.7626
+support at every cell                = 256 of 256
+largest value / expected count       = 1.3670
+canonical/complement preferred value = 4 of 512 cells
+```
+
+The version-0 report found the canonical value or complement preferred in
+nearly every observed output position. That simple positional-memory signature
+was not reproduced against version 1 in this sample.
+
+## Interpretation
+
+Version 1 removes the two known version-0 distinguishers in the measured test
+domains while retaining strong avalanche behavior. It remains vulnerable in
+principle to untested algebraic, higher-order statistical, symmetry,
+meet-in-the-middle, and multicollision attacks. No security level is claimed.

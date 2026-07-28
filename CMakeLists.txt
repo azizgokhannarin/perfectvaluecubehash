@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.20)
 
 project(
     PerfectValueCubeHash
-    VERSION 0.1.0
-    DESCRIPTION "Experimental rotation-only hash construction based on the Perfect Value Cube"
+    VERSION 0.2.0
+    DESCRIPTION "Experimental four-diagonal squeeze hash based on the Perfect Value Cube"
     LANGUAGES CXX
 )
 
@@ -12,12 +12,40 @@ option(PVC_BUILD_TOOLS "Build cryptanalysis tools" ON)
 option(PVC_ENABLE_SANITIZERS "Enable AddressSanitizer and UndefinedBehaviorSanitizer" OFF)
 option(PVC_WARNINGS_AS_ERRORS "Treat compiler warnings as errors" OFF)
 
+add_library(pvc_project_options INTERFACE)
+target_compile_features(pvc_project_options INTERFACE cxx_std_20)
+
+if(MSVC)
+    target_compile_options(pvc_project_options INTERFACE /W4 /permissive-)
+    if(PVC_WARNINGS_AS_ERRORS)
+        target_compile_options(pvc_project_options INTERFACE /WX)
+    endif()
+else()
+    target_compile_options(
+        pvc_project_options
+        INTERFACE -Wall -Wextra -Wpedantic -Wconversion -Wshadow
+    )
+    if(PVC_WARNINGS_AS_ERRORS)
+        target_compile_options(pvc_project_options INTERFACE -Werror)
+    endif()
+endif()
+
+if(PVC_ENABLE_SANITIZERS AND NOT MSVC)
+    target_compile_options(
+        pvc_project_options
+        INTERFACE -fsanitize=address,undefined -fno-omit-frame-pointer
+    )
+    target_link_options(
+        pvc_project_options
+        INTERFACE -fsanitize=address,undefined
+    )
+endif()
+
 add_library(pvc_hash
     src/cube.cpp
     src/hash.cpp
     src/hex.cpp
 )
-
 add_library(PVC::Hash ALIAS pvc_hash)
 
 target_include_directories(pvc_hash
@@ -25,45 +53,29 @@ target_include_directories(pvc_hash
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
 )
-
 target_compile_features(pvc_hash PUBLIC cxx_std_20)
+target_link_libraries(pvc_hash PRIVATE pvc_project_options)
 
-if(MSVC)
-    target_compile_options(pvc_hash PRIVATE /W4 /permissive-)
-    if(PVC_WARNINGS_AS_ERRORS)
-        target_compile_options(pvc_hash PRIVATE /WX)
-    endif()
-else()
-    target_compile_options(pvc_hash PRIVATE -Wall -Wextra -Wpedantic -Wconversion -Wshadow)
-    if(PVC_WARNINGS_AS_ERRORS)
-        target_compile_options(pvc_hash PRIVATE -Werror)
-    endif()
-endif()
+function(pvc_add_executable target source)
+    add_executable(${target} ${source})
+    target_link_libraries(${target} PRIVATE PVC::Hash pvc_project_options)
+endfunction()
 
-if(PVC_ENABLE_SANITIZERS AND NOT MSVC)
-    target_compile_options(pvc_hash PUBLIC -fsanitize=address,undefined -fno-omit-frame-pointer)
-    target_link_options(pvc_hash PUBLIC -fsanitize=address,undefined)
-endif()
-
-add_executable(pvc-hash app/main.cpp)
-target_link_libraries(pvc-hash PRIVATE PVC::Hash)
+pvc_add_executable(pvc-hash app/main.cpp)
 
 if(PVC_BUILD_TOOLS)
-    add_executable(pvc-avalanche tools/avalanche.cpp)
-    target_link_libraries(pvc-avalanche PRIVATE PVC::Hash)
-
-    add_executable(pvc-collision-probe tools/collision_probe.cpp)
-    target_link_libraries(pvc-collision-probe PRIVATE PVC::Hash)
-
-    add_executable(pvc-structure-probe tools/structure_probe.cpp)
-    target_link_libraries(pvc-structure-probe PRIVATE PVC::Hash)
+    pvc_add_executable(pvc-avalanche tools/avalanche.cpp)
+    pvc_add_executable(pvc-avalanche-sweep tools/avalanche_sweep.cpp)
+    pvc_add_executable(pvc-collision-probe tools/collision_probe.cpp)
+    pvc_add_executable(pvc-distribution-probe tools/distribution_probe.cpp)
+    pvc_add_executable(pvc-state-bias-probe tools/state_bias_probe.cpp)
+    pvc_add_executable(pvc-structure-probe tools/structure_probe.cpp)
 endif()
 
 if(PVC_BUILD_TESTS)
     include(CTest)
     enable_testing()
 
-    add_executable(pvc-tests tests/test_main.cpp)
-    target_link_libraries(pvc-tests PRIVATE PVC::Hash)
+    pvc_add_executable(pvc-tests tests/test_main.cpp)
     add_test(NAME pvc-tests COMMAND pvc-tests)
 endif()

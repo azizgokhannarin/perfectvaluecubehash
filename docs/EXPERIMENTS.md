@@ -2,73 +2,97 @@
 
 ## E0 — Canonical-state verification
 
-Pass conditions:
-
-- 512 cells;
-- each value 0..255 appears exactly twice;
-- all 192 axis-parallel lines sum to 1020.
+Verify 512 cells, two copies of every byte, and 192 initial line sums of 1020.
 
 ## E1 — Move correctness
 
 For every axis and amount `a`:
 
 ```text
-R(a) followed by R(8-a) returns the exact prior cube.
-R(1)^8 returns the exact prior cube.
+R(a) followed by R(8-a) restores the exact state.
+R(1)^8 restores the exact state.
 ```
 
 ## E2 — Chain geometry
 
-For every consecutive pair of generated moves:
+For every consecutive generated move, axes differ and the current line
+intersects the previous line.
 
-- axes differ;
-- the next intersection point lies on the previous line.
+## E3 — Determinism, regression vectors, and framing
 
-## E3 — Determinism and framing
-
-Verify:
-
-- repeated hashing is identical;
-- `M` differs from `M || 00`;
-- empty and non-empty samples differ.
+Verify deterministic output, known-answer regression values, and separation of
+`M` from `M || 00`.
 
 ## E4 — Small-domain collision search
 
-Exhaustively hash:
+```bash
+./build/pvc-collision-probe 1
+./build/pvc-collision-probe 2
+```
 
-- all 256 one-byte inputs;
-- all 65,536 two-byte inputs.
+Exhaustively test all one- and two-byte messages. A collision immediately
+falsifies the full candidate. No collision is only a limited negative result.
 
-A collision immediately falsifies collision resistance for the full design.
+## E5 — Avalanche
 
-No collision in these small domains is only a basic implementation result.
+Single-message exhaustive bit flips:
 
-## E5 — Avalanche measurement
+```bash
+./build/pvc-avalanche "Perfect Value Cube"
+```
 
-For a selected message, flip every input bit independently and record:
+Multi-message sweep:
 
-- mean/min/max changed output bits out of 256;
-- mean/min/max changed output bytes out of 32.
+```bash
+./build/pvc-avalanche-sweep 32000 16
+```
 
-The ideal-binomial reference center is 128 changed bits, but proximity to 128
-does not prove security.
+Record mean, standard deviation, minimum, and maximum Hamming distance.
 
-## E6 — Hidden-state comparison
+## E6 — Digest distribution and structural output tests
 
-For pairs of messages, compare:
+```bash
+./build/pvc-distribution-probe --exhaustive-two-byte
+./build/pvc-distribution-probe 100000 16
+./build/pvc-distribution-probe 100000 64
+```
 
-- digest equality;
-- complete final-cube equality;
-- number and location of differing cells.
+Measure:
 
-This distinguishes full-state collisions from projection collisions.
+- chi-square independently for every output byte position;
+- support at every position;
+- maximum bit-frequency z-score;
+- equal-byte pairs;
+- complementary-byte pairs;
+- frequency of digests containing a byte three or more times.
+
+The deterministic standard-library generator is test infrastructure only.
+
+## E7 — Final-state positional memory
+
+```bash
+./build/pvc-state-bias-probe 50000 16
+```
+
+Measure all 512 final-cube coordinates separately and count how often their most
+frequent value equals the canonical occupant or its complement.
+
+## E8 — Structural invariants
+
+```bash
+./build/pvc-structure-probe "Perfect Value Cube"
+```
+
+Verify the intersecting chain and preserved full-state histogram. Initial line
+balance is expected to be lost.
 
 ## Planned experiments
 
-- reduced cube sizes with exhaustive state exploration;
-- automatic search for equivalent move chains;
-- diagonal-only collision optimization;
+- reduced-state exhaustive models;
+- equivalent move-chain search;
+- pairwise and higher-order output correlation;
 - symmetry-generated related inputs;
-- per-round differential maps;
+- per-stage differential maps;
 - cycle and fixed-point search;
-- multicollision and expandable-message attempts.
+- multicollision and expandable-message attempts;
+- meet-in-the-middle attacks on message/finalization boundaries.

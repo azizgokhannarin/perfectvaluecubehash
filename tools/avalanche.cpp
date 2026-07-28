@@ -18,7 +18,7 @@ int main(int argc, char** argv) {
         return 2;
     }
 
-    const auto baseline = pvc::RotHash0::hash(message);
+    const auto baseline = pvc::RotHash1::hash(message);
     std::vector<std::size_t> bit_distances;
     std::vector<std::size_t> byte_distances;
     bit_distances.reserve(message.size() * 8U);
@@ -28,7 +28,7 @@ int main(int argc, char** argv) {
         for (unsigned bit = 0; bit < 8U; ++bit) {
             auto changed = message;
             changed[byte_index] ^= static_cast<std::uint8_t>(1U << bit);
-            const auto digest = pvc::RotHash0::hash(changed);
+            const auto digest = pvc::RotHash1::hash(changed);
             bit_distances.push_back(pvc::digest_hamming_distance(baseline, digest));
             byte_distances.push_back(pvc::digest_byte_distance(baseline, digest));
         }
@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
         static_cast<double>(std::accumulate(byte_distances.begin(), byte_distances.end(), std::size_t{0}))
         / static_cast<double>(byte_distances.size());
 
-    std::cout << "PVC-RotHash-0 avalanche probe\n"
+    std::cout << "PVC-RotHash-1 avalanche probe\n"
               << "message bytes : " << message.size() << '\n'
               << "baseline      : " << pvc::to_hex(baseline) << '\n'
               << "trials        : " << bit_distances.size() << '\n'
