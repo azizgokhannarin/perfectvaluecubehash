@@ -404,3 +404,63 @@ and tested once.
 - E is evidence that **the frozen controller’s alias surface is not inevitable**.
 - E is **not** ready to mint RotHash-2.
 - Honest status: lead offline sketch with a fully listed residual catalogue.
+
+---
+
+## 9. Science-first goal + principled variant G (2026-08-01)
+
+Goal ordering locked in `docs/RESEARCH_GOAL.md`: publishable science first;
+acceptance only if a repaired controller earns it. Design **family continues**;
+RotHash-1 controller remains a disclosed defect.
+
+### 9.1 Comparative full two-byte one-symbol alias scan
+
+Same methodology for all rows: every 2-byte prefix × all next symbols; exact
+operational state equality. One-byte context scan also run.
+
+| Variant | 1-byte aliases | 2-byte instances | Unique pairs | Notes |
+|---|---:|---:|---:|---|
+| canonical (frozen) | 3 | **728** | 10 | Only Δ ∈ {42,126,196}; matches known local catalogue size |
+| E | 0 | **183** | 4 | Residual mod-7 lane rail (§8) |
+| **G** | 0 | **187** | 4 | New pairs; did **not** beat E |
+
+G pairs (all physical-path style expected; not expanded here):
+
+```text
+3c/ac (Δ=112, n=53), 87/fb (Δ=116, n=51),
+3c/bc (Δ=128, n=42), 4b/a8 (Δ=93, n=41)
+```
+
+### 9.2 What G tried (principled, not thrash)
+
+G keeps E’s lane, then sets
+
+```text
+amount_source = 3·lane + 5·symbol + 1·control + 2·probe
+              + 4·geometry + 6·phase + 3·axis
+amount = 1 + (amount_source % 7)
+```
+
+with all displayed coefficients **nonzero mod 7**, so that when Δlane ≡ 0
+(mod 7), Δamount_source ≡ 5·Δsymbol (mod 7) and E’s four residual Δsymbol
+values (none ≡ 0 mod 7) cannot share amount. That calculation is sound for
+*that* obstruction; the scan shows **other** joint (axis, amount, path)
+collisions appear instead.
+
+### 9.3 Scientific conclusion (publishable)
+
+1. **Architecture** (cube, rotations, foldback, closures, squeeze) remains a
+   legitimate research object.
+2. **Controller injectivity** is the central hard problem; amount-mod-7 / LSB
+   axis structure repeatedly reintroduces finite alias families under redesign.
+3. Progress is real and quantitative: 728 → 183 residual instances (E), without
+   restoring the one-byte 42-anchors.
+4. A single linear-mod-7 coefficient fix (G) is **insufficient** for zero
+   two-byte aliases; next redesign must change the *shape* of the choice
+   (e.g. stronger axis dependence, or abandoning bare `% 7` amount), not only
+   coefficients — or the paper stops at this comparative negative for G.
+
+### 9.4 Effort stop
+
+No further ARX/coefficient variants in this session. Next high-value work is
+**paper narrative + optional one structural redesign**, not G2/G3 thrash.

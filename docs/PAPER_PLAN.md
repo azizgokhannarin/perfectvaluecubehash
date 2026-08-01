@@ -11,18 +11,26 @@ Rotations of a Perfect Value Cube**
 
 ## Proposed sections
 
-1. Motivation and design constraints
+1. Motivation and design constraints (primitive-free, PVC geometry)
 2. Perfect Value Cube construction and geometry
-3. Normative hash construction
+3. Normative hash construction (PVC-RotHash-1)
 4. Evolution from raw diagonal extraction to four-diagonal squeeze
-5. Statistical evaluation
+5. Statistical evaluation (v0 distinguishers removed in tested domains)
 6. Reduced-round and transition analysis
-7. Forward controller aliases and multicollisions
-8. Foldback separation analysis
+7. Forward controller aliases and multicollisions (42/126/196; bridged 2^32)
+8. Foldback separation analysis (domains; inductive budget-close, not a proof)
 9. Digest-surface and barrier experiments
-10. Performance
-11. Limitations and open cryptanalytic problems
-12. Reproducibility and independent review
+10. Controller redesign experiments (E vs G injectivity catalogue; negative for
+    coefficient-only G)
+11. Performance
+12. Limitations, design judgment, and open problems
+13. Reproducibility and independent review
+
+## Goal note
+
+The paper’s primary product is **scientific clarity**, not a security claim.
+A successor candidate appears only if a later controller clears short-domain
+aliases; until then RotHash-1 is the attacked baseline.
 
 ## Required evidence before submission
 

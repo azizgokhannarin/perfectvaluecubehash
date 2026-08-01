@@ -6,7 +6,8 @@
 **Supersedes for strategy:** the short “Next campaign” section of `docs/ROADMAP.md`  
 **Does not supersede:** historical completed work in `docs/ROADMAP.md`  
 **Effort rule:** `docs/EFFORT_POLICY.md` (value-based work; inductive closes)  
-**Provisional Gate B:** `docs/CONTROLLER_DECISION_MEMO.md`
+**Provisional Gate B:** `docs/CONTROLLER_DECISION_MEMO.md`  
+**Goal ordering:** `docs/RESEARCH_GOAL.md` (publishable science first; acceptance contingent)
 
 This document defines how the project may move from a frozen research candidate
 toward a construction that the cryptographic community could *rationally

@@ -161,6 +161,47 @@ def variant_f_popcount_amount(
     return axis, amount
 
 
+def variant_g_mod7_rail_break(
+    control: int, probe: int, geometry: int, symbol: int, previous: int, phase: int
+) -> tuple[int, int]:
+    """Principled fix aimed at E's residual mod-7 lane rail (campaign §8).
+
+    Keep E's nonlinear lane (it cleared the frozen 42-family at one-byte depth).
+    Rebuild amount from a linear form over GF(7) whose symbol coefficient is
+    nonzero mod 7, so when Δlane ≡ 0 (mod 7) we still have:
+
+        Δamount_source ≡ c_symbol * Δsymbol  (mod 7)
+
+    with c_symbol ≠ 0. Then amount matches only if Δsymbol ≡ 0 (mod 7).
+    The four known E residuals all have Δsymbol ≠ 0 (mod 7), so they cannot
+    share amount under that condition. Axis still mixes symbol into the
+    selector so even Δsymbol ≡ 0 (mod 7) is not free.
+
+    Coefficients 3,5,1,2,4,6 are all nonzero mod 7. This is still primitive-free.
+    """
+    lane = u8(rotl8(control ^ symbol, phase) + (probe ^ geometry) + phase * 17)
+    lane = u8(lane ^ rotl8(lane, 3) ^ rotl8(symbol, 5))
+    selector = (
+        lane
+        ^ rotl8(probe, phase & 7)
+        ^ rotl8(symbol, phase)
+        ^ rotl8(control, 3)
+    )
+    axis = axis_from_selector(previous, selector)
+    # Integer sum then % 7; coefficients chosen nonzero mod 7.
+    amount_source = (
+        3 * lane
+        + 5 * symbol
+        + 1 * control
+        + 2 * probe
+        + 4 * geometry
+        + 6 * phase
+        + 3 * axis
+    )
+    amount = amount_mod7(amount_source)
+    return axis, amount
+
+
 VARIANTS: dict[str, VariantFn] = {
     "canonical": variant_canonical,
     "A": variant_a_no_symbol_in_amount,
@@ -171,6 +212,7 @@ VARIANTS: dict[str, VariantFn] = {
     "E2": variant_e2_double_fold,
     "E3": variant_e3_split_control_amount,
     "F": variant_f_popcount_amount,
+    "G": variant_g_mod7_rail_break,
 }
 
 

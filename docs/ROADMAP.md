@@ -137,8 +137,7 @@ premature security claims.
   six-move aliases (three pairs); 126/196 appear only in deeper contexts;
 - dual-return and multipath tools: no after-foldback merge in tested domains;
   multipath min distance 282 bits across 128 seeds;
-- redesign prototype E: 0 one-byte aliases; full two-byte domain has exactly
-  four residual physical-path pairs (mod-7 lane rail) — see campaign §8;
-- effort policy + provisional decision memo: foldback-vs-known-forward class
-  budget-closed; prefer Redesign-2; next high-value redesign is one principled
-  fix for the E residual rail (not more ARX thrash or foldback grinding).
+- science-first goal locked (`docs/RESEARCH_GOAL.md`); design family continues;
+- redesign: E best (183/4 pairs); G principled mod-7 fix failed (187/4 new);
+- next high-value: paper narrative from RotHash-1 + E/G evidence; optional
+  *structural* controller redesign later — not coefficient thrash.

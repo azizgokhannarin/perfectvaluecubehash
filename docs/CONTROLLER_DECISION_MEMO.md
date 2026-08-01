@@ -2,7 +2,8 @@
 
 **Date:** 2026-08-01  
 **Candidate:** PVC-RotHash-1 `1.0.0-rc1` (frozen; unchanged by this memo)  
-**Ambition:** general-purpose hash candidate (`docs/ACCEPTANCE_ROADMAP.md`)  
+**Ambition:** science-first publishable result; acceptance only if redesign works
+(`docs/RESEARCH_GOAL.md`, `docs/ACCEPTANCE_ROADMAP.md`)  
 **Effort rule:** `docs/EFFORT_POLICY.md`
 
 This memo records a **provisional** Gate B judgment so effort stops thrashing
@@ -71,25 +72,26 @@ a digest-level attack succeeds; or an external result contradicts the above.
 
 Given the **general-purpose** ambition:
 
-### Preferred path: **Redesign-2** (new candidate when ready)
+### Preferred paths (ordered by `docs/RESEARCH_GOAL.md`)
 
-**Why:** Experts will not accept a hash whose forward pass admits cheap Joux-style
-multicollisions, even if foldback has so far separated them. Measuring foldback
-distance forever does not remove that objection. Value lies in **killing the
-alias family at the controller**, then re-running short-domain and statistical
-batteries under a new identifier.
+**P0 — Publish RotHash-1 science (now):** frozen candidate, disclosed forward
+multicollisions, foldback budget-close, redesign experiments E/G as
+comparative evidence. This is the **default success** if no zero-alias
+controller appears soon.
 
-**Lead sketch:** offline variant **E** (feedback lane).
+**P1 — Redesign-2 only if injectivity is won:** Experts will not accept a hash
+with cheap forward multicollisions. Value is killing aliases at the controller,
+then minting a **new** ID.
 
-- One-byte contexts: **0** aliases.
-- Full two-byte domain: **183** instances, only **4** symbol pairs
-  (`36/71`, `2b/2c`, `61/80`, `2d/ae`); all physical-path aliases.
-- Root residual: `lane` can differ by a multiple of 7 while axis LSB still
-  matches, so amount and axis agree for six moves
-  (`docs/PHASE1_CONTROLLER_CAMPAIGN.md` §8).
-- Blind patches E2–E5 did not help (E4/E5 made counts worse). E6 aborted as
-  low EV. Not shippable; next redesign must target the mod-7 lane rail
-  explicitly, once.
+**Lead sketches (offline, not candidates):**
+
+| Sketch | 1-byte | 2-byte instances | Status |
+|---|---:|---:|---|
+| E | 0 | 183 (4 pairs) | Best so far; residual mod-7 lane rail |
+| G | 0 | 187 (4 new pairs) | Principled GF(7) coefficient fix; **failed** to clear domain |
+
+G shows coefficient-only repair of E’s residual theory is not enough. Next
+redesign, if any, must change control **shape** (not another coefficient set).
 
 ### Rejected as primary path: endless Keep-1 foldback grinding
 
