@@ -138,5 +138,6 @@ premature security claims.
 - dual-return and multipath tools: no after-foldback merge in tested domains;
   multipath min distance 282 bits across 128 seeds;
 - redesign prototype E clears one-byte aliases, residual two-byte aliases remain;
-- next: deepen dual/independent-suffix attacks; harden E-class redesign toward
-  zero two-byte aliases; prepare controller decision memo when evidence stabilizes.
+- effort policy + provisional decision memo: foldback-vs-known-forward class
+  budget-closed; prefer Redesign-2 for acceptance; next high-value work is
+  alias-free E-class+ prototypes (not more same-method foldback grinding).

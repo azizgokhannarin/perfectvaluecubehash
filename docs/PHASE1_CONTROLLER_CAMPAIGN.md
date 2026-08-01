@@ -1,9 +1,10 @@
 # Phase 1 — Controller Decision Campaign
 
-**Status:** Active  
+**Status:** Active — foldback class budget-closed; redesign preferred  
 **Started:** 2026-08-01  
 **Frozen algorithm:** PVC-RotHash-1 `1.0.0-rc1` (unchanged)  
-**Strategy:** Parallel attack + offline redesign (`docs/ACCEPTANCE_ROADMAP.md`)
+**Strategy:** `docs/ACCEPTANCE_ROADMAP.md` · effort: `docs/EFFORT_POLICY.md`  
+**Provisional decision:** `docs/CONTROLLER_DECISION_MEMO.md`
 
 This campaign exists to force a Gate B decision:
 
@@ -303,5 +304,23 @@ python3 scripts/controller_redesign_prototypes.py --variants E --deep --two-byte
   checks; the foldback gate remains standing under these attacks.
 - Simple formula patches often **worsen** alias counts; only careful non-linear
   mixing (variant E) improved the short-domain surface.
-- Gate B still open: need either a dual that works, or a redesign that kills
-  aliases through two-byte (and reverse) domains plus statistical re-validation.
+- Per `docs/EFFORT_POLICY.md`, the foldback-vs-known-forward class is
+  **Phase-1 budget-closed** (inductive; not a proof). More same-method suffix
+  grinding is deferred.
+- Provisional Gate B (`docs/CONTROLLER_DECISION_MEMO.md`): prefer **Redesign-2**
+  for general-purpose acceptance; high-value work is alias-free controller
+  prototypes (E-class+), not endless foldback near-miss distance.
+
+### 7.6 Inductive close (foldback vs known forward multicollisions)
+
+```text
+Attack class: known forward multicollisions → after-foldback merge
+Domains and cost: exhaustive 3-byte foldback; 1496 dual-return + 1-byte
+  suffixes; prior 2^32 MITM samples; 128-seed multipath; prior beam/LSH
+Mechanism: return XOR preservation; large first reverse divergence; no
+  catalogue one-step return dual
+Result: no break in these domains
+Inductive close: further same-method extension is low EV
+Re-open if: SAT dual, multi-step reverse merge, digest break, external contradict
+This is not a security proof.
+```

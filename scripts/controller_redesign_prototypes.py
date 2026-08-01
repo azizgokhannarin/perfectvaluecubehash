@@ -116,6 +116,32 @@ def variant_e_feedback_lane(
     return axis, amount
 
 
+def variant_e2_double_fold(
+    control: int, probe: int, geometry: int, symbol: int, previous: int, phase: int
+) -> tuple[int, int]:
+    """E + second ARX-style fold; still primitive-free."""
+    x = u8(control + rotl8(symbol, 1) + phase * 19)
+    y = u8(probe + rotl8(geometry, 2) + (previous * 37))
+    lane = u8(rotl8(x ^ y, phase) + rotl8(x + y, 3))
+    lane = u8(lane ^ rotl8(lane, 5) ^ rotl8(symbol ^ probe, 2))
+    selector = lane ^ rotl8(control, phase & 7) ^ geometry
+    axis = axis_from_selector(previous, selector)
+    amount = amount_mod7(lane ^ rotl8(geometry + axis, 1) ^ (phase * 9))
+    return axis, amount
+
+
+def variant_e3_split_control_amount(
+    control: int, probe: int, geometry: int, symbol: int, previous: int, phase: int
+) -> tuple[int, int]:
+    """Axis from control/probe; amount from symbol/probe with no shared linear sum."""
+    sel_lane = rotl8(control, phase) ^ probe ^ geometry ^ (previous * 13)
+    axis = axis_from_selector(previous, sel_lane)
+    amt_lane = rotl8(symbol, phase) ^ rotl8(probe, 3) ^ geometry ^ u8(phase * 29)
+    amt_lane = u8(amt_lane + rotl8(amt_lane, 1) + rotl8(control, 5))
+    amount = amount_mod7(amt_lane ^ (axis * 17) ^ rotl8(symbol, 7))
+    return axis, amount
+
+
 def variant_f_popcount_amount(
     control: int, probe: int, geometry: int, symbol: int, previous: int, phase: int
 ) -> tuple[int, int]:
@@ -136,6 +162,8 @@ VARIANTS: dict[str, VariantFn] = {
     "C": variant_c_dual_bit_axis,
     "D": variant_d_xor_rot_amount,
     "E": variant_e_feedback_lane,
+    "E2": variant_e2_double_fold,
+    "E3": variant_e3_split_control_amount,
     "F": variant_f_popcount_amount,
 }
 

@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased — Value-based effort policy and provisional Gate B
+
+Documentation and offline redesign prototypes only. Official digests and the
+frozen algorithm are unchanged.
+
+- added `docs/EFFORT_POLICY.md`: inductive budget-closes, no hiding of weaknesses,
+  stop low-EV repetition of the same attack class;
+- added provisional `docs/CONTROLLER_DECISION_MEMO.md`: prefer Redesign-2 for
+  general-purpose acceptance; Phase-1 budget-close of foldback-vs-known-forward
+  multicollision attacks (explicitly not a security proof);
+- recorded decisions D-011 and D-012;
+- tried redesign E2/E3; neither beat E on two-byte residual aliases — stop
+  unprincipled formula thrash until residual mechanism is characterized.
+
 ## Unreleased — Phase 1 wave 2 (dual alias, multipath, redesign)
 
 Research tooling and documentation only. Official digests and the frozen

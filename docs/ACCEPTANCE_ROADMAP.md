@@ -4,7 +4,9 @@
 **Candidate line:** PVC-RotHash-1 `1.0.0-rc1` and any successor required by evidence  
 **Last updated:** 2026-08-01  
 **Supersedes for strategy:** the short “Next campaign” section of `docs/ROADMAP.md`  
-**Does not supersede:** historical completed work in `docs/ROADMAP.md`
+**Does not supersede:** historical completed work in `docs/ROADMAP.md`  
+**Effort rule:** `docs/EFFORT_POLICY.md` (value-based work; inductive closes)  
+**Provisional Gate B:** `docs/CONTROLLER_DECISION_MEMO.md`
 
 This document defines how the project may move from a frozen research candidate
 toward a construction that the cryptographic community could *rationally
@@ -40,6 +42,7 @@ These rules already govern the repository and remain binding:
 | Exact verification | Fingerprint/LSH tools never report collisions without full-state checks (`docs/DECISIONS.md` D-009). |
 | Forward equality ≠ digest collision | Structural findings are documented at the deepest true phase (`D-010`). |
 | Production ban until decision gate | `SECURITY.md` remains prohibitive until a later explicit policy change. |
+| Value-based effort | Do not grind the same attack class after an inductive budget-close (`docs/EFFORT_POLICY.md`). Weaknesses stay disclosed; low-EV repetition stops. |
 
 ### What “PQC-era acceptance” means here
 
@@ -351,9 +354,12 @@ Maintainer decisions for the acceptance push:
 | Near-term focus (first ~2 weeks) | **Gate A:** public scientific package (`release_check`, tag `v1.0.0-rc1`, announcement, review entry points). |
 | After Gate A | Immediately open Phase 1 workstreams P1-a–P1-e without waiting for external silence. |
 
-Default execution line:
+Default execution line (updated after provisional Gate B memo):
 
-> Gate A now · then parallel attack + redesign · no security claims · redesign ready if Gate B2 fails.
+> RotHash-1 stays frozen for public attack · foldback-vs-known-forward class
+> is Phase-1 budget-closed (not a proof) · **prefer Redesign-2** for the
+> general-purpose ambition · next value is an alias-killing controller
+> prototype, not more suffix/beam clones on known forward pairs.
 
 ---
 

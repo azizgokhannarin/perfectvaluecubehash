@@ -84,3 +84,17 @@ reverse contexts. The project nevertheless keeps the canonical algorithm fixed
 for this campaign so that cryptanalysis remains comparable across releases.
 Controller redesign is deferred until guided searches are repeated across
 multiple paths and independently reviewed.
+
+## D-011 — Value-based cryptanalysis effort
+
+Accepted 2026-08-01. Attack classes may be **budget-closed by induction** when
+mechanism and multi-domain evidence make further same-method work low expected
+value. Budget-closed is not a security proof. Weaknesses remain fully disclosed.
+See `docs/EFFORT_POLICY.md`.
+
+## D-012 — Provisional controller path for acceptance ambition
+
+Accepted provisionally 2026-08-01. For the general-purpose acceptance goal,
+prefer **Redesign-2** (new candidate after alias-killing controller work) over
+endless Keep-1 foldback grinding. PVC-RotHash-1 remains frozen for public
+attack. See `docs/CONTROLLER_DECISION_MEMO.md`.
