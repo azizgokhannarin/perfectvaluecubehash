@@ -336,11 +336,11 @@ def sample_two_byte_context_aliases(
 
 def full_two_byte_alias_catalogue(
     variant: VariantFn,
-) -> tuple[int, Counter]:
+) -> tuple[int, object]:
     """Exact one-symbol aliases after every two-byte prefix (slow, ~10–15 min)."""
-    from collections import Counter as CounterType
+    from collections import Counter
 
-    pair_counts: CounterType = CounterType()
+    pair_counts: Counter = Counter()
     total = 0
     for counter in range(65536):
         if counter % 8192 == 0:
