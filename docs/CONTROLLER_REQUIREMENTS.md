@@ -177,11 +177,10 @@ test**, so a competitive hash program can honestly begin.
 | canonical (RotHash-1) | pass | **fail** (3) | **fail** (728 / 10 pairs) | frozen baseline |
 | E | pass | pass | **fail** (183 / 4) | residual mod-7 lane |
 | G | pass | pass | **fail** (187 / 4) | coefficient-only |
-| **H** | **pass** | **pass** | **fail** (161 / **2** pairs) | **lead**; residuals `58/c5`, `6e/c6` |
-| H2 | pass | **fail** (57) | **fail** (10890 / 78) | discarded |
-| H3 | pass | **fail** (1) | **fail** (183 / 3) | over-hardened; regressed |
-| H4 | pass | pass | **fail** (337 / 5) | kills H residuals; G3 worse |
-| H5 | pass | **fail** (1) | **fail** (243 / 3) | simpler residue; regressed G2 |
+| H | pass | pass | **fail** (161 / 2) | historical; residual residue class |
+| H2–H5 | mixed | mixed | fail | local patches discarded |
+| **S** | **pass** | **pass** | **pass (0)** | **lead** — systematic mixed-radix |
 
-**Lead remains H.** See `docs/CONTROLLER_G3_FAILURE_MODE.md` for the reasoned
-next experiment (hypothesis H\*: one global amount-map redesign; stop on fail).
+**Lead is S (2026-08-02).** G1∧G2∧G3 zero collisions under exact operational
+state equality. Scheduler injectivity only — not full-hash security. Next:
+ST1–ST4 smoke, then possible new candidate ID.

@@ -282,23 +282,23 @@ outreach + silence — weak but honest).
 
 ## 4. Immediate next actions (this quarter)
 
+**Stage 1 status:** Controller **S** passed G1∧G2∧G3 (2026-08-02). See
+`docs/EXTERNAL_ADVICE_G3.md` and campaign §11.
+
 Ordered by dependency:
 
-1. **Execute hypothesis H\*** per `CONTROLLER_G3_FAILURE_MODE.md`  
-   - one global amount map; freeze H axis/init/evolve;  
-   - single G1–G2–G3 run; stop-on-fail.
-2. **If G3 passes:** run ST1–ST4 smoke on a research full-hash path using H\*.
-3. **If ST pass:** draft RotHash-2 (name TBD) spec diff vs RotHash-1; dual impl
-   plan; vector generation.
-4. **If any fail:** update failure-mode note; choose next **class** of controller
-   change (not micro-variants); keep publishing science of RotHash-1 + failed
-   attempts as evidence, not as the product.
+1. ~~G1–G3 injectivity~~ **done (S)**.
+2. **Stage 2:** ST1–ST4 smoke with S wired into a research full-hash path.
+3. **If ST pass:** draft new candidate ID (not RotHash-1) + vectors + dual impl.
+4. **If ST fail:** fix full-hash integration or diffusion phases; do not abandon
+   the injectivity channel without a new structural argument.
 
-Parallel (does not replace 1–3):
+Parallel:
 
 - Keep RotHash-1 public package healthy (CI, vectors, challenge).
-- Paper outline that **leads with the candidate we will mint**, using RotHash-1
-  as prior art / negative controller case — not as the hero product.
+- Paper outline: RotHash-1 as prior/controller failure case; **S-based successor**
+  as the constructive path.
+- When stuck on a structural question, **consult outsiders** (`EFFORT_POLICY` §7).
 
 ---
 
