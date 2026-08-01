@@ -141,7 +141,6 @@ replace the completed-work log above.
   multipath min distance 282 bits across 128 seeds;
 - competitive ambition locked (`docs/RESEARCH_GOAL.md`); controller requirements
   in `docs/CONTROLLER_REQUIREMENTS.md` (G1–G3 hard gates);
-- external G3 advice → systematic controller **S**: **G1∧G2∧G3 PASS** (0 aliases);
-- H remains historical lead before S; H3–H5 local patches discarded;
-- consultation principle: ask outsiders when structurally stuck (`EFFORT_POLICY` §7);
-- next: Stage 2 ST smoke with S; then new candidate ID only if smoke holds.
+- external G3 advice → systematic controller **S**: **G1∧G2∧G3 PASS**;
+- Stage 2 smoke with S full-hash path: **ST1–ST4 PASS** (`docs/STAGE2_SMOKE_S.md`);
+- next: Stage 3 — mint new candidate ID (spec + C++/Python + vectors); not RotHash-1.

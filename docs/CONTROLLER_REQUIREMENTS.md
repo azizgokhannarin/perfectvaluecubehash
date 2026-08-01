@@ -181,6 +181,6 @@ test**, so a competitive hash program can honestly begin.
 | H2–H5 | mixed | mixed | fail | local patches discarded |
 | **S** | **pass** | **pass** | **pass (0)** | **lead** — systematic mixed-radix |
 
-**Lead is S (2026-08-02).** G1∧G2∧G3 zero collisions under exact operational
-state equality. Scheduler injectivity only — not full-hash security. Next:
-ST1–ST4 smoke, then possible new candidate ID.
+**Lead is S (2026-08-02).** G1∧G2∧G3 zero collisions. Stage 2 ST1–ST4 smoke
+**PASS** on research full-hash path (`docs/STAGE2_SMOKE_S.md`). Next: Stage 3
+candidate mint (SPEC + dual impl + vectors). Still not a security proof.

@@ -282,16 +282,16 @@ outreach + silence — weak but honest).
 
 ## 4. Immediate next actions (this quarter)
 
-**Stage 1 status:** Controller **S** passed G1∧G2∧G3 (2026-08-02). See
-`docs/EXTERNAL_ADVICE_G3.md` and campaign §11.
+**Stage 1 status:** Controller **S** passed G1∧G2∧G3 (2026-08-02).  
+**Stage 2 status:** ST1–ST4 smoke **PASS** (2026-08-02) — `docs/STAGE2_SMOKE_S.md`.
 
 Ordered by dependency:
 
 1. ~~G1–G3 injectivity~~ **done (S)**.
-2. **Stage 2:** ST1–ST4 smoke with S wired into a research full-hash path.
-3. **If ST pass:** draft new candidate ID (not RotHash-1) + vectors + dual impl.
-4. **If ST fail:** fix full-hash integration or diffusion phases; do not abandon
-   the injectivity channel without a new structural argument.
+2. ~~ST1–ST4 smoke~~ **done** (research Python full-hash with S).
+3. **Stage 3:** draft new candidate ID (not RotHash-1) + SPEC absorb=S + dual
+   impl + official vectors + freeze tag.
+4. **Stage 4+:** deep falsification and public review.
 
 Parallel:
 

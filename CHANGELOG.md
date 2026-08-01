@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased — Stage 2 smoke PASS for Controller S full-hash path
+
+Research tooling only. Official digests unchanged.
+
+- added `scripts/stage2_smoke_s.py` (S absorb + RotHash-1-shaped finalization);
+- ST1 avalanche mean 128.06/256 (256 trials); ST2 all 65536 two-byte digests
+  unique; ST3 triple rate 6.72%; ST4 R0-like path collides, full S does not;
+- documented in `docs/STAGE2_SMOKE_S.md`; next: Stage 3 candidate mint planning.
+
 ## Unreleased — Controller S passes G1–G3 injectivity
 
 Offline harness only. Official digests unchanged.
@@ -7,8 +16,7 @@ Offline harness only. Official digests unchanged.
 - adopted external G3 advice (systematic mixed-radix injectivity channel);
 - fixed S so context digits `c_i` never depend on the message symbol;
 - **S: G1=PASS G2=PASS G3=PASS** (zero aliases on full two-byte domain);
-- recorded consultation-when-stuck policy in `docs/EFFORT_POLICY.md` §7;
-- next program stage: ST smoke, not production claims.
+- recorded consultation-when-stuck policy in `docs/EFFORT_POLICY.md` §7.
 
 ## Unreleased — Trust path roadmap
 

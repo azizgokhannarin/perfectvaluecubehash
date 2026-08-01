@@ -179,7 +179,8 @@ Version 0.8.0 results are in [`docs/DIGEST_SURFACE_RESULTS.md`](docs/DIGEST_SURF
 ./build/pvc-barrier-correlation --left 000000 --right 000001 --samples 10000 --suffix-bytes 2 --independent-suffix
 ./build/pvc-dual-return-alias --suffix-bytes 1 --suffix-limit 256
 ./build/pvc-multipath-foldback-sample --seed-limit 128 --suffix-samples 64
-python3 scripts/controller_redesign_prototypes.py --variants E --deep --two-byte-samples 4096
+python3 scripts/controller_redesign_prototypes.py --variants S --deep --two-byte-full
+python3 scripts/stage2_smoke_s.py
 ```
 
 These tools are intended to disprove the design. Passing them is not evidence
