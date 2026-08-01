@@ -177,9 +177,11 @@ test**, so a competitive hash program can honestly begin.
 | canonical (RotHash-1) | pass | **fail** (3) | **fail** (728 / 10 pairs) | frozen baseline |
 | E | pass | pass | **fail** (183 / 4) | residual mod-7 lane |
 | G | pass | pass | **fail** (187 / 4) | coefficient-only |
-| **H** | **pass** | **pass** | **fail** (161 / **2** pairs) | **lead** structural; residuals `58/c5`, `6e/c6` |
-| H2 | pass | **fail** (57) | **fail** (10890 / 78) | table amount map regressed |
+| **H** | **pass** | **pass** | **fail** (161 / **2** pairs) | **lead**; residuals `58/c5`, `6e/c6` |
+| H2 | pass | **fail** (57) | **fail** (10890 / 78) | discarded |
+| H3 | pass | **fail** (1) | **fail** (183 / 3) | over-hardened; regressed |
+| H4 | pass | pass | **fail** (337 / 5) | kills H residuals; G3 worse |
+| H5 | pass | **fail** (1) | **fail** (243 / 3) | simpler residue; regressed G2 |
 
-H is the first prototype to clear **G1 and G2** while reducing G3 to two
-symbol pairs. Next structural work should target those two pairs only, then
-re-run G1–G3 — not revive H2-style tables without proof.
+**Lead remains H.** Local splits of `58/c5`/`6e/c6` have traded into other G3
+families or broken G2. Next: global amount-map redesign, not pair-local thrash.
