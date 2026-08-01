@@ -137,7 +137,8 @@ premature security claims.
   six-move aliases (three pairs); 126/196 appear only in deeper contexts;
 - dual-return and multipath tools: no after-foldback merge in tested domains;
   multipath min distance 282 bits across 128 seeds;
-- redesign prototype E clears one-byte aliases, residual two-byte aliases remain;
+- redesign prototype E: 0 one-byte aliases; full two-byte domain has exactly
+  four residual physical-path pairs (mod-7 lane rail) — see campaign §8;
 - effort policy + provisional decision memo: foldback-vs-known-forward class
-  budget-closed; prefer Redesign-2 for acceptance; next high-value work is
-  alias-free E-class+ prototypes (not more same-method foldback grinding).
+  budget-closed; prefer Redesign-2; next high-value redesign is one principled
+  fix for the E residual rail (not more ARX thrash or foldback grinding).

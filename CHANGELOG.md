@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — Variant E residual catalogue (redesign science)
+
+Offline redesign documentation only. Official digests unchanged.
+
+- full two-byte scan under prototype E: 183 alias instances, exactly four symbol
+  pairs, all identical physical six-move paths;
+- residual mechanism: lane deltas that are 0 mod 7 with matching axis LSB;
+- E4/E5 blind amount rewires worsened counts; further ARX thrash budget-closed;
+- recorded in `docs/PHASE1_CONTROLLER_CAMPAIGN.md` §8.
+
 ## Unreleased — Value-based effort policy and provisional Gate B
 
 Documentation and offline redesign prototypes only. Official digests and the

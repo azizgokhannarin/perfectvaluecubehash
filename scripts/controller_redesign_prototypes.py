@@ -107,7 +107,13 @@ def variant_d_xor_rot_amount(
 def variant_e_feedback_lane(
     control: int, probe: int, geometry: int, symbol: int, previous: int, phase: int
 ) -> tuple[int, int]:
-    """Non-linear-ish byte fold before mod 7 (still no external S-box)."""
+    """Lead redesign sketch (not a candidate).
+
+    Clears the frozen one-byte 42-family surface. Full two-byte scan still finds
+    exactly four residual physical-path pairs (see PHASE1_CONTROLLER_CAMPAIGN §8):
+    36/71, 2b/2c, 61/80, 2d/ae — driven by lane deltas that are 0 mod 7 with
+    matching axis LSB. Do not “fix” by random ARX thrash; target that rail.
+    """
     lane = u8(rotl8(control ^ symbol, phase) + (probe ^ geometry) + phase * 17)
     lane = u8(lane ^ rotl8(lane, 3) ^ rotl8(symbol, 5))
     selector = lane ^ rotl8(probe, phase & 7)
@@ -328,11 +334,29 @@ def sample_two_byte_context_aliases(
     return tested, total_pairs, examples
 
 
+def full_two_byte_alias_catalogue(
+    variant: VariantFn,
+) -> tuple[int, Counter]:
+    """Exact one-symbol aliases after every two-byte prefix (slow, ~10–15 min)."""
+    from collections import Counter as CounterType
+
+    pair_counts: CounterType = CounterType()
+    total = 0
+    for counter in range(65536):
+        if counter % 8192 == 0:
+            print(f"  two_byte_full progress {counter}/65536", flush=True)
+        prefix = bytes(((counter >> 8) & 0xFF, counter & 0xFF))
+        for left, right in count_aliases_after_prefix(variant, prefix):
+            pair_counts[(left, right)] += 1
+            total += 1
+    return total, pair_counts
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--variants",
-        default="canonical,A,B,C,D,E,F",
+        default="canonical,E",
         help="comma-separated variant ids",
     )
     parser.add_argument(
@@ -345,6 +369,11 @@ def main() -> int:
         type=int,
         default=0,
         help="sample this many two-byte prefixes for one-symbol aliases",
+    )
+    parser.add_argument(
+        "--two-byte-full",
+        action="store_true",
+        help="exhaustive 2^16 two-byte prefix scan (very slow; use sparingly)",
     )
     args = parser.parse_args()
 
@@ -379,10 +408,20 @@ def main() -> int:
                     f"    example prefix={ex[0]:02x}{ex[1]:02x} "
                     f"{ex[2]:02x}/{ex[3]:02x}"
                 )
+        if args.two_byte_full:
+            total, pair_counts = full_two_byte_alias_catalogue(variant)
+            print(f"  two_byte_full_alias_instances={total}")
+            print(f"  two_byte_full_unique_pairs={len(pair_counts)}")
+            for (left, right), count in pair_counts.most_common():
+                print(
+                    f"    pair={left:02x}/{right:02x} "
+                    f"delta={((right - left) & 0xFF)} count={count}"
+                )
 
     print("\ninterpretation:")
-    print("  - canonical should show the known 3 one-byte-context pairs when --deep")
-    print("  - redesign goal: zero one-symbol aliases in initial and one-byte domains")
+    print("  - canonical: 3 one-byte-context pairs when --deep")
+    print("  - E: 0 one-byte; full two-byte has 4 residual pairs (campaign §8)")
+    print("  - redesign goal: zero one- and two-byte one-symbol aliases")
     print("  - any successor still needs avalanche/distribution/foldback campaigns")
     return 0
 

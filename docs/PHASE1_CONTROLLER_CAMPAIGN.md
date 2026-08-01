@@ -324,3 +324,83 @@ Inductive close: further same-method extension is low EV
 Re-open if: SAT dual, multi-step reverse merge, digest break, external contradict
 This is not a security proof.
 ```
+
+---
+
+## 8. Redesign variant E — residual alias mechanism (2026-08-01)
+
+Offline only. Not a candidate. Exact cube-state equality for every reported pair.
+
+### 8.1 Full two-byte domain catalogue under E
+
+All `2^16` two-byte prefixes; for each, all 256 next symbols; exact state match:
+
+| Metric | Value |
+|---|---:|
+| Alias instances | **183** |
+| Unique symbol pairs | **4** |
+| Physical six-move path identical | **183 / 183** |
+| One-byte-context aliases (prior) | **0** |
+
+| Symbol pair | Δ | Instances |
+|---|---:|---:|
+| `36` / `71` | 59 | 78 |
+| `2b` / `2c` | 1 | 36 |
+| `61` / `80` | 31 | 36 |
+| `2d` / `ae` | 129 | 33 |
+
+So E collapses the classical `42/126/196` one-byte surface but leaves a
+**tiny, discrete residual family** at depth two — not a diffuse random failure.
+
+### 8.2 Mechanism (principled, not cosmetic)
+
+Variant E builds a feedback `lane`, then:
+
+```text
+selector = lane XOR rotl(probe, ...)
+axis     = CHOOSE_OTHER_AXIS(prev, selector)   // LSB only
+amount   = 1 + ((lane + rotl(geometry,1) + axis) % 7)
+```
+
+Traced residuals (example `36/71` on a live context):
+
+- `lane` values on the two sides can **differ**;
+- when they differ by a multiple of 7, **amount matches**;
+- selector LSBs still match, so **axis matches**;
+- the full six-move physical path therefore matches → exact state collision.
+
+This is the same *modular rail* idea as the frozen controller’s amount `% 7`,
+relocated into the E lane. Killing the old `2d ≡ 0 (mod 7)` double-add of
+`symbol` is not enough if a later mix still collides mod 7 for six phases.
+
+### 8.3 Blind patches E4/E5 (stopped under effort policy)
+
+Targeted-looking amount rewires without a full residual theory:
+
+| Variant | One-byte aliases | Two-byte aliases | Verdict |
+|---|---:|---:|---|
+| E | 0 | 183 (4 pairs) | **lead sketch** |
+| E4 | 2 | 194 | worse — discarded |
+| E5 | 5 | 260 | worse — discarded |
+| E6 | scan aborted | — | not completed; low EV after E4/E5 |
+
+Further random ARX tweaks are **budget-closed** for this redesign fork until a
+fix that *provably* breaks “Δlane ≡ 0 (mod 7) for six phases” is written down
+and tested once.
+
+### 8.4 High-value next redesign step (when resumed)
+
+1. Formalize a single amount/axis rule that forbids simultaneous
+   (same axis LSB) ∧ (amount equal) whenever `symbol_L ≠ symbol_R` for the
+   four residual pairs *and* the old 42-family (one design, one full scan).
+2. Prefer structural separation (e.g. amount depends on a byte-bijective mix of
+   `(control, symbol)` before `% 7`, or axis uses more than one mixed bit with
+   proven sensitivity to Δsymbol) over constant thrash.
+3. Only after zero aliases on full one- and two-byte domains: cheap avalanche /
+   two-byte digest smoke, then consider a named successor candidate.
+
+### 8.5 Acceptance reading
+
+- E is evidence that **the frozen controller’s alias surface is not inevitable**.
+- E is **not** ready to mint RotHash-2.
+- Honest status: lead offline sketch with a fully listed residual catalogue.

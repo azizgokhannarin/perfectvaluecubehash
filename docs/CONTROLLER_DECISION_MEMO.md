@@ -79,11 +79,17 @@ distance forever does not remove that objection. Value lies in **killing the
 alias family at the controller**, then re-running short-domain and statistical
 batteries under a new identifier.
 
-**Lead sketch:** offline variant **E** (feedback lane) — zero one-byte-context
-aliases; residual two-byte-context aliases remain (~14 pairs in a 4096-prefix
-sample vs 62 for canonical). Follow-ups **E2/E3** did not improve the two-byte
-sample (21 and 30 pairs). Not shippable yet; further redesign should be
-*principled* (kill remaining pairs’ mechanism), not random formula thrash.
+**Lead sketch:** offline variant **E** (feedback lane).
+
+- One-byte contexts: **0** aliases.
+- Full two-byte domain: **183** instances, only **4** symbol pairs
+  (`36/71`, `2b/2c`, `61/80`, `2d/ae`); all physical-path aliases.
+- Root residual: `lane` can differ by a multiple of 7 while axis LSB still
+  matches, so amount and axis agree for six moves
+  (`docs/PHASE1_CONTROLLER_CAMPAIGN.md` §8).
+- Blind patches E2–E5 did not help (E4/E5 made counts worse). E6 aborted as
+  low EV. Not shippable; next redesign must target the mod-7 lane rail
+  explicitly, once.
 
 ### Rejected as primary path: endless Keep-1 foldback grinding
 
