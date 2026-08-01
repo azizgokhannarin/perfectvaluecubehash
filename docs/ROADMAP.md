@@ -140,6 +140,7 @@ premature security claims.
 - competitive ambition locked (`docs/RESEARCH_GOAL.md`); controller requirements
   in `docs/CONTROLLER_REQUIREMENTS.md` (G1–G3 hard gates);
 - structural prototype **H**: G1+G2 PASS, G3 FAIL with 2 pairs / 161 hits (lead);
-- H residual mechanism: amount residue from `lane2` alone; H3–H5 local fixes
-  regressed G2 or worsened G3 (H4: 337/5);
-- next: global amount-map redesign for G3=0; no candidate mint until then.
+- H3–H5 local residual patches regressed gates; **pause thrash**;
+- deliberate G3 failure-mode note: `docs/CONTROLLER_G3_FAILURE_MODE.md`
+  (hypothesis H\* = one global amount-map change, G1–G3 only score);
+- next implementation only after H\* shape chosen; no candidate mint until G3=0.

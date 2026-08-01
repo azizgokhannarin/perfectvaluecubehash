@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased — G3 failure-mode deliberation
+
+Documentation only. Official digests unchanged.
+
+- added `docs/CONTROLLER_G3_FAILURE_MODE.md`: why H fails G3, why H3–H5 local
+  fixes redistributed collisions, and a single next hypothesis H\* (global
+  amount map; freeze H axis/init; one G1–G3 run; stop on fail).
+
 ## Unreleased — H residual hunt (H3–H5)
 
 Offline controller harness only. Official digests unchanged.

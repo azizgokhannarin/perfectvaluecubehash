@@ -183,5 +183,5 @@ test**, so a competitive hash program can honestly begin.
 | H4 | pass | pass | **fail** (337 / 5) | kills H residuals; G3 worse |
 | H5 | pass | **fail** (1) | **fail** (243 / 3) | simpler residue; regressed G2 |
 
-**Lead remains H.** Local splits of `58/c5`/`6e/c6` have traded into other G3
-families or broken G2. Next: global amount-map redesign, not pair-local thrash.
+**Lead remains H.** See `docs/CONTROLLER_G3_FAILURE_MODE.md` for the reasoned
+next experiment (hypothesis H\*: one global amount-map redesign; stop on fail).
