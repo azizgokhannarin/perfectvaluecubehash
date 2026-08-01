@@ -176,6 +176,9 @@ algorithm change → fix as bug or mint new candidate; never silent drift.
 **Objective:** Resolve the central open decision in `docs/ROADMAP.md`:
 keep, redesign, or abandon the move controller.
 
+**Living campaign log:** `docs/PHASE1_CONTROLLER_CAMPAIGN.md`  
+**Independent analysis helper:** `scripts/controller_alias_analysis.py`
+
 Workstreams (parallel):
 
 | ID | Workstream | Success signal |

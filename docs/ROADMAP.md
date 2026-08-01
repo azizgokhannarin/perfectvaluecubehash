@@ -127,3 +127,13 @@ in [`docs/ACCEPTANCE_ROADMAP.md`](ACCEPTANCE_ROADMAP.md). That document does not
 replace the completed-work log above; it defines how the project may move from
 a frozen research candidate toward externally credible standing without
 premature security claims.
+
+## Active — Phase 1 controller decision campaign
+
+- living log: [`docs/PHASE1_CONTROLLER_CAMPAIGN.md`](PHASE1_CONTROLLER_CAMPAIGN.md);
+- independent modular analysis of the `42/126/196` family (double linear use of
+  the symbol in control and amount_source; amount mod 7; axis LSB);
+- alignment probe: among multiples of 14, only Δ=42 yields exact one-byte-context
+  six-move aliases (three pairs); 126/196 appear only in deeper contexts;
+- offline redesign constraints drafted; frozen RotHash-1 vectors untouched;
+- next: multi-path foldback search, dual reverse-alias search, redesign prototypes.

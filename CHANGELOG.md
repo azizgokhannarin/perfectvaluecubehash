@@ -1,6 +1,20 @@
 # Changelog
 
-## Unreleased — Acceptance path packaging (post-tag tooling)
+## Unreleased — Phase 1 controller campaign kickoff
+
+Research documentation and analysis tooling only. Official digests and the
+frozen PVC-RotHash-1 algorithm are unchanged.
+
+- started Phase 1 controller decision campaign
+  (`docs/PHASE1_CONTROLLER_CAMPAIGN.md`);
+- derived phase-0 necessary conditions for one-symbol aliases (`d ≡ 0 (mod 14)`);
+- traced the known Δ=42 alias through six moves and corrected the multi-phase
+  modular model (integer byte sums mod 7, not raw u8 deltas alone);
+- confirmed with alignment probes that among multiples of 14 only Δ=42 yields
+  exact one-byte-context six-move aliases (three pairs);
+- added independent `scripts/controller_alias_analysis.py` (Python/spec-based).
+
+## 1.0.0-rc1 packaging follow-up — Acceptance path (post-tag tooling)
 
 Documentation and repository packaging only. Official digests and the frozen
 PVC-RotHash-1 algorithm are unchanged.
