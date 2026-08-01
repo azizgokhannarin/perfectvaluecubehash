@@ -61,18 +61,26 @@ PVC-RotHash-1 `1.0.0-rc1` is a **frozen research baseline**:
 
 ## Working order
 
+Full trust path (stages 0–9, gates, time scale, anti-patterns):
+
+→ **`docs/TRUST_PATH_ROADMAP.md`**
+
+Short form:
+
 ```text
-1. Controller requirements + structural prototypes until G1–G3 pass
-2. Soft statistical smoke (ST1–ST4)
+1. Controller injectivity G1–G3 (H* contract)
+2. ST1–ST4 smoke
 3. Mint new candidate ID + vectors + dual impl
-4. Deep falsification suite (existing tools + new)
-5. Public freeze and independent review
-6. Paper presents a serious candidate, not a failed hobby
+4. Deep falsification suite
+5. Public independent review window
+6. PQ/parameter honesty + engineering
+7. Only then careful recommendation language
 ```
 
-See:
+See also:
 
 - `docs/CONTROLLER_REQUIREMENTS.md`
+- `docs/CONTROLLER_G3_FAILURE_MODE.md`
 - `docs/SECURITY_TARGET.md`
 - `docs/ACCEPTANCE_ROADMAP.md`
 - `docs/EFFORT_POLICY.md`

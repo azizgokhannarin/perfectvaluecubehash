@@ -122,11 +122,13 @@ After structural cryptanalysis, choose among:
 
 ## Strategic acceptance path
 
-Long-horizon gates, PQC-era honesty bounds, and Phase 0–6 ordering are defined
-in [`docs/ACCEPTANCE_ROADMAP.md`](ACCEPTANCE_ROADMAP.md). That document does not
-replace the completed-work log above; it defines how the project may move from
-a frozen research candidate toward externally credible standing without
-premature security claims.
+**Path to a hash people can rationally trust** (stages, gates, time scale):
+
+→ [`docs/TRUST_PATH_ROADMAP.md`](TRUST_PATH_ROADMAP.md)
+
+Long-horizon public-review packaging and related gates also appear in
+[`docs/ACCEPTANCE_ROADMAP.md`](ACCEPTANCE_ROADMAP.md). Those documents do not
+replace the completed-work log above.
 
 ## Active — Phase 1 controller decision campaign
 

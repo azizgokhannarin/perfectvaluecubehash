@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased — Trust path roadmap
+
+Documentation only. Official digests unchanged.
+
+- added `docs/TRUST_PATH_ROADMAP.md`: stages 0–9 from laboratory baseline to a
+  hash that can earn real-world trust (injectivity → smoke → new candidate →
+  deep attack → public review → parameters → engineering → careful policy);
+- linked from README, RESEARCH_GOAL, and ROADMAP.
+
 ## Unreleased — G3 failure-mode deliberation
 
 Documentation only. Official digests unchanged.

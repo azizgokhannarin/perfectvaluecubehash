@@ -16,8 +16,9 @@ It is not a production hash and makes no security claim.
 - [`docs/KNOWN_CRYPTOANALYSIS.md`](docs/KNOWN_CRYPTOANALYSIS.md) — consolidated findings.
 - [`docs/SECURITY_TARGET.md`](docs/SECURITY_TARGET.md) — targets and explicit non-claims.
 - [`docs/RESEARCH_GOAL.md`](docs/RESEARCH_GOAL.md) — competitive hash ambition; RotHash-1 is baseline, not the product.
+- [`docs/TRUST_PATH_ROADMAP.md`](docs/TRUST_PATH_ROADMAP.md) — stage-by-stage path to a hash people can rationally trust.
 - [`docs/CONTROLLER_REQUIREMENTS.md`](docs/CONTROLLER_REQUIREMENTS.md) — hard injectivity gates G1–G3 for any successor.
-- [`docs/ACCEPTANCE_ROADMAP.md`](docs/ACCEPTANCE_ROADMAP.md) — path toward credible standing (no security claim).
+- [`docs/ACCEPTANCE_ROADMAP.md`](docs/ACCEPTANCE_ROADMAP.md) — public-review packaging and long-horizon gates.
 - [`test-vectors/`](test-vectors/) — official digest and phase vectors.
 - [`reference/python/`](reference/python/) — independent standard-library reference.
 
