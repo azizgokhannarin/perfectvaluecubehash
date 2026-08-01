@@ -174,6 +174,9 @@ Version 0.8.0 results are in [`docs/DIGEST_SURFACE_RESULTS.md`](docs/DIGEST_SURF
 ./build/pvc-divergent-digest-beam --left 000000 --right 000001 --depth 8 --beam 128 --branch 16
 ./build/pvc-digest-lsh-search --left 000000 --right 000001 --suffix-bytes 2 --suffix-limit 8192 --projections 32 --projection-bytes 1
 ./build/pvc-barrier-correlation --left 000000 --right 000001 --samples 10000 --suffix-bytes 2 --independent-suffix
+./build/pvc-dual-return-alias --suffix-bytes 1 --suffix-limit 256
+./build/pvc-multipath-foldback-sample --seed-limit 128 --suffix-samples 64
+python3 scripts/controller_redesign_prototypes.py --variants E --deep --two-byte-samples 4096
 ```
 
 These tools are intended to disprove the design. Passing them is not evidence

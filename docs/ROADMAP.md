@@ -135,5 +135,8 @@ premature security claims.
   the symbol in control and amount_source; amount mod 7; axis LSB);
 - alignment probe: among multiples of 14, only Δ=42 yields exact one-byte-context
   six-move aliases (three pairs); 126/196 appear only in deeper contexts;
-- offline redesign constraints drafted; frozen RotHash-1 vectors untouched;
-- next: multi-path foldback search, dual reverse-alias search, redesign prototypes.
+- dual-return and multipath tools: no after-foldback merge in tested domains;
+  multipath min distance 282 bits across 128 seeds;
+- redesign prototype E clears one-byte aliases, residual two-byte aliases remain;
+- next: deepen dual/independent-suffix attacks; harden E-class redesign toward
+  zero two-byte aliases; prepare controller decision memo when evidence stabilizes.

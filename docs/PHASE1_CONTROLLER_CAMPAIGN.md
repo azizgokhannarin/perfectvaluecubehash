@@ -231,3 +231,77 @@ Python 3 standard library only for the analysis script.
    redesign targets.
 4. Gate B remains **open**. Parallel attack and redesign continue.
 5. Acceptance messaging stays off until Gate B closes.
+
+---
+
+## 7. Campaign results — 2026-08-01 (Phase 1 wave 2)
+
+Frozen PVC-RotHash-1 only for attack tools. Redesign prototypes are offline.
+
+### 7.1 P1-b Dual return-alias (`pvc-dual-return-alias`)
+
+Full three-byte forward catalogue (`1496` pairs), canonical parameters:
+
+| Check | Result |
+|---|---:|
+| Direct return-gate merges (one reverse step from common forward state) | **0** |
+| After-foldback merges, bare pairs | **0** |
+| After-foldback merges, all common 1-byte suffixes (`1496×256`) | **0** |
+| Min direct return operational-state distance | 181 bits |
+| Min after-foldback operational-state distance (with 1-byte suffixes) | 208 bits |
+| Common-forward states with a further family-delta one-symbol alias | 15 (matches known second-level multicollision seeds) |
+
+Return-symbol absolute arithmetic deltas are **not** concentrated on `{42,126,196}`
+(the return map preserves XOR differences, not arithmetic differences). No
+foldback-compatible dual was found in this domain.
+
+### 7.2 P1-a Multi-path foldback sample (`pvc-multipath-foldback-sample`)
+
+`128` independent forward seeds, optional common 1-byte suffixes (`64` samples
+each):
+
+| Metric | Bits |
+|---|---:|
+| Bare after-foldback mean / p50 / p10 / min | 753 / 783 / 573 / 521 |
+| Best common-suffix mean / p50 / p10 | 580 / 618 / 438 |
+| Global minimum (seed + common suffix) | **282** (`176f2d51` / `17992d51`) |
+| Exact after-foldback merges | **0** |
+
+Distances remain large; sampling many seeds does not show a collapse to zero in
+this budget. Beam/LSH on multiple bridged paths remains open for deeper work.
+
+### 7.3 P1-e Offline redesign prototypes
+
+`scripts/controller_redesign_prototypes.py` — one-symbol alias counts:
+
+| Variant | Idea | 1-byte contexts | 2-byte sample (4096 prefixes) |
+|---|---|---:|---:|
+| canonical | frozen controller | **3** | 62 |
+| A | drop symbol from amount | 7 | — |
+| B | XOR amount mix | 167 | — |
+| C | dual-bit axis | 5 | — |
+| D | XOR/rotate amount | 1 | — |
+| **E** | feedback lane before mod 7 | **0** | **14** |
+| F | popcount amount | 465 | — |
+
+Variant **E** eliminates the known one-byte-context surface and reduces sampled
+two-byte residual aliases (~4× fewer than canonical in a 4096-prefix sample) but
+**does not** achieve injectivity. Residual pairs use non-`42` deltas (e.g.
+`36/71`). E is a **lead redesign sketch**, not a successor candidate.
+
+### 7.4 Tools added
+
+```bash
+./build/pvc-dual-return-alias --suffix-bytes 1 --suffix-limit 256
+./build/pvc-multipath-foldback-sample --seed-limit 128 --suffix-samples 64
+python3 scripts/controller_redesign_prototypes.py --variants E --deep --two-byte-samples 4096
+```
+
+### 7.5 Updated conclusion
+
+- RotHash-1 still has no known after-foldback merge in expanded dual/multipath
+  checks; the foldback gate remains standing under these attacks.
+- Simple formula patches often **worsen** alias counts; only careful non-linear
+  mixing (variant E) improved the short-domain surface.
+- Gate B still open: need either a dual that works, or a redesign that kills
+  aliases through two-byte (and reverse) domains plus statistical re-validation.

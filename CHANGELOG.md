@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased — Phase 1 wave 2 (dual alias, multipath, redesign)
+
+Research tooling and documentation only. Official digests and the frozen
+PVC-RotHash-1 algorithm are unchanged.
+
+- added `pvc-dual-return-alias`: no direct return-gate or after-foldback merge on
+  all 1,496 three-byte forward pairs (bare and common 1-byte suffixes);
+- added `pvc-multipath-foldback-sample`: 128 seeds, min after-foldback distance
+  282 bits, zero exact merges in the sampled common-suffix budget;
+- expanded offline redesign prototypes A–F; variant E clears one-byte-context
+  aliases but still has residual two-byte-context aliases;
+- recorded results in `docs/PHASE1_CONTROLLER_CAMPAIGN.md` §7.
+
 ## Unreleased — Phase 1 controller campaign kickoff
 
 Research documentation and analysis tooling only. Official digests and the
