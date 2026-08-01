@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased — H residual hunt (H3–H5)
+
+Offline controller harness only. Official digests unchanged.
+
+- traced H G3 residuals `58/c5` and `6e/c6`: six-phase axis+amount match with
+  differing `lane2` (residue map independent of symbol);
+- H3/H5 regress G2; H4 keeps G1+G2 but G3 rises to 337/5;
+- **H remains lead** (G1+G2 pass, G3 161/2).
+
 ## Unreleased — Competitive program gates and structural controller H
 
 Documentation and offline controller harness only. Official digests unchanged.

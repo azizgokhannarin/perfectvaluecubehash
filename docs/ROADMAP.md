@@ -139,7 +139,7 @@ premature security claims.
   multipath min distance 282 bits across 128 seeds;
 - competitive ambition locked (`docs/RESEARCH_GOAL.md`); controller requirements
   in `docs/CONTROLLER_REQUIREMENTS.md` (G1–G3 hard gates);
-- structural prototype **H**: G1+G2 PASS, G3 FAIL with only 2 pairs / 161 hits
-  (best so far; vs canonical 728, E 183);
-- next: target H residuals `58/c5` and `6e/c6`, then ST smoke; no candidate mint
-  until G3 = 0.
+- structural prototype **H**: G1+G2 PASS, G3 FAIL with 2 pairs / 161 hits (lead);
+- H residual mechanism: amount residue from `lane2` alone; H3–H5 local fixes
+  regressed G2 or worsened G3 (H4: 337/5);
+- next: global amount-map redesign for G3=0; no candidate mint until then.

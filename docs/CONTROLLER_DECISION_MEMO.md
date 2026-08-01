@@ -89,10 +89,12 @@ then minting a **new** ID.
 |---|---|---|---|---|
 | E | pass | pass | 183 / 4 pairs | mod-7 lane residual |
 | G | pass | pass | 187 / 4 pairs | coefficient-only; failed |
-| **H** | **pass** | **pass** | **161 / 2 pairs** | **current lead**; residuals `58/c5`, `6e/c6` |
-| H2 | pass | fail | bad | discarded |
+| **H** | **pass** | **pass** | **161 / 2 pairs** | **current lead** |
+| H2–H5 | mixed | mixed | worse or G2 fail | residual patches not yet global |
 
-Next: kill H’s two residual pairs with a targeted structural fix, re-run G1–G3.
+H residuals: amount residue ignores direct symbol when `lane2` collides.
+H3–H5 split those pairs locally but did not improve G3 (H4: 337/5; H5 G2 fail).
+Next: global residue redesign or non-`%7` amount map, not more pair-local thrash.
 Mint a new candidate **only** after G3 = 0 and ST smoke tests.
 
 ### Rejected as primary path: endless Keep-1 foldback grinding

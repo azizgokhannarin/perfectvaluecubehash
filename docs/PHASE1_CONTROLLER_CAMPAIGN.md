@@ -497,7 +497,32 @@ H2 (fixed 256→{1..7} table) **failed** G2/G3 and is discarded as lead.
 
 - **Progress is real:** first controller to pass G1∧G2 with only two G3 pairs.
 - **Not done:** G3 must be zero before minting any successor candidate.
-- **Next engineering:** kill `58/c5` and `6e/c6` with a **targeted** structural
-  change (trace those pairs like E residuals), re-run full G1–G3 once.
 - **Do not** mint RotHash-2 or claim Keccak-class standing until G3 passes and
   ST smoke tests run.
+
+### 10.4 H residual mechanism (traced)
+
+Prefixes: `0247` → `58/c5` (Δ=109); `0056` → `6e/c6` (Δ=88). Counts 82 and 79.
+
+On both pairs, **all six phases** share identical `(axis, amount)` while
+`control` and intermediate `lane2` differ. Amount collides because:
+
+```text
+residue = (mul_odd(lane2, 41) XOR (lane2>>3) XOR (lane2>>5) XOR phase) mod 7
+```
+
+depends only on `lane2` (and phase), not on a direct symbol term that would
+separate those two symbols when `lane2` already collides mod the residue map.
+
+### 10.5 Targeted follow-ups (H3–H5)
+
+| Variant | Change | G1 | G2 | G3 | Verdict |
+|---|---|---|---|---|---|
+| H3 | harden axis + heavy residue mix | pass | fail 1 | 183/3 | worse |
+| H4 | H axis + `mul_odd(symbol,13)` in residue | pass | pass | **337/5** | H residuals split; **G3 worse** |
+| H5 | amount = `1+mul_odd(lane2⊕symbol,41)%7` | pass | fail 1 | 243/3 | worse |
+
+**Conclusion:** Splitting the two known H pairs on sample prefixes is easy;
+doing so **without** increasing the full two-byte alias count is not. H stays
+the competitive-path lead (best G1∧G2 with smallest G3). Further work must
+attack the residue collision class globally, not only two symbol pairs.

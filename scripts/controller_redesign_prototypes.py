@@ -391,6 +391,206 @@ class ControllerH2(StructuralController):
         )
 
 
+class ControllerH3(StructuralController):
+    """Over-hardened H residual fix (axis+amount). Regressed G2/G3; kept for log."""
+
+    name = "H3"
+
+    def init_control(
+        self, symbol: int, symbol_index: int, cursor: tuple[int, int, int]
+    ) -> int:
+        return ControllerH().init_control(symbol, symbol_index, cursor)
+
+    def choose(
+        self,
+        control: int,
+        probe: int,
+        geometry: int,
+        symbol: int,
+        previous: int,
+        phase: int,
+    ) -> tuple[int, int]:
+        sel = (
+            rotl8(symbol, phase)
+            ^ rotl8(control, (phase + 1) & 7)
+            ^ rotl8(probe, 2)
+            ^ geometry
+            ^ u8(previous * 0x1D)
+            ^ u8(phase * 0x3B)
+        )
+        sel = u8(
+            sel
+            ^ rotl8(sel, 3)
+            ^ mul_odd(symbol, 9)
+            ^ mul_odd(control, 3)
+            ^ rotl8(symbol ^ control, 5)
+        )
+        axis = axis_from_selector(previous, sel)
+
+        lane = u8(
+            mul_odd(symbol, 73)
+            ^ mul_odd(control, 45)
+            ^ mul_odd(probe, 29)
+            ^ rotl8(geometry, phase & 7)
+            ^ u8(phase * 19)
+            ^ u8(axis * 11)
+        )
+        lane2 = u8(lane + rotl8(lane, 4) + rotl8(symbol ^ control, 2))
+        residue = (
+            mul_odd(lane2, 41)
+            ^ mul_odd(symbol, 13)
+            ^ mul_odd(control, 21)
+            ^ rotl8(symbol, phase)
+            ^ (lane2 >> 3)
+            ^ (lane2 >> 5)
+            ^ phase
+        ) % 7
+        amount = 1 + residue
+        return axis, amount
+
+    def evolve_control(
+        self,
+        control: int,
+        axis: int,
+        amount: int,
+        probe_after: int,
+        cursor: tuple[int, int, int],
+        phase: int,
+        symbol: int,
+    ) -> int:
+        return ControllerH().evolve_control(
+            control, axis, amount, probe_after, cursor, phase, symbol
+        )
+
+
+class ControllerH4(StructuralController):
+    """Minimal H fix: same axis as H; amount residue includes symbol once.
+
+    H residuals matched amount because residue depended only on lane2 (and
+    phase). Adding mul_odd(symbol, 13) splits 58/c5 and 6e/c6 on traced
+    prefixes without touching the axis path that already passed G1/G2.
+    G3 worsened (337/5); kept as experiment log.
+    """
+
+    name = "H4"
+
+    def init_control(
+        self, symbol: int, symbol_index: int, cursor: tuple[int, int, int]
+    ) -> int:
+        return ControllerH().init_control(symbol, symbol_index, cursor)
+
+    def choose(
+        self,
+        control: int,
+        probe: int,
+        geometry: int,
+        symbol: int,
+        previous: int,
+        phase: int,
+    ) -> tuple[int, int]:
+        # Axis path identical to ControllerH.
+        sel = (
+            rotl8(symbol, phase)
+            ^ rotl8(control, (phase + 1) & 7)
+            ^ rotl8(probe, 2)
+            ^ geometry
+            ^ u8(previous * 0x1D)
+            ^ u8(phase * 0x3B)
+        )
+        sel = u8(sel ^ rotl8(sel, 3) ^ mul_odd(symbol, 9))
+        axis = axis_from_selector(previous, sel)
+
+        lane = u8(
+            mul_odd(symbol, 73)
+            ^ mul_odd(control, 45)
+            ^ mul_odd(probe, 29)
+            ^ rotl8(geometry, phase & 7)
+            ^ u8(phase * 19)
+            ^ u8(axis * 11)
+        )
+        lane2 = u8(lane + rotl8(lane, 4) + rotl8(symbol ^ control, 2))
+        residue = (
+            mul_odd(lane2, 41)
+            ^ mul_odd(symbol, 13)
+            ^ (lane2 >> 3)
+            ^ (lane2 >> 5)
+            ^ phase
+        ) % 7
+        amount = 1 + residue
+        return axis, amount
+
+    def evolve_control(
+        self,
+        control: int,
+        axis: int,
+        amount: int,
+        probe_after: int,
+        cursor: tuple[int, int, int],
+        phase: int,
+        symbol: int,
+    ) -> int:
+        return ControllerH().evolve_control(
+            control, axis, amount, probe_after, cursor, phase, symbol
+        )
+
+
+class ControllerH5(StructuralController):
+    """H axis; amount = 1 + mul_odd(lane2 XOR symbol, 41) % 7 (single XOR fold)."""
+
+    name = "H5"
+
+    def init_control(
+        self, symbol: int, symbol_index: int, cursor: tuple[int, int, int]
+    ) -> int:
+        return ControllerH().init_control(symbol, symbol_index, cursor)
+
+    def choose(
+        self,
+        control: int,
+        probe: int,
+        geometry: int,
+        symbol: int,
+        previous: int,
+        phase: int,
+    ) -> tuple[int, int]:
+        sel = (
+            rotl8(symbol, phase)
+            ^ rotl8(control, (phase + 1) & 7)
+            ^ rotl8(probe, 2)
+            ^ geometry
+            ^ u8(previous * 0x1D)
+            ^ u8(phase * 0x3B)
+        )
+        sel = u8(sel ^ rotl8(sel, 3) ^ mul_odd(symbol, 9))
+        axis = axis_from_selector(previous, sel)
+
+        lane = u8(
+            mul_odd(symbol, 73)
+            ^ mul_odd(control, 45)
+            ^ mul_odd(probe, 29)
+            ^ rotl8(geometry, phase & 7)
+            ^ u8(phase * 19)
+            ^ u8(axis * 11)
+        )
+        lane2 = u8(lane + rotl8(lane, 4) + rotl8(symbol ^ control, 2))
+        amount = 1 + (mul_odd(lane2 ^ symbol, 41) % 7)
+        return axis, amount
+
+    def evolve_control(
+        self,
+        control: int,
+        axis: int,
+        amount: int,
+        probe_after: int,
+        cursor: tuple[int, int, int],
+        phase: int,
+        symbol: int,
+    ) -> int:
+        return ControllerH().evolve_control(
+            control, axis, amount, probe_after, cursor, phase, symbol
+        )
+
+
 ControllerLike = VariantFn | StructuralController
 
 VARIANTS: dict[str, ControllerLike] = {
@@ -406,6 +606,9 @@ VARIANTS: dict[str, ControllerLike] = {
     "G": variant_g_mod7_rail_break,
     "H": ControllerH(),
     "H2": ControllerH2(),
+    "H3": ControllerH3(),
+    "H4": ControllerH4(),
+    "H5": ControllerH5(),
 }
 
 
