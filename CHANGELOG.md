@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — Session handoff for clean resume
+
+Documentation only. Official digests unchanged.
+
+- added `docs/SESSION_HANDOFF.md` capturing program state, decisions, S/ST
+  evidence, anti-patterns, and exact Stage 3 resume steps.
+
 ## Unreleased — Stage 2 smoke PASS for Controller S full-hash path
 
 Research tooling only. Official digests unchanged.

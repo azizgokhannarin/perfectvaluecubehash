@@ -144,3 +144,4 @@ replace the completed-work log above.
 - external G3 advice → systematic controller **S**: **G1∧G2∧G3 PASS**;
 - Stage 2 smoke with S full-hash path: **ST1–ST4 PASS** (`docs/STAGE2_SMOKE_S.md`);
 - next: Stage 3 — mint new candidate ID (spec + C++/Python + vectors); not RotHash-1.
+- **Resume pointer:** [`docs/SESSION_HANDOFF.md`](SESSION_HANDOFF.md).
