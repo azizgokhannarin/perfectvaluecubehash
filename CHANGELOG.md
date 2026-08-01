@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — Science-first goal and variant G experiment
+
+Offline redesign and goal docs only. Official digests unchanged.
+
+- locked `docs/RESEARCH_GOAL.md`: publishable science first; acceptance contingent;
+- comparative full two-byte scans: canonical 728, E 183, G 187 instances;
+- G (nonzero mod-7 amount coefficients) replaces E’s residual pairs with four
+  new ones — coefficient-only repair insufficient;
+- paper plan gains redesign comparative section.
+
 ## Unreleased — Variant E residual catalogue (redesign science)
 
 Offline redesign documentation only. Official digests unchanged.
