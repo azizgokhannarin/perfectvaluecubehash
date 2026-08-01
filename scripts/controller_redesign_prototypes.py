@@ -202,7 +202,198 @@ def variant_g_mod7_rail_break(
     return axis, amount
 
 
-VARIANTS: dict[str, VariantFn] = {
+def mul_odd(value: int, odd: int) -> int:
+    """Multiplication by an odd constant is a bijection on Z/256Z."""
+    return (value * odd) & 0xFF
+
+
+class StructuralController:
+    """Full absorb-hook controller (not only axis/amount from fixed control)."""
+
+    name: str = "structural"
+
+    def init_control(
+        self, symbol: int, symbol_index: int, cursor: tuple[int, int, int]
+    ) -> int:
+        raise NotImplementedError
+
+    def choose(
+        self,
+        control: int,
+        probe: int,
+        geometry: int,
+        symbol: int,
+        previous: int,
+        phase: int,
+    ) -> tuple[int, int]:
+        raise NotImplementedError
+
+    def evolve_control(
+        self,
+        control: int,
+        axis: int,
+        amount: int,
+        probe_after: int,
+        cursor: tuple[int, int, int],
+        phase: int,
+        symbol: int,
+    ) -> int:
+        # Default: RotHash-1 evolution (kept unless a design changes it).
+        return u8(
+            rotl8(control, 1 + (axis & 1))
+            + probe_after
+            + amount
+            + coordinate_code(cursor)
+            + phase * 7
+        )
+
+
+class ControllerH(StructuralController):
+    """Structural competitive-path prototype (requirements S1–S5).
+
+    - Control init is a nonlinear injective-friendly mix of symbol (not s+k only).
+    - Amount uses odd multiplications on Z/256Z then a balanced residue map
+      (not a linear form over GF(7) alone).
+    - Axis selector mixes symbol every phase with rotates (not probe-only LSB).
+    Still primitive-free: only XOR, rotates, adds, odd muls, fixed arithmetic.
+    """
+
+    name = "H"
+
+    def init_control(
+        self, symbol: int, symbol_index: int, cursor: tuple[int, int, int]
+    ) -> int:
+        c = coordinate_code(cursor)
+        # Nonlinear in symbol; avoids control = symbol + k affine rail.
+        return u8(
+            rotl8(symbol, 3)
+            ^ rotl8(symbol, 1)
+            ^ mul_odd(symbol, 5)
+            ^ u8(symbol_index)
+            ^ c
+            ^ rotl8(c, 2)
+        )
+
+    def choose(
+        self,
+        control: int,
+        probe: int,
+        geometry: int,
+        symbol: int,
+        previous: int,
+        phase: int,
+    ) -> tuple[int, int]:
+        # Wide mix for axis; symbol appears with rotates every phase.
+        sel = (
+            rotl8(symbol, phase)
+            ^ rotl8(control, (phase + 1) & 7)
+            ^ rotl8(probe, 2)
+            ^ geometry
+            ^ u8(previous * 0x1D)
+            ^ u8(phase * 0x3B)
+        )
+        sel = u8(sel ^ rotl8(sel, 3) ^ mul_odd(symbol, 9))
+        axis = axis_from_selector(previous, sel)
+
+        # Byte mix bijective components, then balanced map to {1..7}.
+        lane = u8(
+            mul_odd(symbol, 73)
+            ^ mul_odd(control, 45)
+            ^ mul_odd(probe, 29)
+            ^ rotl8(geometry, phase & 7)
+            ^ u8(phase * 19)
+            ^ u8(axis * 11)
+        )
+        lane = u8(lane + rotl8(lane, 4) + rotl8(symbol ^ control, 2))
+        # Map u8 -> {0..6} without "sum of fields mod 7" identity.
+        residue = (mul_odd(lane, 41) ^ (lane >> 3) ^ (lane >> 5) ^ phase) % 7
+        amount = 1 + residue
+        return axis, amount
+
+    def evolve_control(
+        self,
+        control: int,
+        axis: int,
+        amount: int,
+        probe_after: int,
+        cursor: tuple[int, int, int],
+        phase: int,
+        symbol: int,
+    ) -> int:
+        # Feed symbol back nonlinearly so later phases keep symbol sensitivity.
+        return u8(
+            rotl8(control, 1 + (axis & 1))
+            ^ mul_odd(symbol, 3)
+            ^ probe_after
+            ^ u8(amount * 17)
+            ^ coordinate_code(cursor)
+            ^ u8(phase * 13)
+        )
+
+
+class ControllerH2(StructuralController):
+    """H + fixed public 256→{1..7} table (S5). Table is a project constant."""
+
+    name = "H2"
+
+    def __init__(self) -> None:
+        # Balanced: each residue 0..6 appears 36 or 37 times.
+        self._amount_table = [
+            1 + ((mul_odd(i, 47) ^ (i >> 2) ^ (i * 3)) % 7) for i in range(256)
+        ]
+
+    def init_control(
+        self, symbol: int, symbol_index: int, cursor: tuple[int, int, int]
+    ) -> int:
+        return ControllerH().init_control(symbol, symbol_index, cursor)
+
+    def choose(
+        self,
+        control: int,
+        probe: int,
+        geometry: int,
+        symbol: int,
+        previous: int,
+        phase: int,
+    ) -> tuple[int, int]:
+        sel = (
+            rotl8(symbol, phase)
+            ^ rotl8(control, (phase + 2) & 7)
+            ^ probe
+            ^ rotl8(geometry, 1)
+            ^ u8(phase * 0x51)
+        )
+        sel = u8(sel ^ mul_odd(sel, 11) ^ symbol)
+        axis = axis_from_selector(previous, sel)
+        idx = u8(
+            mul_odd(symbol, 73)
+            ^ mul_odd(control, 19)
+            ^ rotl8(probe, phase & 7)
+            ^ geometry
+            ^ u8(axis * 13)
+            ^ u8(phase * 7)
+        )
+        amount = self._amount_table[idx]
+        return axis, amount
+
+    def evolve_control(
+        self,
+        control: int,
+        axis: int,
+        amount: int,
+        probe_after: int,
+        cursor: tuple[int, int, int],
+        phase: int,
+        symbol: int,
+    ) -> int:
+        return ControllerH().evolve_control(
+            control, axis, amount, probe_after, cursor, phase, symbol
+        )
+
+
+ControllerLike = VariantFn | StructuralController
+
+VARIANTS: dict[str, ControllerLike] = {
     "canonical": variant_canonical,
     "A": variant_a_no_symbol_in_amount,
     "B": variant_b_xor_amount,
@@ -213,6 +404,8 @@ VARIANTS: dict[str, VariantFn] = {
     "E3": variant_e3_split_control_amount,
     "F": variant_f_popcount_amount,
     "G": variant_g_mod7_rail_break,
+    "H": ControllerH(),
+    "H2": ControllerH2(),
 }
 
 
@@ -241,7 +434,40 @@ def rotate_line(cube: list[int], axis: int, point: tuple[int, int, int], amount:
     cube[:] = st.cube
 
 
-def absorb_symbol(state: ProtoState, symbol: int, variant: VariantFn) -> None:
+def absorb_symbol(state: ProtoState, symbol: int, controller: ControllerLike) -> None:
+    if isinstance(controller, StructuralController):
+        control = controller.init_control(
+            symbol, state.symbol_index, state.cursor
+        )
+        for phase in range(6):
+            probe = state.cube[
+                state.cursor[2] * 64 + state.cursor[1] * 8 + state.cursor[0]
+            ]
+            index_byte = (state.symbol_index >> ((phase & 7) * 8)) & 0xFF
+            geometry = u8(coordinate_code(state.cursor) + phase * 29 + index_byte)
+            axis, amount = controller.choose(
+                control, probe, geometry, symbol, state.previous_axis, phase
+            )
+            rotate_line(state.cube, axis, state.cursor, amount)
+            state.cursor = advance(state.cursor, axis, amount)
+            probe_after = state.cube[
+                state.cursor[2] * 64 + state.cursor[1] * 8 + state.cursor[0]
+            ]
+            control = controller.evolve_control(
+                control,
+                axis,
+                amount,
+                probe_after,
+                state.cursor,
+                phase,
+                symbol,
+            )
+            state.previous_axis = axis
+        state.symbol_index += 1
+        return
+
+    # Legacy VariantFn path (axis/amount only; RotHash-1 control rails).
+    variant = controller
     control = u8(symbol + u8(state.symbol_index) + coordinate_code(state.cursor))
     for phase in range(6):
         probe = state.cube[
@@ -287,13 +513,14 @@ def state_key(state: ProtoState) -> tuple:
     )
 
 
-def count_one_byte_context_aliases(variant: VariantFn) -> tuple[int, list[tuple]]:
+def count_one_byte_context_aliases(
+    controller: ControllerLike,
+) -> tuple[int, list[tuple]]:
     """Match scripts/controller_alias_analysis.py domain: first then second symbol."""
     found: list[tuple] = []
     for first in range(256):
         base = initial_state()
-        absorb_symbol(base, first, variant)
-        # Map second symbol -> state key
+        absorb_symbol(base, first, controller)
         keys: dict[tuple, int] = {}
         for symbol in range(256):
             st = ProtoState(
@@ -302,7 +529,7 @@ def count_one_byte_context_aliases(variant: VariantFn) -> tuple[int, list[tuple]
                 previous_axis=base.previous_axis,
                 symbol_index=base.symbol_index,
             )
-            absorb_symbol(st, symbol, variant)
+            absorb_symbol(st, symbol, controller)
             key = state_key(st)
             if key in keys:
                 found.append((first, keys[key], symbol))
@@ -311,7 +538,7 @@ def count_one_byte_context_aliases(variant: VariantFn) -> tuple[int, list[tuple]
     return len(found), found
 
 
-def count_initial_one_symbol_aliases(variant: VariantFn) -> int:
+def count_initial_one_symbol_aliases(controller: ControllerLike) -> int:
     keys: dict[tuple, int] = {}
     collisions = 0
     base = initial_state()
@@ -322,7 +549,7 @@ def count_initial_one_symbol_aliases(variant: VariantFn) -> int:
             previous_axis=base.previous_axis,
             symbol_index=base.symbol_index,
         )
-        absorb_symbol(st, symbol, variant)
+        absorb_symbol(st, symbol, controller)
         key = state_key(st)
         if key in keys:
             collisions += 1
@@ -332,11 +559,11 @@ def count_initial_one_symbol_aliases(variant: VariantFn) -> int:
 
 
 def count_aliases_after_prefix(
-    variant: VariantFn, prefix: bytes
+    controller: ControllerLike, prefix: bytes
 ) -> list[tuple[int, int]]:
     base = initial_state()
     for byte in prefix:
-        absorb_symbol(base, byte, variant)
+        absorb_symbol(base, byte, controller)
     keys: dict[tuple, int] = {}
     pairs: list[tuple[int, int]] = []
     for symbol in range(256):
@@ -346,7 +573,7 @@ def count_aliases_after_prefix(
             previous_axis=base.previous_axis,
             symbol_index=base.symbol_index,
         )
-        absorb_symbol(st, symbol, variant)
+        absorb_symbol(st, symbol, controller)
         key = state_key(st)
         if key in keys:
             pairs.append((keys[key], symbol))
@@ -356,7 +583,7 @@ def count_aliases_after_prefix(
 
 
 def sample_two_byte_context_aliases(
-    variant: VariantFn, sample_prefixes: int
+    controller: ControllerLike, sample_prefixes: int
 ) -> tuple[int, int, list[tuple]]:
     """Sample two-byte prefixes; return (prefixes_tested, alias_pairs, examples)."""
     total_pairs = 0
@@ -367,7 +594,7 @@ def sample_two_byte_context_aliases(
         if tested >= sample_prefixes:
             break
         prefix = bytes(((counter >> 8) & 0xFF, counter & 0xFF))
-        pairs = count_aliases_after_prefix(variant, prefix)
+        pairs = count_aliases_after_prefix(controller, prefix)
         total_pairs += len(pairs)
         for left, right in pairs[:2]:
             if len(examples) < 8:
@@ -377,7 +604,7 @@ def sample_two_byte_context_aliases(
 
 
 def full_two_byte_alias_catalogue(
-    variant: VariantFn,
+    controller: ControllerLike,
 ) -> tuple[int, object]:
     """Exact one-symbol aliases after every two-byte prefix (slow, ~10–15 min)."""
     from collections import Counter
@@ -388,7 +615,7 @@ def full_two_byte_alias_catalogue(
         if counter % 8192 == 0:
             print(f"  two_byte_full progress {counter}/65536", flush=True)
         prefix = bytes(((counter >> 8) & 0xFF, counter & 0xFF))
-        for left, right in count_aliases_after_prefix(variant, prefix):
+        for left, right in count_aliases_after_prefix(controller, prefix):
             pair_counts[(left, right)] += 1
             total += 1
     return total, pair_counts
@@ -398,7 +625,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--variants",
-        default="canonical,E",
+        default="H,H2",
         help="comma-separated variant ids",
     )
     parser.add_argument(
@@ -426,20 +653,20 @@ def main() -> int:
     for name in names:
         if name not in VARIANTS:
             raise SystemExit(f"unknown variant {name}; choose from {list(VARIANTS)}")
-        variant = VARIANTS[name]
-        initial_collisions = count_initial_one_symbol_aliases(variant)
+        controller = VARIANTS[name]
+        initial_collisions = count_initial_one_symbol_aliases(controller)
         print(f"\nvariant={name}")
-        print(f"  initial_context_one_symbol_alias_pairs={initial_collisions}")
+        print(f"  G1_initial_one_symbol_alias_pairs={initial_collisions}")
         if args.deep:
-            n, samples = count_one_byte_context_aliases(variant)
-            print(f"  one_byte_context_alias_pairs={n}")
+            n, samples = count_one_byte_context_aliases(controller)
+            print(f"  G2_one_byte_context_alias_pairs={n}")
             for sample in samples[:6]:
                 print(f"    example context={sample[0]:02x} {sample[1]:02x}/{sample[2]:02x}")
             if n > 6:
                 print(f"    ... {n - 6} more")
         if args.two_byte_samples > 0:
             tested, pairs, examples = sample_two_byte_context_aliases(
-                variant, args.two_byte_samples
+                controller, args.two_byte_samples
             )
             print(
                 f"  two_byte_prefix_samples={tested} "
@@ -451,20 +678,27 @@ def main() -> int:
                     f"{ex[2]:02x}/{ex[3]:02x}"
                 )
         if args.two_byte_full:
-            total, pair_counts = full_two_byte_alias_catalogue(variant)
-            print(f"  two_byte_full_alias_instances={total}")
-            print(f"  two_byte_full_unique_pairs={len(pair_counts)}")
+            total, pair_counts = full_two_byte_alias_catalogue(controller)
+            print(f"  G3_two_byte_full_alias_instances={total}")
+            print(f"  G3_two_byte_full_unique_pairs={len(pair_counts)}")
             for (left, right), count in pair_counts.most_common():
                 print(
                     f"    pair={left:02x}/{right:02x} "
                     f"delta={((right - left) & 0xFF)} count={count}"
                 )
+            g1 = initial_collisions == 0
+            g2 = (not args.deep) or (n == 0)
+            g3 = total == 0
+            print(
+                f"  gates: G1={'PASS' if g1 else 'FAIL'} "
+                f"G2={'PASS' if g2 else 'FAIL' if args.deep else 'skip'} "
+                f"G3={'PASS' if g3 else 'FAIL'}"
+            )
 
     print("\ninterpretation:")
-    print("  - canonical: 3 one-byte-context pairs when --deep")
-    print("  - E: 0 one-byte; full two-byte has 4 residual pairs (campaign §8)")
-    print("  - redesign goal: zero one- and two-byte one-symbol aliases")
-    print("  - any successor still needs avalanche/distribution/foldback campaigns")
+    print("  - competitive path: G1∧G2∧G3 must PASS (docs/CONTROLLER_REQUIREMENTS.md)")
+    print("  - canonical fails G2/G3; E/G fail G3; H/H2 are structural attempts")
+    print("  - meeting gates is necessary, not a security proof")
     return 0
 
 

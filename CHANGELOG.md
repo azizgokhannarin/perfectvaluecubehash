@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased — Competitive program gates and structural controller H
+
+Documentation and offline controller harness only. Official digests unchanged.
+
+- reoriented `docs/RESEARCH_GOAL.md` to a competitive hash ambition (Keccak-class
+  quality bar as aspiration, not a claim);
+- added `docs/CONTROLLER_REQUIREMENTS.md` with automated gates G1–G3;
+- updated `docs/SECURITY_TARGET.md` for ambition vs claim discipline;
+- structural prototypes H / H2 in `scripts/controller_redesign_prototypes.py`;
+- H: G1+G2 pass, G3 has 161 aliases in two pairs only (best so far);
+- H2: rejected (G2/G3 regression).
+
 ## Unreleased — Science-first goal and variant G experiment
 
 Offline redesign and goal docs only. Official digests unchanged.

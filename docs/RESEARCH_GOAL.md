@@ -1,51 +1,78 @@
-# Research Goal — Science First, Acceptance Contingent
+# Research Goal — Competitive Hash Ambition
 
 **Adopted:** 2026-08-01  
-**Status:** Binding goal ordering for effort and claims
+**Updated:** 2026-08-01  
+**Status:** Binding goal for effort, design, and claims
 
-## What we want
+## North star
 
-1. **Primary (now):** a **publishable scientific result** — honest, reproducible,
-   attack-complete enough to stand as research on an original Perfect Value Cube
-   rotation hash.
-2. **Aspirational (later):** that a **corrected** member of this design family
-   might someday earn serious consideration as a general-purpose hash.
+Build a **real, competitive cryptographic hash** in the Perfect Value Cube /
+intersecting-rotation design family:
 
-These are compatible only in this order. Acceptance is **not** pursued by
-testing a known structural defect harder. Acceptance is pursued only if the
-design family can be repaired without abandoning its identity.
+- strong enough in structure and evidence to be discussed next to serious
+  general-purpose hashes (SHA-3 / Keccak class as the **quality bar**, not a
+  claim of equality);
+- parameterized and documented honestly for the **post-quantum era** (digest
+  length and quantum-query notes; no slogan security);
+- **not** a “we tried and it failed” paper as the primary product.
 
-## Design judgment (current)
+A negative scientific write-up remains an honest **fallback** if the family
+cannot meet the controller and cryptanalysis bars after serious redesign. It is
+not the plan.
+
+## What success looks like
+
+1. A **new candidate identifier** (not silent RotHash-1 drift) whose move
+   controller passes `docs/CONTROLLER_REQUIREMENTS.md` gates G1–G4.
+2. Smoke statistical and reduced-round batteries (ST1–ST4) without reviving v0
+   distinguishers.
+3. Dual conforming implementations, official vectors, freeze policy, and a
+   public attack surface.
+4. Ongoing independent cryptanalysis with **no known structural break** of the
+   kinds that killed RotHash-1’s acceptance path (cheap forward multicollisions).
+5. Only then: language that inches from “experimental candidate” toward
+   carefully scoped recommendations — still without fake proofs.
+
+## What RotHash-1 is
+
+PVC-RotHash-1 `1.0.0-rc1` is a **frozen research baseline**:
+
+- fully specified, dual-implemented, heavily attacked in-tree;
+- **does not** meet the competitive controller requirements;
+- remains valuable as comparison, regression, and cryptanalytic evidence;
+- **must not** be marketed as the path to Keccak-class standing.
+
+## Design judgment
 
 | Layer | Judgment |
 |---|---|
-| Geometry (PVC, intersecting line rotations, foldback, closures, squeeze) | **Worth continuing** as a research architecture |
-| RotHash-1 move controller (linear double use of symbol, amount `% 7`, LSB axis) | **Design defect** for injectivity; blocks acceptance |
-| Offline prototype E | Shows the 42-family is not inevitable; residual mod-7 lane rail remains |
-| Endless foldback / ARX thrash | **Low value** (`docs/EFFORT_POLICY.md`) |
+| PVC geometry, intersecting rotations, foldback, closures, squeeze | Keep as family DNA unless evidence forces a larger fork |
+| RotHash-1 controller | Defective for injectivity; replace for any successor |
+| Coefficient-only patches (e.g. G) | Insufficient |
+| Structural controller redesign + hard gates | **Main engineering path** |
+| Foldback-distance grinding on known forward collisions | Low EV (`docs/EFFORT_POLICY.md`) |
 
-**Continue the design family.** Do **not** claim RotHash-1 is on a short path to
-standardization. Publish RotHash-1 as a frozen, attacked baseline; put any
-acceptance hope on a **new candidate** after a principled controller fix.
+## Claim discipline (unchanged)
 
-## Decision rule
+- No “collision-resistant”, “PQC-secure”, or “Keccak replacement” claims without
+  evidence that would survive expert review.
+- Meeting G1–G4 is **necessary, not sufficient**.
+- Production use stays prohibited until an explicit later policy change.
+
+## Working order
 
 ```text
-IF controller redesign achieves zero one- and two-byte one-symbol aliases
-   AND cheap statistical smokes do not revive v0 distinguishers
-THEN mint a new candidate ID and re-open deep cryptanalysis
-ELSE keep RotHash-1 as the scientific object (paper / negative+constructive)
-     and do not market acceptance
+1. Controller requirements + structural prototypes until G1–G3 pass
+2. Soft statistical smoke (ST1–ST4)
+3. Mint new candidate ID + vectors + dual impl
+4. Deep falsification suite (existing tools + new)
+5. Public freeze and independent review
+6. Paper presents a serious candidate, not a failed hobby
 ```
 
-Either branch is a **success** if it is honest and publishable.
-Only the first branch keeps the acceptance aspiration alive.
+See:
 
-## Paper-shaped outcomes (both valid)
-
-- **Constructive:** original construction + cryptanalysis + redesign rationale.
-- **Negative+constructive:** why the first controller fails, what foldback did
-  and did not buy, what a repaired controller must satisfy.
-
-See `docs/PAPER_PLAN.md`, `docs/CONTROLLER_DECISION_MEMO.md`,
-`docs/EFFORT_POLICY.md`.
+- `docs/CONTROLLER_REQUIREMENTS.md`
+- `docs/SECURITY_TARGET.md`
+- `docs/ACCEPTANCE_ROADMAP.md`
+- `docs/EFFORT_POLICY.md`

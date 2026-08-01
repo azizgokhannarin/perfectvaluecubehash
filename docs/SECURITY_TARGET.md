@@ -1,61 +1,72 @@
 # Security Target and Claim Boundaries
 
-## Research target
+## Ambition versus claim
 
-PVC-RotHash-1 outputs 256 bits. The aspirational generic targets are:
+**Ambition (program goal):** a general-purpose hash in this design family that
+can stand public cryptanalysis at a quality bar comparable to serious modern
+hashes (SHA-3 / Keccak as reference class), including honest post-quantum
+parameter discussion.
 
-| Property | Generic reference | Current claim |
-|---|---:|---|
-| Collision resistance | about `2^128` work | **Not claimed** |
-| Second-preimage resistance | about `2^256` work | **Not claimed** |
-| Preimage resistance | about `2^256` work | **Not claimed** |
-| Random-oracle-like output distribution | statistical ideal | only bounded tests passed |
-| Length-extension resistance | construction-specific | no formal claim |
-| Quantum collision resistance | about `2^(256/3)` generic query scale | **Not claimed** |
-| Quantum preimage resistance | about `2^128` generic query scale | **Not claimed** |
+**Current claim for PVC-RotHash-1:** **none** of the competitive properties
+below are claimed. RotHash-1 is an experimental frozen baseline with known
+forward multicollision structure.
 
-These values are comparison targets, not proven security levels.
+Successor candidates inherit the same table as **targets** until evidence and
+review justify carefully worded statements. Targets are not theorems.
 
-## Post-quantum wording (non-claim)
+## Aspirational generic targets (256-bit digest)
 
-PVC-RotHash-1 does **not** claim post-quantum security. A 256-bit digest is the
-current candidate output length only. Under standard quantum query models:
+| Property | Generic reference | RotHash-1 claim | Successor program target |
+|---|---:|---|---|
+| Collision resistance | about `2^128` work | **Not claimed** | Meet this scale vs known attacks |
+| Second-preimage resistance | about `2^256` work | **Not claimed** | Meet this scale vs known attacks |
+| Preimage resistance | about `2^256` work | **Not claimed** | Meet this scale vs known attacks |
+| Output distribution | statistical ideal | bounded tests only | No simple distinguisher in large samples |
+| Length-extension resistance | construction-specific | no formal claim | No trivial extension |
+| Quantum collision (query model) | far below `2^128` for 256-bit ideal | **Not claimed** | Document; consider 384/512-bit variants as separate IDs if needed |
+| Quantum preimage (Grover) | about `2^128` queries for 256-bit ideal | **Not claimed** | Document; parameterize honestly |
 
-- preimage search scales like Grover's algorithm (about `2^128` queries for a
-  256-bit ideal random oracle preimage);
-- collision search admits better-than-classical quantum algorithms whose
-  generic cost is far below `2^128` work for 256-bit outputs.
+## Structural gate (hard, before any competitive language)
 
-Until a full security argument and independent cryptanalysis exist, quantum
-remarks are **parameter-comparison notes**, not design guarantees. Any future
-longer-output variant (for example 384- or 512-bit squeeze) would be a separate
-candidate identifier under the freeze policy. See
-`docs/ACCEPTANCE_ROADMAP.md` Gate E for the planned expansion of this section.
+Any successor **MUST** pass `docs/CONTROLLER_REQUIREMENTS.md` injectivity gates
+G1–G3 (and G4 regressions). Cheap forward multicollisions of the RotHash-1 type
+are **disqualifying** for the competitive program.
 
-## What has been established
+## Post-quantum wording
 
-The repository provides reproducible evidence that:
+No candidate in this repository currently claims post-quantum security.
 
-- the direct-output version-0 distinguishers were corrected;
-- canonical output distributions and single-bit avalanche are close to their
-  random references in the documented domains;
-- reduced-round variants fail progressively;
-- the forward pass admits exact and exponentially extensible multicollisions;
-- known forward multicollisions are separated by foldback in tested domains;
-- selected internal-state distances do not linearly predict final digest
-  distances after closure and squeeze;
-- bounded full-digest searches have not outperformed generic reference minima.
+Under standard quantum query models, a 256-bit ideal digest has:
+
+- preimage cost on the order of Grover’s algorithm (`~2^128` queries);
+- collision cost below the classical `2^128` birthday scale for some quantum
+  algorithms.
+
+These are **parameter notes**. A future 384- or 512-bit squeeze would be a
+**new candidate identifier**. See Gate E in `docs/ACCEPTANCE_ROADMAP.md`.
+
+## What has been established (RotHash-1 baseline)
+
+Reproducible evidence includes:
+
+- correction of v0 raw-diagonal multiplicity and strong short-message positional
+  memory distinguishers under documented tests;
+- near-ideal avalanche and distribution samples in stated domains;
+- **forward non-injectivity** and scalable bridged multicollisions;
+- foldback separation of known forward collisions in large finite domains
+  (not a proof of foldback injectivity);
+- digest-surface searches not beating generic references in documented budgets;
+- offline redesign: E and G reduce but do not eliminate two-byte one-symbol
+  aliases (`docs/PHASE1_CONTROLLER_CAMPAIGN.md`).
 
 ## What has not been established
 
-There is no security reduction, proof of indifferentiability, proof of
-collision resistance, or proof of preimage resistance. The construction is a
-new permutation-of-values design and may have undiscovered algebraic,
-combinatorial, invariant, differential, meet-in-the-middle, SAT/SMT, or
-long-message attacks.
+No security reduction, indifferentiability proof, or proof of collision /
+preimage resistance for any candidate. No successor has yet passed the
+controller injectivity program.
 
 ## Production prohibition
 
-Do not use the candidate for authentication, signatures, certificates, password
-storage, KDFs, MACs, integrity verification, commitments, proof-of-work, or any
-other real security boundary.
+Do not use PVC-RotHash-1 (or unreleased prototypes) for authentication,
+signatures, certificates, password storage, KDFs, MACs, integrity verification,
+commitments, proof-of-work, or any real security boundary.

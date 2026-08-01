@@ -85,13 +85,15 @@ then minting a **new** ID.
 
 **Lead sketches (offline, not candidates):**
 
-| Sketch | 1-byte | 2-byte instances | Status |
-|---|---:|---:|---|
-| E | 0 | 183 (4 pairs) | Best so far; residual mod-7 lane rail |
-| G | 0 | 187 (4 new pairs) | Principled GF(7) coefficient fix; **failed** to clear domain |
+| Sketch | G1 | G2 | G3 | Status |
+|---|---|---|---|---|
+| E | pass | pass | 183 / 4 pairs | mod-7 lane residual |
+| G | pass | pass | 187 / 4 pairs | coefficient-only; failed |
+| **H** | **pass** | **pass** | **161 / 2 pairs** | **current lead**; residuals `58/c5`, `6e/c6` |
+| H2 | pass | fail | bad | discarded |
 
-G shows coefficient-only repair of E’s residual theory is not enough. Next
-redesign, if any, must change control **shape** (not another coefficient set).
+Next: kill H’s two residual pairs with a targeted structural fix, re-run G1–G3.
+Mint a new candidate **only** after G3 = 0 and ST smoke tests.
 
 ### Rejected as primary path: endless Keep-1 foldback grinding
 

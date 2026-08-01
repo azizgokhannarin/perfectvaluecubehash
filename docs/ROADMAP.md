@@ -137,7 +137,9 @@ premature security claims.
   six-move aliases (three pairs); 126/196 appear only in deeper contexts;
 - dual-return and multipath tools: no after-foldback merge in tested domains;
   multipath min distance 282 bits across 128 seeds;
-- science-first goal locked (`docs/RESEARCH_GOAL.md`); design family continues;
-- redesign: E best (183/4 pairs); G principled mod-7 fix failed (187/4 new);
-- next high-value: paper narrative from RotHash-1 + E/G evidence; optional
-  *structural* controller redesign later — not coefficient thrash.
+- competitive ambition locked (`docs/RESEARCH_GOAL.md`); controller requirements
+  in `docs/CONTROLLER_REQUIREMENTS.md` (G1–G3 hard gates);
+- structural prototype **H**: G1+G2 PASS, G3 FAIL with only 2 pairs / 161 hits
+  (best so far; vs canonical 728, E 183);
+- next: target H residuals `58/c5` and `6e/c6`, then ST smoke; no candidate mint
+  until G3 = 0.

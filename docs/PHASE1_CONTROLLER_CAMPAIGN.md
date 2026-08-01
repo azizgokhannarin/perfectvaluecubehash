@@ -460,7 +460,44 @@ collisions appear instead.
    (e.g. stronger axis dependence, or abandoning bare `% 7` amount), not only
    coefficients — or the paper stops at this comparative negative for G.
 
-### 9.4 Effort stop
+### 9.4 Effort stop (superseded by §10)
 
-No further ARX/coefficient variants in this session. Next high-value work is
-**paper narrative + optional one structural redesign**, not G2/G3 thrash.
+Coefficient thrash stopped. Structural path opened in §10.
+
+---
+
+## 10. Competitive program + structural controller H (2026-08-01)
+
+Goal reaffirmed: build toward a **serious general-purpose / PQC-era hash**, not
+a “failed attempt” paper (`docs/RESEARCH_GOAL.md`). Hard gates in
+`docs/CONTROLLER_REQUIREMENTS.md`.
+
+### 10.1 Structural prototype H
+
+H changes more than amount coefficients:
+
+- nonlinear **control init** (not `symbol + index + coord` alone);
+- odd multiplications on `Z/256Z` + residue map for amount;
+- symbol-sensitive axis mix every phase;
+- nonlinear control evolution feeding symbol back each phase.
+
+H2 (fixed 256→{1..7} table) **failed** G2/G3 and is discarded as lead.
+
+### 10.2 Gate results
+
+| Variant | G1 | G2 | G3 instances / pairs |
+|---|---|---|---|
+| canonical | pass | fail | 728 / 10 |
+| E | pass | pass | 183 / 4 |
+| G | pass | pass | 187 / 4 |
+| **H** | **pass** | **pass** | **161 / 2** (`58/c5`×82, `6e/c6`×79) |
+| H2 | pass | fail 57 | 10890 / 78 |
+
+### 10.3 Reading for the competitive path
+
+- **Progress is real:** first controller to pass G1∧G2 with only two G3 pairs.
+- **Not done:** G3 must be zero before minting any successor candidate.
+- **Next engineering:** kill `58/c5` and `6e/c6` with a **targeted** structural
+  change (trace those pairs like E residuals), re-run full G1–G3 once.
+- **Do not** mint RotHash-2 or claim Keccak-class standing until G3 passes and
+  ST smoke tests run.
