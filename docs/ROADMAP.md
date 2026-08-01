@@ -119,3 +119,11 @@ After structural cryptanalysis, choose among:
 - Test differential trails chosen to control emitted diagonal bytes rather than
   merely internal-state distance.
 - Expand 40/48-bit truncated campaigns to their expected birthday ranges.
+
+## Strategic acceptance path
+
+Long-horizon gates, PQC-era honesty bounds, and Phase 0–6 ordering are defined
+in [`docs/ACCEPTANCE_ROADMAP.md`](ACCEPTANCE_ROADMAP.md). That document does not
+replace the completed-work log above; it defines how the project may move from
+a frozen research candidate toward externally credible standing without
+premature security claims.

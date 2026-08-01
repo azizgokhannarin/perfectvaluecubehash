@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Independent review guide
+    url: https://github.com/azizgokhannarin/perfectvaluecubehash/blob/main/docs/INDEPENDENT_REVIEW.md
+    about: Start here before opening a cryptanalysis or conformance issue.
+  - name: Public cryptanalysis challenge
+    url: https://github.com/azizgokhannarin/perfectvaluecubehash/blob/main/CRYPTANALYSIS_CHALLENGE.md
+    about: High-value attack targets C1–C8 and known non-results.

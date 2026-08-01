@@ -1,0 +1,62 @@
+name: Conformance report
+description: Report a mismatch between the specification, C++, Python, or official vectors.
+title: "[conformance] "
+labels: ["conformance"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The normative definition is `SPECIFICATION.md`. Implementations must not
+        silently change the frozen candidate. Prefer a minimal failing input.
+  - type: input
+    id: candidate
+    attributes:
+      label: Candidate and commit
+      placeholder: "PVC-RotHash-1 1.0.0-rc1 / <sha>"
+    validations:
+      required: true
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Discrepancy surface
+      options:
+        - Specification ambiguity
+        - C++ vs official vectors
+        - Python vs official vectors
+        - C++ vs Python
+        - Phase-state mismatch
+        - Platform / portability defect
+        - Tooling or documentation error
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: Quote the specification section or official vector entry.
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: Observed behavior
+      description: Actual digest, phase state, or runtime error.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: input
+    attributes:
+      label: Input
+      description: Exact bytes (hex) or CLI invocation.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, compiler, Python version, commit, and commands.
+    validations:
+      required: true

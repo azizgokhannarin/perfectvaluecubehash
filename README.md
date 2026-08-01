@@ -15,6 +15,7 @@ It is not a production hash and makes no security claim.
 - [`docs/INDEPENDENT_REVIEW.md`](docs/INDEPENDENT_REVIEW.md) — reviewer workflow.
 - [`docs/KNOWN_CRYPTOANALYSIS.md`](docs/KNOWN_CRYPTOANALYSIS.md) — consolidated findings.
 - [`docs/SECURITY_TARGET.md`](docs/SECURITY_TARGET.md) — targets and explicit non-claims.
+- [`docs/ACCEPTANCE_ROADMAP.md`](docs/ACCEPTANCE_ROADMAP.md) — path toward credible standing (no security claim).
 - [`test-vectors/`](test-vectors/) — official digest and phase vectors.
 - [`reference/python/`](reference/python/) — independent standard-library reference.
 

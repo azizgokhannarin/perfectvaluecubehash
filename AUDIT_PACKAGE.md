@@ -31,6 +31,9 @@ This source tree is the complete public-review package for PVC-RotHash-1
 - `AUTHORS.md`
 - `CITATION.cff`
 - `LICENSE`
-- GitHub issue templates
+- GitHub issue templates under `.github/ISSUE_TEMPLATE/`
+- CI workflow under `.github/workflows/ci.yml`
+- Long-horizon acceptance gates in `docs/ACCEPTANCE_ROADMAP.md`
+- Suggested public-review issue text in `docs/PUBLIC_REVIEW_ISSUE.md`
 
 Start with `docs/INDEPENDENT_REVIEW.md`.

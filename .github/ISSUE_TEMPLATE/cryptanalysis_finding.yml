@@ -1,0 +1,110 @@
+name: Cryptanalysis finding
+description: Report a collision, distinguisher, preimage, structural attack, or strong negative result.
+title: "[cryptanalysis] "
+labels: ["cryptanalysis"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for attacking PVC-RotHash-1. Weaknesses are successful project results.
+        Forward-state equality alone is already known and is **not** a full digest collision.
+        See `docs/KNOWN_CRYPTOANALYSIS.md` and `CRYPTANALYSIS_CHALLENGE.md`.
+  - type: input
+    id: candidate
+    attributes:
+      label: Candidate and commit
+      description: Algorithm identifier, candidate version, and git commit (or tag).
+      placeholder: "PVC-RotHash-1 1.0.0-rc1 / v1.0.0-rc1 / <sha>"
+    validations:
+      required: true
+  - type: dropdown
+    id: attack_class
+    attributes:
+      label: Attack class
+      options:
+        - Full digest collision (C1)
+        - Truncated collision better than generic (C2)
+        - Preimage or second preimage (C3)
+        - Full-digest distinguisher (C4)
+        - Foldback-compatible alias / after-foldback merge (C5)
+        - Chosen-prefix, herding, or expandable message (C6)
+        - Formal / solver attack (C7)
+        - Spec or implementation discrepancy (C8)
+        - Reduced-round only
+        - Structural finding (non-digest)
+        - Negative result / improved bound
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: parameters
+    attributes:
+      label: Parameter set
+      options:
+        - R5-canonical (full candidate)
+        - R0-minimal
+        - R1-foldback
+        - R2-small
+        - R3-medium
+        - R4-near
+        - Custom research parameters
+    validations:
+      required: true
+  - type: dropdown
+    id: deepest_phase
+    attributes:
+      label: Deepest equal phase (if collision-like)
+      options:
+        - Not applicable
+        - After forward only
+        - After foldback
+        - After diagonal closure
+        - After orbit closure
+        - After squeeze / final state
+        - Full digest
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What was found, in a few sentences.
+    validations:
+      required: true
+  - type: textarea
+    id: messages
+    attributes:
+      label: Messages or generation procedure
+      description: Exact hex messages, or a deterministic generator with seeds and commands.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: complexity
+    attributes:
+      label: Complexity and comparison
+      description: Time, memory, number of evaluations, and expected generic cost with the comparison method.
+    validations:
+      required: true
+  - type: textarea
+    id: verification
+    attributes:
+      label: Exact verification
+      description: How full operational state or digest equality was checked after any fingerprint/LSH filter.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Build commands, tool flags, scripts, and platform details.
+      render: text
+    validations:
+      required: true
+  - type: input
+    id: credit
+    attributes:
+      label: Preferred credit
+      description: Name/affiliation for the attack log, or "anonymous".
+    validations:
+      required: true

@@ -16,6 +16,22 @@ PVC-RotHash-1 outputs 256 bits. The aspirational generic targets are:
 
 These values are comparison targets, not proven security levels.
 
+## Post-quantum wording (non-claim)
+
+PVC-RotHash-1 does **not** claim post-quantum security. A 256-bit digest is the
+current candidate output length only. Under standard quantum query models:
+
+- preimage search scales like Grover's algorithm (about `2^128` queries for a
+  256-bit ideal random oracle preimage);
+- collision search admits better-than-classical quantum algorithms whose
+  generic cost is far below `2^128` work for 256-bit outputs.
+
+Until a full security argument and independent cryptanalysis exist, quantum
+remarks are **parameter-comparison notes**, not design guarantees. Any future
+longer-output variant (for example 384- or 512-bit squeeze) would be a separate
+candidate identifier under the freeze policy. See
+`docs/ACCEPTANCE_ROADMAP.md` Gate E for the planned expansion of this section.
+
 ## What has been established
 
 The repository provides reproducible evidence that:

@@ -22,10 +22,11 @@ independent of the C++ source structure.
 
 1. `SPECIFICATION.md` — frozen normative algorithm.
 2. `docs/SECURITY_TARGET.md` — exact non-claims and desired targets.
-3. `docs/KNOWN_CRYPTANALYSIS.md` — consolidated positive and negative results.
+3. `docs/KNOWN_CRYPTOANALYSIS.md` — consolidated positive and negative results.
 4. `docs/ATTACK_MODEL.md` — terminology and state boundaries.
 5. `docs/CRYPTANALYSIS_FRAMEWORK.md` — reduced-round API and tools.
-6. Detailed result documents for the attack class of interest.
+6. `docs/ACCEPTANCE_ROADMAP.md` — long-horizon credibility gates (not a claim of security).
+7. Detailed result documents for the attack class of interest.
 
 ## 3. High-value attack questions
 

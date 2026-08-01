@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased — Acceptance path packaging (post-tag tooling)
+
+Documentation and repository packaging only. Official digests and the frozen
+PVC-RotHash-1 algorithm are unchanged.
+
+- added `docs/ACCEPTANCE_ROADMAP.md` with honesty-bound gates toward long-horizon
+  general-purpose hash credibility (not a security claim);
+- locked maintainer strategy: general-purpose ambition, parallel attack and
+  controller-redesign prototypes, 256-bit output for now, Gate A first;
+- added GitHub Actions CI (GCC, Clang, ASan/UBSan, Windows MSVC, Python compile);
+- added cryptanalysis and conformance issue templates;
+- added public-review issue draft and short post-quantum non-claim notes;
+- recorded a clean `scripts/release_check.sh` pass for the frozen vectors.
+
 ## 1.0.0-rc1 — Frozen public cryptanalysis candidate
 
 - froze the PVC-RotHash-1 algorithm without changing canonical digests;
