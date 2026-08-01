@@ -141,8 +141,7 @@ replace the completed-work log above.
   multipath min distance 282 bits across 128 seeds;
 - competitive ambition locked (`docs/RESEARCH_GOAL.md`); controller requirements
   in `docs/CONTROLLER_REQUIREMENTS.md` (G1–G3 hard gates);
-- structural prototype **H**: G1+G2 PASS, G3 FAIL with 2 pairs / 161 hits (lead);
-- H3–H5 local residual patches regressed gates; **pause thrash**;
-- deliberate G3 failure-mode note: `docs/CONTROLLER_G3_FAILURE_MODE.md`
-  (hypothesis H\* = one global amount-map change, G1–G3 only score);
-- next implementation only after H\* shape chosen; no candidate mint until G3=0.
+- external G3 advice → systematic controller **S**: **G1∧G2∧G3 PASS** (0 aliases);
+- H remains historical lead before S; H3–H5 local patches discarded;
+- consultation principle: ask outsiders when structurally stuck (`EFFORT_POLICY` §7);
+- next: Stage 2 ST smoke with S; then new candidate ID only if smoke holds.

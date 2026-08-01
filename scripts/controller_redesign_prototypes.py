@@ -591,7 +591,138 @@ class ControllerH5(StructuralController):
         )
 
 
-ControllerLike = VariantFn | StructuralController
+class ControllerS:
+    """Systematic injectivity channel (external advice, 2026-08-02).
+
+    Phases 0–2: mixed-radix encoding of Π(symbol) with Z/7Z context translation
+    from START-OF-SYMBOL state only (c_i independent of s). Proves
+    s ↦ (amount0, amount1, amount2) injective for each fixed context.
+
+    Phases 3–5 + all axes: free diffusion (may use symbol).
+
+    See docs/EXTERNAL_ADVICE_G3.md. Not a full-hash candidate.
+    """
+
+    name = "S"
+
+    def __init__(self) -> None:
+        # Nothing-up-my-sleeve public byte permutation (odd multiply + add).
+        self.PI = [((i * 41) + 17) & 0xFF for i in range(256)]
+
+    def _context_digit(
+        self,
+        probe: int,
+        control: int,
+        cursor: tuple[int, int, int],
+        previous: int,
+        symbol_index: int,
+        which: int,
+    ) -> int:
+        """State-only Z/7 digit; must not use the message symbol."""
+        g = u8(
+            coordinate_code(cursor)
+            + which * 29
+            + u8(symbol_index)
+            + u8(previous * 11)
+        )
+        mixed = u8(
+            mul_odd(probe, 29)
+            ^ mul_odd(control, 45)
+            ^ rotl8(g, which & 7)
+            ^ u8(which * 19)
+        )
+        return mixed % 7
+
+    def absorb_into(self, state: "ProtoState", symbol: int) -> None:
+        probe0 = state.cube[
+            state.cursor[2] * 64 + state.cursor[1] * 8 + state.cursor[0]
+        ]
+        # Context seed MUST NOT use the message symbol (advice: c_i state-only).
+        # A symbol-dependent control here would break the Z/7 translation proof.
+        context_seed = u8(
+            u8(state.symbol_index)
+            ^ coordinate_code(state.cursor)
+            ^ u8(int(state.previous_axis) * 13)
+            ^ mul_odd(probe0, 19)
+        )
+        c_digits = [
+            self._context_digit(
+                probe0,
+                context_seed,
+                state.cursor,
+                state.previous_axis,
+                state.symbol_index,
+                i,
+            )
+            for i in range(3)
+        ]
+        t = self.PI[symbol]
+        d_digits = [t % 7, (t // 7) % 7, t // 49]
+        inj_amounts = [
+            1 + ((d_digits[i] + c_digits[i]) % 7) for i in range(3)
+        ]
+
+        # Diffusion control may use symbol (separate from injectivity channel).
+        control = ControllerH().init_control(
+            symbol, state.symbol_index, state.cursor
+        )
+
+        for phase in range(6):
+            probe = state.cube[
+                state.cursor[2] * 64 + state.cursor[1] * 8 + state.cursor[0]
+            ]
+            index_byte = (state.symbol_index >> ((phase & 7) * 8)) & 0xFF
+            geometry = u8(
+                coordinate_code(state.cursor) + phase * 29 + index_byte
+            )
+            # Axis: free diffusion (may use symbol).
+            sel = u8(
+                rotl8(symbol, phase)
+                ^ rotl8(control, (phase + 1) & 7)
+                ^ rotl8(probe, 2)
+                ^ geometry
+                ^ u8(state.previous_axis * 0x1D)
+                ^ u8(phase * 0x3B)
+            )
+            sel = u8(sel ^ rotl8(sel, 3) ^ mul_odd(symbol, 9))
+            axis = axis_from_selector(state.previous_axis, sel)
+
+            if phase < 3:
+                amount = inj_amounts[phase]
+            else:
+                # Free diffusion amounts.
+                lane = u8(
+                    mul_odd(symbol, 73)
+                    ^ mul_odd(control, 45)
+                    ^ mul_odd(probe, 29)
+                    ^ rotl8(geometry, phase & 7)
+                    ^ u8(phase * 19)
+                    ^ u8(axis * 11)
+                )
+                lane = u8(lane + rotl8(lane, 4) + rotl8(symbol ^ control, 2))
+                amount = 1 + (
+                    (mul_odd(lane, 41) ^ (lane >> 3) ^ (lane >> 5) ^ phase) % 7
+                )
+
+            rotate_line(state.cube, axis, state.cursor, amount)
+            state.cursor = advance(state.cursor, axis, amount)
+            probe_after = state.cube[
+                state.cursor[2] * 64 + state.cursor[1] * 8 + state.cursor[0]
+            ]
+            control = ControllerH().evolve_control(
+                control,
+                axis,
+                amount,
+                probe_after,
+                state.cursor,
+                phase,
+                symbol,
+            )
+            state.previous_axis = axis
+        state.symbol_index += 1
+
+
+ControllerLike = VariantFn | StructuralController | ControllerS
 
 VARIANTS: dict[str, ControllerLike] = {
     "canonical": variant_canonical,
@@ -609,6 +740,7 @@ VARIANTS: dict[str, ControllerLike] = {
     "H3": ControllerH3(),
     "H4": ControllerH4(),
     "H5": ControllerH5(),
+    "S": ControllerS(),
 }
 
 
@@ -638,6 +770,10 @@ def rotate_line(cube: list[int], axis: int, point: tuple[int, int, int], amount:
 
 
 def absorb_symbol(state: ProtoState, symbol: int, controller: ControllerLike) -> None:
+    if isinstance(controller, ControllerS):
+        controller.absorb_into(state, symbol)
+        return
+
     if isinstance(controller, StructuralController):
         control = controller.init_control(
             symbol, state.symbol_index, state.cursor
@@ -828,7 +964,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--variants",
-        default="H,H2",
+        default="S",
         help="comma-separated variant ids",
     )
     parser.add_argument(
@@ -900,7 +1036,7 @@ def main() -> int:
 
     print("\ninterpretation:")
     print("  - competitive path: G1∧G2∧G3 must PASS (docs/CONTROLLER_REQUIREMENTS.md)")
-    print("  - canonical fails G2/G3; E/G fail G3; H/H2 are structural attempts")
+    print("  - S = systematic mixed-radix injectivity (docs/EXTERNAL_ADVICE_G3.md)")
     print("  - meeting gates is necessary, not a security proof")
     return 0
 

@@ -89,13 +89,14 @@ then minting a **new** ID.
 |---|---|---|---|---|
 | E | pass | pass | 183 / 4 pairs | mod-7 lane residual |
 | G | pass | pass | 187 / 4 pairs | coefficient-only; failed |
-| **H** | **pass** | **pass** | **161 / 2 pairs** | **current lead** |
-| H2–H5 | mixed | mixed | worse or G2 fail | residual patches not yet global |
+| H | pass | pass | 161 / 2 | superseded for injectivity |
+| H2–H5 | mixed | mixed | worse | discarded |
+| **S** | **pass** | **pass** | **0** | **injectivity lead** (mixed-radix) |
 
-H residuals: amount residue ignores direct symbol when `lane2` collides.
-H3–H5 split those pairs locally but did not improve G3 (H4: 337/5; H5 G2 fail).
-Next: global residue redesign or non-`%7` amount map, not more pair-local thrash.
-Mint a new candidate **only** after G3 = 0 and ST smoke tests.
+S implements systematic coding from external advice: phases 0–2 carry `Π(s)` in
+three Z/7 amounts with state-only context translation; phases 3–5 diffuse.
+**G1∧G2∧G3 passed 2026-08-02.** Next: ST1–ST4 smoke, then candidate mint only
+if smoke holds. Still not a security proof.
 
 ### Rejected as primary path: endless Keep-1 foldback grinding
 

@@ -56,7 +56,8 @@ stage is how projects ship false confidence.
 | Ambition | Competitive, PQC-era general-purpose hash |
 | RotHash-1 | Frozen; usable as science baseline; **do not trust for security** |
 | Known disqualifier | Forward controller multicollisions (42/126/196 family, bridges) |
-| Best offline scheduler | Structural **H**: G1✓ G2✓ G3✗ (161 aliases / 2 pairs) |
+| Best offline scheduler | **S (systematic)**: G1✓ G2✓ **G3✓ (0)** — 2026-08-02 |
+| Prior lead H | G1✓ G2✓ G3✗ (161/2); superseded by S for injectivity |
 | Foldback vs known forward collisions | Phase-1 budget-closed for same-method grind; not a proof |
 | Production policy | Banned until an explicit later change |
 

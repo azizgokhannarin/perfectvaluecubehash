@@ -523,6 +523,52 @@ separate those two symbols when `lane2` already collides mod the residue map.
 | H5 | amount = `1+mul_odd(lane2⊕symbol,41)%7` | pass | fail 1 | 243/3 | worse |
 
 **Conclusion:** Splitting the two known H pairs on sample prefixes is easy;
-doing so **without** increasing the full two-byte alias count is not. H stays
-the competitive-path lead (best G1∧G2 with smallest G3). Further work must
-attack the residue collision class globally, not only two symbol pairs.
+doing so **without** increasing the full two-byte alias count is not. Local
+patches abandoned; see §11 for systematic controller **S**.
+
+---
+
+## 11. Controller S — G1∧G2∧G3 pass (2026-08-02)
+
+External advice (`docs/EXTERNAL_ADVICE_G3.md`): random-like schedulers expect
+~280 G3 collisions; G3=0 needs **structural** injectivity. Implement mixed-radix
+encoding of `Π(s)` into three amounts with Z/7 context translation from
+**start-of-symbol state only** (no message symbol in `c_i`).
+
+### 11.1 Implementation fix
+
+First draft wrongly used symbol-dependent `control` inside `c_i` (broke the
+proof and could alias). Corrected: `context_seed` from
+`(probe0, cursor, prev_axis, symbol_index)` only; diffusion uses a separate
+symbol-aware control.
+
+### 11.2 Gate results (exact state equality)
+
+```text
+variant=S
+G1_initial_one_symbol_alias_pairs=0
+G2_one_byte_context_alias_pairs=0
+G3_two_byte_full_alias_instances=0
+G3_two_byte_full_unique_pairs=0
+gates: G1=PASS G2=PASS G3=PASS
+```
+
+Command:
+
+```bash
+python3 scripts/controller_redesign_prototypes.py --variants S --deep --two-byte-full
+```
+
+### 11.3 Meaning
+
+| Is | Is not |
+|---|---|
+| Short-domain one-symbol operational injectivity | Full collision resistance |
+| Structural fix of RotHash-1’s controller class | A frozen public candidate yet |
+| Green light for Stage 2 smoke (ST1–ST4) | Permission to claim PQC/Keccak-class security |
+
+### 11.4 Next (trust path Stage 2)
+
+1. Wire S into a research full-hash path (or temporary absorb hook).
+2. Run ST1–ST4 (avalanche, two-byte digest uniqueness, multiplicity, reduced ladder).
+3. If smoke holds → draft new candidate ID + vectors (Stage 3).

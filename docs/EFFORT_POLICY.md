@@ -99,3 +99,20 @@ This is not a security proof.
 - `SECURITY.md` production ban remains until an explicit later policy change.
 - Papers and READMEs must keep the distinction between *effort spent* and
   *proven security*.
+
+---
+
+## 7. External consultation (when stuck)
+
+If progress stalls on a **structural** question (not a missing constant tweak),
+**ask an outside specialist or peer** rather than chaining low-EV local patches.
+
+Good triggers:
+
+- the same gate fails after 2–3 reasoned experiments in one class;
+- statistics or theory suggest the approach cannot pass (e.g. random-like G3);
+- the team is optimizing a hit-list instead of a global invariant.
+
+The 2026-08-02 G3 consultation (`docs/EXTERNAL_ADVICE_G3.md`) is the template:
+clear gates, what failed, design constraints, concrete questions. Outside advice
+does not replace measurement; it chooses the **next class** of design.

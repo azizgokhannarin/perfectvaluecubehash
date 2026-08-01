@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — Controller S passes G1–G3 injectivity
+
+Offline harness only. Official digests unchanged.
+
+- adopted external G3 advice (systematic mixed-radix injectivity channel);
+- fixed S so context digits `c_i` never depend on the message symbol;
+- **S: G1=PASS G2=PASS G3=PASS** (zero aliases on full two-byte domain);
+- recorded consultation-when-stuck policy in `docs/EFFORT_POLICY.md` §7;
+- next program stage: ST smoke, not production claims.
+
 ## Unreleased — Trust path roadmap
 
 Documentation only. Official digests unchanged.
