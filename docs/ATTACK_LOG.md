@@ -338,3 +338,28 @@ The in-house attack suite was pointed at RotHash-2 via
 surface that dominated RotHash-1 cryptanalysis. Remaining work is longer
 domains, digest-surface search, and external review — not replaying R1 alias
 catalogues.
+
+
+## A-R2-002 — Digest-surface + truncated on PVC-RotHash-2 (negative)
+
+**Affected design:** PVC-RotHash-2 draft (`R5-rothash2`)  
+**Date:** 2026-08-13  
+**Status:** no exact 256-bit collision; distances near generic (not a proof)
+
+**Methods:** `scripts/stage4_digest_r2.sh` plus R1-parity LSH and extended
+40-bit truncated. Details: `docs/STAGE4_DIGEST_R2.md`, logs
+`results/stage4-r2-digest/`.
+
+| Class | Budget (headline) | Result |
+|---|---|---|
+| Same-forward digest beam | bridged path | `path_found=no` (no seeds) |
+| Divergent digest beam | 2×229,633 pairs | best 90 / 91 bits vs generic ~93; no exact |
+| Digest LSH | 4×4k² + 1×8k² domains | best 83–88 vs generic 84–86; no exact; 0 forward-equal |
+| Barrier correlation | 5k indep + 5k common | \|corr\| ≲ 0.02; digest mean ~128; 0 collisions |
+| Truncated 24/32 | 4 trials | near birthday |
+| Truncated 40 | 4 trials, limit 2e6 | mean ratio **0.90** vs birthday; all found |
+
+**Interpretation:** With forward multicollision seeds removed, the remaining
+digest-search suite does not show a clear sub-generic full-digest attack in
+these budgets. Truncated 40-bit costs look generic. Still not collision
+resistance.

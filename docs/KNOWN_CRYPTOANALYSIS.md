@@ -103,5 +103,10 @@ keeping the same finalization shape. Stage 4 entry campaigns
   budgets;
 - truncated 24/32-bit collisions near birthday cost in small trial sets.
 
-**Status:** experimental; production prohibited; no security claim. Deep
-digest-surface and long truncated campaigns for RotHash-2 remain open.
+**Digest surface (A-R2-002):** divergent beam bests 90/91 vs ~93 generic;
+LSH bests 83–88 vs 84–86 generic; barrier correlations ~0; same-forward beam
+inapplicable (`path_found=no`). Truncated 40-bit mean cost ~0.9× birthday
+(4 trials, limit 2×10⁶). No exact 256-bit collision in these campaigns.
+
+**Status:** experimental; production prohibited; no security claim. Larger
+digest budgets, 48-bit+ truncated, and external review remain open.

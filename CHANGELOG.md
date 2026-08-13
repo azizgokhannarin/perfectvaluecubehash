@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased — Stage 4 digest-surface campaigns (RotHash-2)
+
+Experimental path only. RotHash-1 official vectors unchanged.
+
+- added `scripts/stage4_digest_r2.sh` (divergent beam, LSH, barrier, truncated);
+- same-forward digest beam: `path_found=no` (no R1-style seeds);
+- divergent best 90/91 vs ~93 generic; LSH 83–88 vs 84–86; barrier |corr|≲0.02;
+- truncated 40-bit mean ratio ~0.90 vs birthday (4 trials, limit 2e6);
+- logged as **A-R2-002** (`docs/STAGE4_DIGEST_R2.md`, `results/stage4-r2-digest/`);
+- production still prohibited; no security claim.
+
 ## Unreleased — Stage 4 first deep campaigns (RotHash-2)
 
 Experimental path only. RotHash-1 official vectors unchanged.

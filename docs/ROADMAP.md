@@ -147,7 +147,9 @@ replace the completed-work log above.
   `SPECIFICATION_ROTHASH2.md`, 29× `official-v2.json`, CTest v2 verify) —
   see `docs/STAGE3_ROTHASH2.md`;
 - Stage 4 **smoke PASS** (`docs/STAGE4_SMOKE_R2.md`);
-- Stage 4 **first deep PASS** budget-limited (`docs/STAGE4_DEEP_R2.md`, A-R2-001):
-  full 2^24 three-byte forward/foldback = 0 pairs under `R5-rothash2`;
-- next: digest-surface / longer truncated Stage 4 + public challenge draft;
+- Stage 4 **first deep PASS** (`docs/STAGE4_DEEP_R2.md`, A-R2-001): full 2^24
+  three-byte forward/foldback = 0 pairs under `R5-rothash2`;
+- Stage 4 **digest-surface PASS** budget-limited (`docs/STAGE4_DIGEST_R2.md`,
+  A-R2-002): near-generic minima; 40-bit truncated ~0.9× birthday;
+- next: public challenge draft / optional freeze tag / optional larger stress;
 - **Resume pointer:** [`docs/SESSION_HANDOFF.md`](SESSION_HANDOFF.md).

@@ -1,0 +1,13 @@
+Correlation of internal phase distance with final digest distance
+preset=R5-rothash2 left_prefix=000000 right_prefix=000001 samples=5000 suffix_bytes=2 suffix_mode=common
+moves_per_symbol=6 diagonal_closure=64 orbit_closure=128 squeeze_bytes=32 squeeze_symbols_per_byte=4 foldback=on
+digest_mean_bits=128.022000
+digest_min_bits=100
+digest_max_bits=161
+exact_digest_collisions=0
+forward_equal_samples=0
+phase=after-forward mean_state_bits=793.331400 min_state_bits=556 max_state_bits=960 digest_correlation=0.003370
+phase=after-foldback mean_state_bits=1549.651400 min_state_bits=1166 max_state_bits=1822 digest_correlation=0.007351
+phase=after-diagonal-closure mean_state_bits=2052.953800 min_state_bits=1934 max_state_bits=2154 digest_correlation=-0.001594
+phase=after-orbit-closure mean_state_bits=2053.177800 min_state_bits=1902 max_state_bits=2162 digest_correlation=0.009397
+phase=final mean_state_bits=2052.615000 min_state_bits=1940 max_state_bits=2175 digest_correlation=0.011063

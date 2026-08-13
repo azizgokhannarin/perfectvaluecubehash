@@ -286,9 +286,9 @@ outreach + silence — weak but honest).
 **Stage 2 status:** ST1–ST4 smoke **PASS** (2026-08-02) — `docs/STAGE2_SMOKE_S.md`.  
 **Stage 3 status:** PVC-RotHash-2 draft minted + polish (2026-08-13) —
 `docs/STAGE3_ROTHASH2.md` (optional freeze tag still open).  
-**Stage 4 status:** smoke PASS + **first deep tool suite PASS** (2026-08-13) —
-`docs/STAGE4_SMOKE_R2.md`, `docs/STAGE4_DEEP_R2.md`; digest-surface and long
-truncated campaigns still open.
+**Stage 4 status:** smoke + operational deep + **digest-surface PASS**
+(2026-08-13, budget-limited) — `STAGE4_SMOKE_R2.md`, `STAGE4_DEEP_R2.md`,
+`STAGE4_DIGEST_R2.md`; larger optional stress and public challenge still open.
 
 Ordered by dependency:
 
@@ -296,8 +296,8 @@ Ordered by dependency:
 2. ~~ST1–ST4 smoke~~ **done** (research Python full-hash with S).
 3. ~~Stage 3 draft mint + polish~~ **done** (dual impl, 29 v2 vectors, CTest);
    optional freeze tag remaining.
-4. **Stage 4 deep continued:** digest beam/LSH/barrier + longer truncated on
-   `R5-rothash2`; public challenge draft; optional freeze tag.
+4. **Stage 4 packaging:** public challenge draft for RotHash-2; optional freeze
+   tag; optional larger digest/truncated stress if EV justifies.
 
 Parallel:
 

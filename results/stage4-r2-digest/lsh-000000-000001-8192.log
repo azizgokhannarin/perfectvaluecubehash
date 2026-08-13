@@ -1,0 +1,79 @@
+Digest-LSH search across different forward-state families
+preset=R5-rothash2 left_prefix=000000 right_prefix=000001 suffix_bytes=2 suffixes_per_side=8192 logical_cross_pairs=67108864 projections=32 projection_bytes=1
+moves_per_symbol=6 diagonal_closure=64 orbit_closure=128 squeeze_bytes=32 squeeze_symbols_per_byte=4 foldback=on
+projection=0 cumulative_candidates=261666 best_digest_bits=87
+projection=1 cumulative_candidates=523513 best_digest_bits=83
+projection=2 cumulative_candidates=786198 best_digest_bits=83
+projection=3 cumulative_candidates=1048672 best_digest_bits=83
+projection=4 cumulative_candidates=1310350 best_digest_bits=83
+projection=5 cumulative_candidates=1572708 best_digest_bits=83
+projection=6 cumulative_candidates=1835782 best_digest_bits=83
+projection=7 cumulative_candidates=2097903 best_digest_bits=83
+projection=8 cumulative_candidates=2360564 best_digest_bits=83
+projection=9 cumulative_candidates=2623181 best_digest_bits=83
+projection=10 cumulative_candidates=2885121 best_digest_bits=83
+projection=11 cumulative_candidates=3148020 best_digest_bits=83
+projection=12 cumulative_candidates=3409853 best_digest_bits=83
+projection=13 cumulative_candidates=3671004 best_digest_bits=83
+projection=14 cumulative_candidates=3933338 best_digest_bits=83
+projection=15 cumulative_candidates=4194977 best_digest_bits=83
+projection=16 cumulative_candidates=4457463 best_digest_bits=83
+projection=17 cumulative_candidates=4720226 best_digest_bits=83
+projection=18 cumulative_candidates=4981528 best_digest_bits=83
+projection=19 cumulative_candidates=5243570 best_digest_bits=83
+projection=20 cumulative_candidates=5504735 best_digest_bits=83
+projection=21 cumulative_candidates=5766885 best_digest_bits=83
+projection=22 cumulative_candidates=6029435 best_digest_bits=83
+projection=23 cumulative_candidates=6290357 best_digest_bits=83
+projection=24 cumulative_candidates=6552487 best_digest_bits=83
+projection=25 cumulative_candidates=6814676 best_digest_bits=83
+projection=26 cumulative_candidates=7077118 best_digest_bits=83
+projection=27 cumulative_candidates=7339410 best_digest_bits=83
+projection=28 cumulative_candidates=7601340 best_digest_bits=83
+projection=29 cumulative_candidates=7864175 best_digest_bits=83
+projection=30 cumulative_candidates=8127703 best_digest_bits=83
+projection=31 cumulative_candidates=8389677 best_digest_bits=83
+candidate_pairs_evaluated=8389677
+forward_equal_skipped=0
+generic_cross_min_digest_bits=84
+best_digest_bits=83
+left_message=00000006c7
+right_message=0000010adf
+exact_digest_collision=no
+phase=after-forward state_bits=732 state_bytes=191
+phase=after-foldback state_bits=1438 state_bytes=359
+phase=after-diagonal-closure state_bits=2117 state_bytes=515
+phase=after-orbit-closure state_bits=2072 state_bytes=513
+phase=final state_bits=2085 state_bytes=513
+phase=after-squeeze-byte index=0 state_bits=2070 emitted_prefix_bits=4
+phase=after-squeeze-byte index=1 state_bits=2035 emitted_prefix_bits=8
+phase=after-squeeze-byte index=2 state_bits=2044 emitted_prefix_bits=11
+phase=after-squeeze-byte index=3 state_bits=2047 emitted_prefix_bits=12
+phase=after-squeeze-byte index=4 state_bits=2064 emitted_prefix_bits=14
+phase=after-squeeze-byte index=5 state_bits=2094 emitted_prefix_bits=15
+phase=after-squeeze-byte index=6 state_bits=2117 emitted_prefix_bits=18
+phase=after-squeeze-byte index=7 state_bits=2124 emitted_prefix_bits=21
+phase=after-squeeze-byte index=8 state_bits=2109 emitted_prefix_bits=23
+phase=after-squeeze-byte index=9 state_bits=2083 emitted_prefix_bits=27
+phase=after-squeeze-byte index=10 state_bits=2033 emitted_prefix_bits=29
+phase=after-squeeze-byte index=11 state_bits=2060 emitted_prefix_bits=32
+phase=after-squeeze-byte index=12 state_bits=2040 emitted_prefix_bits=36
+phase=after-squeeze-byte index=13 state_bits=2038 emitted_prefix_bits=38
+phase=after-squeeze-byte index=14 state_bits=2060 emitted_prefix_bits=40
+phase=after-squeeze-byte index=15 state_bits=2002 emitted_prefix_bits=41
+phase=after-squeeze-byte index=16 state_bits=2033 emitted_prefix_bits=41
+phase=after-squeeze-byte index=17 state_bits=2055 emitted_prefix_bits=43
+phase=after-squeeze-byte index=18 state_bits=2108 emitted_prefix_bits=46
+phase=after-squeeze-byte index=19 state_bits=2111 emitted_prefix_bits=49
+phase=after-squeeze-byte index=20 state_bits=2073 emitted_prefix_bits=49
+phase=after-squeeze-byte index=21 state_bits=2047 emitted_prefix_bits=54
+phase=after-squeeze-byte index=22 state_bits=2066 emitted_prefix_bits=57
+phase=after-squeeze-byte index=23 state_bits=2115 emitted_prefix_bits=61
+phase=after-squeeze-byte index=24 state_bits=2070 emitted_prefix_bits=62
+phase=after-squeeze-byte index=25 state_bits=2104 emitted_prefix_bits=63
+phase=after-squeeze-byte index=26 state_bits=2090 emitted_prefix_bits=67
+phase=after-squeeze-byte index=27 state_bits=2101 emitted_prefix_bits=69
+phase=after-squeeze-byte index=28 state_bits=2065 emitted_prefix_bits=72
+phase=after-squeeze-byte index=29 state_bits=2087 emitted_prefix_bits=75
+phase=after-squeeze-byte index=30 state_bits=2066 emitted_prefix_bits=78
+phase=after-squeeze-byte index=31 state_bits=2085 emitted_prefix_bits=83

@@ -17,18 +17,18 @@ Stage 3 polish + Stage 4 smoke for RotHash-2).
 | **Stage 1** | **PASS** — Controller **S** G1∧G2∧G3 = 0 |
 | **Stage 2** | **PASS** — ST1–ST4 smoke with S full-hash path |
 | **Stage 3** | **PASS (draft mint + polish)** — PVC-RotHash-2 dual-impl + 29 official-v2 vectors + CTest |
-| **Stage 4** | **SMOKE + first deep PASS (budget-limited)** — see `STAGE4_DEEP_R2.md` |
+| **Stage 4** | **SMOKE + operational deep + digest-surface PASS (budget-limited)** |
 | **Production** | Still **forbidden** |
 | **Security claims** | **None** |
 
 **Exact next work when resuming:**
 
 ```text
-Stage 4 deep (continued) on RotHash-2:
-  1. Digest beam / LSH / barrier campaigns with --preset R5-rothash2
-  2. Longer truncated (40–48+) with higher limits
-  3. Optional reduced-round systematic-absorb ladder
-  4. Optional tag v0.2.0-rothash2-draft + public challenge draft
+Stage 4 packaging / further stress on RotHash-2:
+  1. Optional larger LSH/beam and 48-bit truncated (higher EV only if time)
+  2. Draft public challenge text for RotHash-2
+  3. Optional tag v0.2.0-rothash2-draft when packaging ready
+  4. Reduced-round ladder with systematic absorb (optional)
   5. Do not claim security; production still forbidden
 ```
 
@@ -155,6 +155,7 @@ RotHash-1 structural facts still true:
 | `scripts/verify_vectors_v2.py` | Official v2 Python↔C++ verify |
 | `scripts/stage4_smoke_r2.py` | Stage 4 entry smoke (SF1–SF4) |
 | `scripts/stage4_deep_r2.sh` | Multi-tool deep campaign runner (`R5-rothash2`) |
+| `scripts/stage4_digest_r2.sh` | Digest beam/LSH/barrier + truncated runner |
 | `tools/collision_probe.cpp` | `--rothash2` one/two-byte + r1-pair |
 | `test-vectors/official-v2.json` | RotHash-2 KAT corpus (draft) |
 | `results/stage4-r2/` | Latest deep campaign logs + SUMMARY |
