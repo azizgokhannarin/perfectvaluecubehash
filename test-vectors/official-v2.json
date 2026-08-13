@@ -1,0 +1,62 @@
+{
+  "algorithm": "PVC-RotHash-2",
+  "version": "0.1.0-draft",
+  "digest_bits": 256,
+  "note": "Experimental Stage-3 candidate. Not production. Absorb = Controller S.",
+  "vectors": [
+    {
+      "name": "empty",
+      "message_hex": "",
+      "digest_hex": "9c4f0899255220a60bac6df7661cc50583f25f076ad37254b270b54685ce864a",
+      "message_length": 0
+    },
+    {
+      "name": "abc",
+      "message_hex": "616263",
+      "digest_hex": "9c1b502e8eac4ea07e18265ea30f888c4d5fd8ae81fa1ed453c2c099d4d68fdb",
+      "message_length": 3
+    },
+    {
+      "name": "a",
+      "message_hex": "61",
+      "digest_hex": "2ae013529a6003585dcba71f0afbd131f018aac52740a966979055cac14d2af4",
+      "message_length": 1
+    },
+    {
+      "name": "hello",
+      "message_hex": "68656c6c6f",
+      "digest_hex": "b2885b8ab70e8bd0c5e508e12b9e54489351e26f9feb38b48531d352858f153a",
+      "message_length": 5
+    },
+    {
+      "name": "zero",
+      "message_hex": "00",
+      "digest_hex": "c8ee87b40f2b250655fc4ba907297bf835607de5d899a947d4e972babb5c77a1",
+      "message_length": 1
+    },
+    {
+      "name": "ff",
+      "message_hex": "ff",
+      "digest_hex": "211458ed68b63ddabb5d8a80d3a0495b0733792d10876fa82295172626b271cf",
+      "message_length": 1
+    },
+    {
+      "name": "two",
+      "message_hex": "0001",
+      "digest_hex": "c3d35df00e11cbbbbf6d2374d8f1303f97b9f901a08aa1d16a1f0d5aa8ab3521",
+      "message_length": 2
+    },
+    {
+      "name": "17 6f",
+      "message_hex": "176f",
+      "digest_hex": "c2ac5d3b4a9d7a762fd7a02737eaa0e77d28d4da6b007c067c56e6d9d53dbf3d",
+      "message_length": 2
+    },
+    {
+      "name": "17 99",
+      "message_hex": "1799",
+      "digest_hex": "6388f29aca2a3d33a66e88d40d7624811de395f002c390207ca96a6e4ff0994d",
+      "message_length": 2
+    }
+  ]
+}

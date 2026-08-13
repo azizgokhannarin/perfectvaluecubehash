@@ -50,6 +50,7 @@ std::vector<NamedHashParameters> reduced_round_presets() {
             .enable_foldback = true,
         }},
         {"R5-canonical", canonical_hash_parameters()},
+        {"R5-rothash2", rothash2_hash_parameters()},
     };
 }
 

@@ -19,6 +19,8 @@ struct HashParameters {
     std::size_t squeeze_bytes = kDigestBytes;
     std::size_t squeeze_symbols_per_byte = kSqueezeSymbolsPerByte;
     bool enable_foldback = true;
+    // false = PVC-RotHash-1 canonical controller; true = systematic (RotHash-2).
+    bool systematic_absorb = false;
 
     friend constexpr bool operator==(const HashParameters&, const HashParameters&) = default;
 };
@@ -63,6 +65,13 @@ struct NamedHashParameters {
 
 [[nodiscard]] constexpr HashParameters canonical_hash_parameters() {
     return HashParameters{};
+}
+
+// PVC-RotHash-2: same finalization shape as RotHash-1, systematic absorb (S).
+[[nodiscard]] constexpr HashParameters rothash2_hash_parameters() {
+    HashParameters parameters{};
+    parameters.systematic_absorb = true;
+    return parameters;
 }
 
 [[nodiscard]] std::vector<NamedHashParameters> reduced_round_presets();

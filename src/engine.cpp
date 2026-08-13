@@ -1,6 +1,7 @@
 #include "engine.hpp"
 
 #include <algorithm>
+#include <array>
 #include <limits>
 #include <stdexcept>
 
@@ -249,9 +250,151 @@ WorkingState working_state_from(const InternalStateSnapshot& state,
     };
 }
 
+constexpr std::uint8_t mul_odd_byte(std::uint8_t value, std::uint8_t odd) {
+    return static_cast<std::uint8_t>(
+        (static_cast<unsigned>(value) * static_cast<unsigned>(odd)) & 0xFFU);
+}
+
+// PVC-RotHash-2 / Controller S: systematic injectivity channel (phases 0–2)
+// + free diffusion (phases 3–5). See docs/EXTERNAL_ADVICE_G3.md.
+void absorb_symbol_systematic(WorkingState& state, std::uint8_t symbol) {
+    const auto probe0 = state.cube.at(state.cursor);
+    const auto context_seed = static_cast<std::uint8_t>(
+        static_cast<std::uint8_t>(state.symbol_index)
+        ^ coordinate_code(state.cursor)
+        ^ static_cast<std::uint8_t>(axis_code(state.previous_axis) * 13U)
+        ^ mul_odd_byte(probe0, 19U));
+
+    std::array<std::uint8_t, 3> c_digits{};
+    for (std::size_t which = 0; which < 3U; ++which) {
+        const auto g = static_cast<std::uint8_t>(
+            coordinate_code(state.cursor)
+            + static_cast<std::uint8_t>(which * 29U)
+            + static_cast<std::uint8_t>(state.symbol_index)
+            + static_cast<std::uint8_t>(axis_code(state.previous_axis) * 11U));
+        const auto mixed = static_cast<std::uint8_t>(
+            mul_odd_byte(probe0, 29U)
+            ^ mul_odd_byte(context_seed, 45U)
+            ^ rotate_left_byte(g, static_cast<unsigned>(which & 7U))
+            ^ static_cast<std::uint8_t>(which * 19U));
+        c_digits[which] = static_cast<std::uint8_t>(mixed % 7U);
+    }
+
+    // Π(s) = (s * 41 + 17) mod 256 — public odd-mul permutation.
+    const auto t = static_cast<std::uint8_t>(
+        (static_cast<unsigned>(symbol) * 41U + 17U) & 0xFFU);
+    const std::array<std::uint8_t, 3> d_digits{{
+        static_cast<std::uint8_t>(t % 7U),
+        static_cast<std::uint8_t>((t / 7U) % 7U),
+        static_cast<std::uint8_t>(t / 49U),
+    }};
+    std::array<std::uint8_t, 3> inj_amounts{};
+    for (std::size_t i = 0; i < 3U; ++i) {
+        inj_amounts[i] = static_cast<std::uint8_t>(
+            1U + ((static_cast<unsigned>(d_digits[i])
+                 + static_cast<unsigned>(c_digits[i]))
+                % 7U));
+    }
+
+    // Diffusion control (may depend on symbol); separate from c_i.
+    const auto coord0 = coordinate_code(state.cursor);
+    std::uint8_t control = static_cast<std::uint8_t>(
+        rotate_left_byte(symbol, 3U)
+        ^ rotate_left_byte(symbol, 1U)
+        ^ mul_odd_byte(symbol, 5U)
+        ^ static_cast<std::uint8_t>(state.symbol_index)
+        ^ coord0
+        ^ rotate_left_byte(coord0, 2U));
+
+    for (std::uint8_t phase = 0; phase < 6U; ++phase) {
+        const auto intersection_before = state.cursor;
+        const auto probe_before = state.cube.at(state.cursor);
+        const auto index_byte = static_cast<std::uint8_t>(
+            state.symbol_index >> static_cast<unsigned>((phase & 7U) * 8U));
+        const auto geometry = static_cast<std::uint8_t>(
+            coordinate_code(state.cursor)
+            + static_cast<std::uint8_t>(phase * 29U)
+            + index_byte);
+
+        auto sel = static_cast<std::uint8_t>(
+            rotate_left_byte(symbol, phase)
+            ^ rotate_left_byte(control, static_cast<unsigned>((phase + 1U) & 7U))
+            ^ rotate_left_byte(probe_before, 2U)
+            ^ geometry
+            ^ static_cast<std::uint8_t>(axis_code(state.previous_axis) * 0x1DU)
+            ^ static_cast<std::uint8_t>(phase * 0x3BU));
+        sel = static_cast<std::uint8_t>(
+            sel
+            ^ rotate_left_byte(sel, 3U)
+            ^ mul_odd_byte(symbol, 9U));
+        const Axis axis = choose_other_axis(state.previous_axis, sel);
+
+        std::uint8_t amount = 0;
+        if (phase < 3U) {
+            amount = inj_amounts[phase];
+        } else {
+            auto lane = static_cast<std::uint8_t>(
+                mul_odd_byte(symbol, 73U)
+                ^ mul_odd_byte(control, 45U)
+                ^ mul_odd_byte(probe_before, 29U)
+                ^ rotate_left_byte(geometry, phase & 7U)
+                ^ static_cast<std::uint8_t>(phase * 19U)
+                ^ static_cast<std::uint8_t>(axis_code(axis) * 11U));
+            lane = static_cast<std::uint8_t>(
+                lane
+                + rotate_left_byte(lane, 4U)
+                + rotate_left_byte(static_cast<std::uint8_t>(symbol ^ control), 2U));
+            amount = static_cast<std::uint8_t>(
+                1U
+                + ((mul_odd_byte(lane, 41U)
+                    ^ static_cast<std::uint8_t>(lane >> 3U)
+                    ^ static_cast<std::uint8_t>(lane >> 5U)
+                    ^ phase)
+                   % 7U));
+        }
+
+        state.cube.rotate_line(axis, state.cursor, amount);
+        state.cursor = advance(state.cursor, axis, amount);
+        const auto probe_after = state.cube.at(state.cursor);
+
+        if (state.trace != nullptr) {
+            state.trace->push_back(Move{
+                .axis = axis,
+                .intersection_before = intersection_before,
+                .intersection_after = state.cursor,
+                .amount = amount,
+                .symbol = symbol,
+                .phase = phase,
+                .symbol_index = state.symbol_index,
+            });
+        }
+
+        control = static_cast<std::uint8_t>(
+            rotate_left_byte(control, 1U + (axis_code(axis) & 1U))
+            ^ mul_odd_byte(symbol, 3U)
+            ^ probe_after
+            ^ static_cast<std::uint8_t>(amount * 17U)
+            ^ coordinate_code(state.cursor)
+            ^ static_cast<std::uint8_t>(phase * 13U));
+
+        state.previous_axis = axis;
+    }
+
+    ++state.symbol_index;
+}
+
 void absorb_symbol(WorkingState& state,
                    std::uint8_t symbol,
                    const HashParameters& parameters) {
+    if (parameters.systematic_absorb) {
+        if (parameters.moves_per_symbol != kMovesPerSymbol) {
+            throw std::invalid_argument(
+                "systematic absorb requires moves_per_symbol == 6");
+        }
+        absorb_symbol_systematic(state, symbol);
+        return;
+    }
+
     std::uint8_t control = static_cast<std::uint8_t>(
         symbol
         + static_cast<std::uint8_t>(state.symbol_index)

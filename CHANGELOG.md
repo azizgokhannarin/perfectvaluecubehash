@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased — PVC-RotHash-2 draft candidate (Stage 3)
+
+Experimental absorb path only. RotHash-1 official vectors unchanged.
+
+- added `pvc::RotHash2` and `HashParameters::systematic_absorb` (Controller S);
+- added `SPECIFICATION_ROTHASH2.md`, `reference/python/pvc_rothash2.py`,
+  `test-vectors/official-v2.json`;
+- CLI `--rothash2`; research preset `R5-rothash2`;
+- regression tests: abc digest matches research S path; separates RotHash-1
+  forward-pair digests;
+- production still prohibited; no security claim.
+
 ## Unreleased — Session handoff for clean resume
 
 Documentation only. Official digests unchanged.

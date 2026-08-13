@@ -54,6 +54,26 @@ private:
     std::vector<std::uint8_t> message_{};
 };
 
+// PVC-RotHash-2: systematic controller S + same foldback/closure/squeeze shape.
+// Experimental candidate; production use prohibited (see SECURITY.md).
+class RotHash2 {
+public:
+    RotHash2();
+
+    void update(std::span<const std::uint8_t> bytes);
+    void update(std::string_view text);
+
+    [[nodiscard]] HashResult finalize(bool keep_trace = false) const;
+
+    [[nodiscard]] static Digest hash(std::span<const std::uint8_t> bytes);
+    [[nodiscard]] static Digest hash(std::string_view text);
+    [[nodiscard]] static HashResult inspect(std::span<const std::uint8_t> bytes,
+                                            bool keep_trace = true);
+
+private:
+    std::vector<std::uint8_t> message_{};
+};
+
 // Compatibility alias for experiments built against v0.1.0.
 using RotHash0 = RotHash1;
 

@@ -133,9 +133,11 @@ void test_research_framework() {
           "single-symbol research transition preserves cube histogram");
 
     const auto presets = pvc::reduced_round_presets();
-    check(presets.size() == 6U, "six reduced-round presets are available");
-    check(presets.back().parameters == canonical,
-          "last reduced-round preset is canonical");
+    check(presets.size() == 7U, "seven reduced-round presets are available");
+    check(presets[5].parameters == canonical,
+          "R5-canonical preset is available");
+    check(presets.back().parameters == pvc::rothash2_hash_parameters(),
+          "last reduced-round preset is rothash2");
 }
 
 const pvc::InternalStateSnapshot& checkpoint_for(
@@ -394,9 +396,38 @@ void test_digest_surface_regressions() {
           "known divergent seed remains 126 digest bits apart");
 }
 
+void test_rothash2_basics() {
+    const auto empty = pvc::RotHash2::hash(std::string_view{});
+    const auto abc = pvc::RotHash2::hash("abc");
+    check(empty != abc, "rothash2 empty and abc digests differ");
+    check(empty != pvc::RotHash1::hash(std::string_view{}),
+          "rothash2 empty digest differs from rothash1");
+    check(abc != pvc::RotHash1::hash("abc"),
+          "rothash2 abc digest differs from rothash1");
+
+    // Align with research Python stage2 smoke (Controller S full path).
+    check(pvc::to_hex(abc)
+              == "9c1b502e8eac4ea07e18265ea30f888c4d5fd8ae81fa1ed453c2c099d4d68fdb",
+          "rothash2 abc matches research Controller S digest");
+
+    const auto framed_a = pvc::RotHash2::hash(std::string_view{"a"});
+    const std::array<std::uint8_t, 2> a_zero{{0x61, 0x00}};
+    check(framed_a != pvc::RotHash2::hash(a_zero),
+          "rothash2 length framing distinguishes a from a||00");
+
+    // Known RotHash-1 forward collision must not share digests under RotHash-2
+    // (S kills short-domain operational aliases; full digests must still differ).
+    const std::array<std::uint8_t, 2> left{{0x17U, 0x6fU}};
+    const std::array<std::uint8_t, 2> right{{0x17U, 0x99U}};
+    check(pvc::RotHash2::hash(left) != pvc::RotHash2::hash(right),
+          "rothash2 separates the known rothash1 two-byte forward pair digests");
+}
+
 void print_known_answers() {
     std::cout << "KAT empty: " << pvc::to_hex(pvc::RotHash1::hash("")) << '\n';
     std::cout << "KAT abc  : " << pvc::to_hex(pvc::RotHash1::hash("abc")) << '\n';
+    std::cout << "R2 empty : " << pvc::to_hex(pvc::RotHash2::hash("")) << '\n';
+    std::cout << "R2 abc   : " << pvc::to_hex(pvc::RotHash2::hash("abc")) << '\n';
 }
 
 } // namespace
@@ -417,6 +448,7 @@ int main() {
         test_length_framing_symbol_indices();
         test_return_symbol_preserves_xor_difference();
         test_digest_surface_regressions();
+        test_rothash2_basics();
         print_known_answers();
 
         if (failures != 0) {

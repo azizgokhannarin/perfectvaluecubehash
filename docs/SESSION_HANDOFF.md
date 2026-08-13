@@ -14,25 +14,26 @@ Stage 2 smoke commit for Controller S).
 |---|---|
 | **Ambition** | Build a hash people can eventually trust (Keccak-class **quality bar**, not a claim). RotHash-1 is **not** that product. |
 | **Stage 0** | Program docs locked (trust path, goals, effort policy) |
-| **Stage 1** | **PASS** — Controller **S** has G1∧G2∧G3 = 0 one-symbol operational collisions |
-| **Stage 2** | **PASS** — ST1–ST4 smoke on research full-hash path using S |
-| **Stage 3** | **NEXT** — Mint new candidate ID (SPEC + C++/Python + vectors + freeze) |
+| **Stage 1** | **PASS** — Controller **S** G1∧G2∧G3 = 0 |
+| **Stage 2** | **PASS** — ST1–ST4 smoke with S full-hash path |
+| **Stage 3** | **IN PROGRESS / draft minted** — PVC-RotHash-2 in tree (C++/Python/SPEC/v2 vectors) |
+| **Stage 4** | **NEXT** — Deep falsification on RotHash-2 |
 | **Production** | Still **forbidden** |
-| **Security claims** | **None** (no collision/preimage/PQC claims) |
+| **Security claims** | **None** |
 
 **Exact next work when resuming:**
 
 ```text
-Stage 3 candidate mint:
-  1. Choose name (working suggestion: PVC-RotHash-2)
-  2. Normative absorb = Controller S (mixed-radix injectivity channel)
-  3. Port S into C++ engine (or shared research API) + Python
-  4. Official vectors + cross-verify
-  5. Tag freeze; then Stage 4 deep falsification
+Stage 3 polish + Stage 4:
+  1. Expand official-v2 vectors / phase dumps; CTest cross-verify v2
+  2. Optional tag v0.2.0-rothash2-draft
+  3. Point attack tools at systematic_absorb / RotHash2
+  4. Deep multicollision / truncated / digest campaigns
+  5. Update public challenge for RotHash-2
 ```
 
 Do **not** reopen H3–H5 residual whack-a-mole. Do **not** treat RotHash-1 as
-the product. Do **not** claim security after Stage 2 alone.
+the product. Do **not** claim security after Stage 2/3 alone.
 
 ---
 
@@ -191,7 +192,7 @@ supplementary only; **do not rely on it as the sole resume source**.
 
 ## 10. Closing line for the next session
 
-> We are past injectivity and smoke for research controller **S**. Resume at
-> **Stage 3: mint a new candidate** with S as absorb, without touching
-> RotHash-1 vectors, without security marketing, and without reopening failed
-> residual-patch lines.
+> PVC-RotHash-2 is drafted in-tree (`RotHash2`, `SPECIFICATION_ROTHASH2.md`,
+> `official-v2.json`) with Controller S absorb. Resume at **Stage 3 polish +
+> Stage 4 deep attack**, without security marketing and without touching
+> RotHash-1 official vectors.

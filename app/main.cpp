@@ -14,9 +14,11 @@ namespace {
 void print_usage(const char* program) {
     std::cerr
         << "Usage:\n"
-        << "  " << program << " --text <message> [--dump-cube] [--trace]\n"
-        << "  " << program << " --file <path>    [--dump-cube] [--trace]\n"
-        << "  " << program << " --hex <bytes>    [--dump-cube] [--trace]\n";
+        << "  " << program << " --text <message> [--rothash2] [--dump-cube] [--trace]\n"
+        << "  " << program << " --file <path>    [--rothash2] [--dump-cube] [--trace]\n"
+        << "  " << program << " --hex <bytes>    [--rothash2] [--dump-cube] [--trace]\n"
+        << "Default algorithm: PVC-RotHash-1. Use --rothash2 for PVC-RotHash-2 "
+           "(experimental; not production).\n";
 }
 
 std::vector<std::uint8_t> parse_hex(const std::string& text) {
@@ -57,6 +59,7 @@ int main(int argc, char** argv) {
         bool dump_cube = false;
         bool show_trace = false;
         bool have_input = false;
+        bool use_rothash2 = false;
 
         for (int i = 1; i < argc; ++i) {
             const std::string arg = argv[i];
@@ -70,6 +73,8 @@ int main(int argc, char** argv) {
             } else if (arg == "--hex" && i + 1 < argc) {
                 message = parse_hex(argv[++i]);
                 have_input = true;
+            } else if (arg == "--rothash2") {
+                use_rothash2 = true;
             } else if (arg == "--dump-cube") {
                 dump_cube = true;
             } else if (arg == "--trace") {
@@ -88,7 +93,9 @@ int main(int argc, char** argv) {
             return 2;
         }
 
-        const auto result = pvc::RotHash1::inspect(message, show_trace);
+        const auto result = use_rothash2
+            ? pvc::RotHash2::inspect(message, show_trace)
+            : pvc::RotHash1::inspect(message, show_trace);
 
         std::cout << pvc::to_hex(result.digest) << '\n';
 
