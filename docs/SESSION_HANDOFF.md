@@ -203,7 +203,7 @@ supplementary only; **do not rely on it as the sole resume source**.
 
 ## 10. Closing line for the next session
 
-> PVC-RotHash-2 Stage 4 first deep campaign set is done: tools on `R5-rothash2`,
-> full 2^24 three-byte forward/foldback = **0** pairs (A-R2-001). Resume at
-> **digest-surface / longer truncated** Stage 4 work, without security marketing
-> and without touching RotHash-1 official vectors.
+> PVC-RotHash-2 Stage 4 has operational deep (A-R2-001) and digest-surface
+> (A-R2-002) budget-limited negatives. Resume at **public challenge / optional
+> freeze tag / larger optional stress**, without security marketing and without
+> touching RotHash-1 official vectors.
