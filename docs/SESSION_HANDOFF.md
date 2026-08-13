@@ -23,6 +23,9 @@ docs). Session chat is **not** durable memory — **this file + git are**.
 | **Production** | Still **forbidden** |
 | **Security claims** | **None** |
 
+**Paused (2026-08-14):** User chose a clean stop after draft freeze + rough
+forward roadmap. Resume from Stage 5 entry, not from redesign.
+
 **Exact next work when resuming:**
 
 ```text
@@ -32,10 +35,15 @@ Public review window (Stage 5 entry):
   3. Optional larger stress only if EV justifies
   4. Log external findings in ATTACK_LOG
   5. Do not claim security; production still forbidden
+
+Rough forward map (agreed at pause):
+  Stage 5 social open → optional deeper Stage 4 stress → independent review
+  window (months+) → only much later engineering / careful language (years).
+  No production; no thrash redesign of S without a structural break.
 ```
 
 Do **not** reopen H3–H5 residual whack-a-mole. Do **not** treat RotHash-1 as
-the product. Do **not** claim security after Stage 2/3/4-smoke alone.
+the product. Do **not** claim security after Stage 2/3/4 alone.
 
 ---
 
