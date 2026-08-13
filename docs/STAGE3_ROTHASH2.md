@@ -32,14 +32,22 @@ RotHash-1 anchors unchanged (`7f01…`, `f32b…`).
 - Stage 1: G1–G3 injectivity PASS for S  
 - Stage 2: ST1–ST4 smoke PASS (`docs/STAGE2_SMOKE_S.md`)
 
+## Stage 3 polish (done 2026-08-13)
+
+- [x] Expand official-v2 vector set (29 messages; aliases + classic KATs)
+- [x] CTest cross-impl verify for v2 (`scripts/verify_vectors_v2.py`,
+      test `pvc-cross-implementation-vectors-v2`)
+- [x] Stage 4 **smoke** entry (`scripts/stage4_smoke_r2.py`,
+      `pvc-collision-probe --rothash2`, test `pvc-stage4-smoke-rothash2`)
+      — details in `docs/STAGE4_SMOKE_R2.md`
+
 ## Not done yet (continue later)
 
-- [ ] Expand official-v2 vector set (more messages + phase dumps)
-- [ ] CTest cross-impl verify for v2 (like v1 script)
-- [ ] Tag e.g. `v0.2.0-rothash2-draft` when ready
-- [ ] Stage 4 deep falsification on RotHash-2 (multicollision tools with
-      `systematic_absorb`)
+- [ ] Optional tag e.g. `v0.2.0-rothash2-draft` when ready
+- [ ] Stage 4 **deep** falsification on RotHash-2 (multicollision / truncated /
+      beam tools with `systematic_absorb` / `R5-rothash2`)
 - [ ] Public challenge text for RotHash-2
+- [ ] Phase dumps for v2 (optional; absorb differs from RotHash-1 dump format)
 
 ## Policy
 

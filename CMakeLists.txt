@@ -131,5 +131,19 @@ if(PVC_BUILD_TESTS)
                 --cpp $<TARGET_FILE:pvc-hash>
                 --vector-dump $<TARGET_FILE:pvc-vector-dump>
         )
+        add_test(
+            NAME pvc-cross-implementation-vectors-v2
+            COMMAND
+                ${Python3_EXECUTABLE}
+                ${CMAKE_CURRENT_SOURCE_DIR}/scripts/verify_vectors_v2.py
+                --cpp $<TARGET_FILE:pvc-hash>
+        )
+        add_test(
+            NAME pvc-stage4-smoke-rothash2
+            COMMAND
+                ${Python3_EXECUTABLE}
+                ${CMAKE_CURRENT_SOURCE_DIR}/scripts/stage4_smoke_r2.py
+                --cpp $<TARGET_FILE:pvc-collision-probe>
+        )
     endif()
 endif()

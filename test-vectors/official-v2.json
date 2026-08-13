@@ -2,61 +2,211 @@
   "algorithm": "PVC-RotHash-2",
   "version": "0.1.0-draft",
   "digest_bits": 256,
-  "note": "Experimental Stage-3 candidate. Not production. Absorb = Controller S.",
+  "note": "Experimental Stage-3 candidate. Not production. Absorb = Controller S. Digests from dual C++/Python references.",
+  "encoding": "message_hex is the exact byte string; digest_hex is lowercase hexadecimal",
   "vectors": [
     {
-      "name": "empty",
+      "id": "empty",
+      "note": "Empty message",
+      "message_length": 0,
       "message_hex": "",
-      "digest_hex": "9c4f0899255220a60bac6df7661cc50583f25f076ad37254b270b54685ce864a",
-      "message_length": 0
+      "digest_hex": "9c4f0899255220a60bac6df7661cc50583f25f076ad37254b270b54685ce864a"
     },
     {
-      "name": "abc",
-      "message_hex": "616263",
-      "digest_hex": "9c1b502e8eac4ea07e18265ea30f888c4d5fd8ae81fa1ed453c2c099d4d68fdb",
-      "message_length": 3
-    },
-    {
-      "name": "a",
-      "message_hex": "61",
-      "digest_hex": "2ae013529a6003585dcba71f0afbd131f018aac52740a966979055cac14d2af4",
-      "message_length": 1
-    },
-    {
-      "name": "hello",
-      "message_hex": "68656c6c6f",
-      "digest_hex": "b2885b8ab70e8bd0c5e508e12b9e54489351e26f9feb38b48531d352858f153a",
-      "message_length": 5
-    },
-    {
-      "name": "zero",
+      "id": "single-00",
+      "note": "Single zero byte",
+      "message_length": 1,
       "message_hex": "00",
-      "digest_hex": "c8ee87b40f2b250655fc4ba907297bf835607de5d899a947d4e972babb5c77a1",
-      "message_length": 1
+      "digest_hex": "c8ee87b40f2b250655fc4ba907297bf835607de5d899a947d4e972babb5c77a1"
     },
     {
-      "name": "ff",
+      "id": "single-ff",
+      "note": "Single 0xff byte",
+      "message_length": 1,
       "message_hex": "ff",
-      "digest_hex": "211458ed68b63ddabb5d8a80d3a0495b0733792d10876fa82295172626b271cf",
-      "message_length": 1
+      "digest_hex": "211458ed68b63ddabb5d8a80d3a0495b0733792d10876fa82295172626b271cf"
     },
     {
-      "name": "two",
+      "id": "two-0001",
+      "note": "Two-byte ascending boundary",
+      "message_length": 2,
       "message_hex": "0001",
-      "digest_hex": "c3d35df00e11cbbbbf6d2374d8f1303f97b9f901a08aa1d16a1f0d5aa8ab3521",
-      "message_length": 2
+      "digest_hex": "c3d35df00e11cbbbbf6d2374d8f1303f97b9f901a08aa1d16a1f0d5aa8ab3521"
     },
     {
-      "name": "17 6f",
+      "id": "two-0100",
+      "note": "Two-byte reversed boundary",
+      "message_length": 2,
+      "message_hex": "0100",
+      "digest_hex": "b004d9de67669979367612205374d00564b0b51032eebf569dd3a19b81aa71b2"
+    },
+    {
+      "id": "ascii-a",
+      "note": "ASCII a",
+      "message_length": 1,
+      "message_hex": "61",
+      "digest_hex": "2ae013529a6003585dcba71f0afbd131f018aac52740a966979055cac14d2af4"
+    },
+    {
+      "id": "ascii-abc",
+      "note": "ASCII abc",
+      "message_length": 3,
+      "message_hex": "616263",
+      "digest_hex": "9c1b502e8eac4ea07e18265ea30f888c4d5fd8ae81fa1ed453c2c099d4d68fdb"
+    },
+    {
+      "id": "ascii-hello",
+      "note": "ASCII hello",
+      "message_length": 5,
+      "message_hex": "68656c6c6f",
+      "digest_hex": "b2885b8ab70e8bd0c5e508e12b9e54489351e26f9feb38b48531d352858f153a"
+    },
+    {
+      "id": "ascii-message-digest",
+      "note": "Classic short ASCII phrase",
+      "message_length": 14,
+      "message_hex": "6d65737361676520646967657374",
+      "digest_hex": "4d1c74a6b0584e1ab14ce1f4a964da31fd4e238841494b109445a1d9fbb6a4f9"
+    },
+    {
+      "id": "ascii-pvc",
+      "note": "Project name",
+      "message_length": 18,
+      "message_hex": "506572666563742056616c75652043756265",
+      "digest_hex": "d50de02b2e6ff1ad4891a2fba5731dba2eaaddc7560c8a660cd08b944e8b41f4"
+    },
+    {
+      "id": "ascii-quick-fox",
+      "note": "Classic sentence",
+      "message_length": 43,
+      "message_hex": "54686520717569636b2062726f776e20666f78206a756d7073206f76657220746865206c617a7920646f67",
+      "digest_hex": "0892798f58e02e149cef8e200e6148008aa6a0d0a1457c878f150c72657a995c"
+    },
+    {
+      "id": "utf8-turkish",
+      "note": "UTF-8 Turkish phrase",
+      "message_length": 23,
+      "message_hex": "4dc3bc6b656d6d656c204465c49f6572204bc3bc70c3bc",
+      "digest_hex": "0a454a8016902fa92cadc0c176a3b2ba492cf852ba283de6c515660418aa8b22"
+    },
+    {
+      "id": "zeros-8",
+      "note": "Eight zero bytes",
+      "message_length": 8,
+      "message_hex": "0000000000000000",
+      "digest_hex": "a00f9ab7013e7bc694c74e29300982c8439cffc0180858d35909b5eb0a5e3910"
+    },
+    {
+      "id": "zeros-32",
+      "note": "Thirty-two zero bytes",
+      "message_length": 32,
+      "message_hex": "0000000000000000000000000000000000000000000000000000000000000000",
+      "digest_hex": "39822c9b4da85707e3fb17bc128b92d43972720239e6b82b111acacc27dd04d5"
+    },
+    {
+      "id": "zeros-64",
+      "note": "Sixty-four zero bytes",
+      "message_length": 64,
+      "message_hex": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "digest_hex": "75b4b5c52495d023c79169865287c949f51bda8e0a67d4348e99b7b1d3185357"
+    },
+    {
+      "id": "ff-8",
+      "note": "Eight 0xff bytes",
+      "message_length": 8,
+      "message_hex": "ffffffffffffffff",
+      "digest_hex": "cc70416d73cc0d7512edab5fad2f25907a28209f7bdcee762873ffb08eba53ea"
+    },
+    {
+      "id": "ff-32",
+      "note": "Thirty-two 0xff bytes",
+      "message_length": 32,
+      "message_hex": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "digest_hex": "493e0040517cc768bafa18fde438a8f6eea868402af76d4747520ef50aa413ef"
+    },
+    {
+      "id": "incrementing-8",
+      "note": "00..07",
+      "message_length": 8,
+      "message_hex": "0001020304050607",
+      "digest_hex": "b833595ea2da5d9664ab1819748d62ce41acc5bf340d479d7db0b7970fe7dd1b"
+    },
+    {
+      "id": "incrementing-16",
+      "note": "00..0f",
+      "message_length": 16,
+      "message_hex": "000102030405060708090a0b0c0d0e0f",
+      "digest_hex": "64a3b9fa51260110bb4ba5ebfa1de29ce1c9c6c5cc3ca15ac2123e278afda669"
+    },
+    {
+      "id": "incrementing-32",
+      "note": "00..1f",
+      "message_length": 32,
+      "message_hex": "000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f",
+      "digest_hex": "cae8ac24f9b1c30412b992921ef26542d3553297c8b5e000807acae321cbee27"
+    },
+    {
+      "id": "alternating-aa55-32",
+      "note": "Alternating aa55",
+      "message_length": 32,
+      "message_hex": "aa55aa55aa55aa55aa55aa55aa55aa55aa55aa55aa55aa55aa55aa55aa55aa55",
+      "digest_hex": "52652e6429d52ff7637d0ffc77a0ca89a7e3a6a38a31ed3168116591c9adcd3f"
+    },
+    {
+      "id": "r1-forward-alias-left",
+      "note": "RotHash-1 known forward-state alias left",
+      "message_length": 2,
       "message_hex": "176f",
-      "digest_hex": "c2ac5d3b4a9d7a762fd7a02737eaa0e77d28d4da6b007c067c56e6d9d53dbf3d",
-      "message_length": 2
+      "digest_hex": "c2ac5d3b4a9d7a762fd7a02737eaa0e77d28d4da6b007c067c56e6d9d53dbf3d"
     },
     {
-      "name": "17 99",
+      "id": "r1-forward-alias-right",
+      "note": "RotHash-1 known forward-state alias right",
+      "message_length": 2,
       "message_hex": "1799",
-      "digest_hex": "6388f29aca2a3d33a66e88d40d7624811de395f002c390207ca96a6e4ff0994d",
-      "message_length": 2
+      "digest_hex": "6388f29aca2a3d33a66e88d40d7624811de395f002c390207ca96a6e4ff0994d"
+    },
+    {
+      "id": "r1-context-alias-left",
+      "note": "RotHash-1 known context alias left",
+      "message_length": 3,
+      "message_hex": "af671b",
+      "digest_hex": "f404fe4390e0bf6775330535e0e34d6c008145acd88d3990bfea45cdcf8da1e9"
+    },
+    {
+      "id": "r1-context-alias-right",
+      "note": "RotHash-1 known context alias right",
+      "message_length": 3,
+      "message_hex": "af67df",
+      "digest_hex": "35f6587a505f49b91e25b5ffd2c237d2dc119612670d1c1ac70eeef47db66e06"
+    },
+    {
+      "id": "r1-four-way-1",
+      "note": "RotHash-1 four-way forward family member 1",
+      "message_length": 4,
+      "message_hex": "176f115b",
+      "digest_hex": "7d0b43719870d498008dd23569de2eca5b43ab1cd8c5e56feda76418411a0179"
+    },
+    {
+      "id": "r1-four-way-2",
+      "note": "RotHash-1 four-way forward family member 2",
+      "message_length": 4,
+      "message_hex": "176f1185",
+      "digest_hex": "d1a418fcd8b1cce4a542c8ee38be7334bf7aecd8253454435dc2515ba26a0045"
+    },
+    {
+      "id": "r1-four-way-3",
+      "note": "RotHash-1 four-way forward family member 3",
+      "message_length": 4,
+      "message_hex": "1799115b",
+      "digest_hex": "726678e68e89384e68e054760ffa521233d7d0bc73064efc57fff237ab11a436"
+    },
+    {
+      "id": "r1-four-way-4",
+      "note": "RotHash-1 four-way forward family member 4",
+      "message_length": 4,
+      "message_hex": "17991185",
+      "digest_hex": "89a56cbf622dcfc920ffd34cb0aa7d5afca9f3bfdd4fe863b8bfe73317e0743f"
     }
   ]
 }

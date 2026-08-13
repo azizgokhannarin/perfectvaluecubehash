@@ -1,10 +1,10 @@
 # Session Handoff — Resume Here
 
-**Last updated:** 2026-08-02  
+**Last updated:** 2026-08-13  
 **Purpose:** Permanent memory of this work stream so any future session (human or
 agent) continues **exactly** from the current program state with no amnesia.  
 **Git tip of work:** check `git log -5 --oneline` on `main` (should include
-Stage 2 smoke commit for Controller S).
+Stage 3 polish + Stage 4 smoke for RotHash-2).
 
 ---
 
@@ -16,24 +16,25 @@ Stage 2 smoke commit for Controller S).
 | **Stage 0** | Program docs locked (trust path, goals, effort policy) |
 | **Stage 1** | **PASS** — Controller **S** G1∧G2∧G3 = 0 |
 | **Stage 2** | **PASS** — ST1–ST4 smoke with S full-hash path |
-| **Stage 3** | **IN PROGRESS / draft minted** — PVC-RotHash-2 in tree (C++/Python/SPEC/v2 vectors) |
-| **Stage 4** | **NEXT** — Deep falsification on RotHash-2 |
+| **Stage 3** | **PASS (draft mint + polish)** — PVC-RotHash-2 dual-impl + 29 official-v2 vectors + CTest |
+| **Stage 4** | **SMOKE PASS / deep NEXT** — entry smoke done; full campaigns remain |
 | **Production** | Still **forbidden** |
 | **Security claims** | **None** |
 
 **Exact next work when resuming:**
 
 ```text
-Stage 3 polish + Stage 4:
-  1. Expand official-v2 vectors / phase dumps; CTest cross-verify v2
-  2. Optional tag v0.2.0-rothash2-draft
-  3. Point attack tools at systematic_absorb / RotHash2
-  4. Deep multicollision / truncated / digest campaigns
-  5. Update public challenge for RotHash-2
+Stage 4 deep falsification on RotHash-2:
+  1. Point remaining attack tools at R5-rothash2 / systematic_absorb
+     (foldback-aware, bridged, dual-return, three-byte, truncated, beam/LSH)
+  2. Log findings; optional exhaustive C++ two-byte --rothash2 2
+  3. Optional tag v0.2.0-rothash2-draft
+  4. Draft public challenge text for RotHash-2
+  5. Do not claim security; production still forbidden
 ```
 
 Do **not** reopen H3–H5 residual whack-a-mole. Do **not** treat RotHash-1 as
-the product. Do **not** claim security after Stage 2/3 alone.
+the product. Do **not** claim security after Stage 2/3/4-smoke alone.
 
 ---
 
@@ -130,12 +131,15 @@ RotHash-1 structural facts still true:
 
 1. **`docs/SESSION_HANDOFF.md`** ← this file  
 2. `docs/TRUST_PATH_ROADMAP.md` — stages 0–9  
-3. `docs/STAGE2_SMOKE_S.md` — latest smoke results  
-4. `docs/EXTERNAL_ADVICE_G3.md` — why S works in principle  
-5. `docs/CONTROLLER_REQUIREMENTS.md` — G1–G3, ST1–ST4  
-6. `docs/RESEARCH_GOAL.md` — ambition vs claims  
-7. `docs/EFFORT_POLICY.md` — thrash / consult rules  
-8. `SPECIFICATION.md` — **RotHash-1 only** until Stage 3 rewrites absorb  
+3. `docs/STAGE3_ROTHASH2.md` — candidate mint + polish  
+4. `docs/STAGE4_SMOKE_R2.md` — Stage 4 entry smoke  
+5. `docs/STAGE2_SMOKE_S.md` — Controller S full-hash smoke  
+6. `docs/EXTERNAL_ADVICE_G3.md` — why S works in principle  
+7. `docs/CONTROLLER_REQUIREMENTS.md` — G1–G3, ST1–ST4  
+8. `docs/RESEARCH_GOAL.md` — ambition vs claims  
+9. `docs/EFFORT_POLICY.md` — thrash / consult rules  
+10. `SPECIFICATION_ROTHASH2.md` — RotHash-2 absorb draft  
+11. `SPECIFICATION.md` — **RotHash-1 only** (frozen baseline)  
 
 ---
 
@@ -143,10 +147,16 @@ RotHash-1 structural facts still true:
 
 | Path | Role |
 |---|---|
-| `src/engine.cpp` | RotHash-1 normative absorb (frozen) |
+| `src/engine.cpp` | RotHash-1 absorb + RotHash-2 `systematic_absorb` branch |
+| `include/pvc/hash.hpp` | `RotHash1`, `RotHash2` |
 | `reference/python/pvc_rothash1.py` | RotHash-1 pure Python |
+| `reference/python/pvc_rothash2.py` | RotHash-2 pure Python |
 | `scripts/controller_redesign_prototypes.py` | Controllers E/G/H/S; G1–G3 harness |
 | `scripts/stage2_smoke_s.py` | Full-hash S path + ST1–ST4 |
+| `scripts/verify_vectors_v2.py` | Official v2 Python↔C++ verify |
+| `scripts/stage4_smoke_r2.py` | Stage 4 entry smoke (SF1–SF4) |
+| `tools/collision_probe.cpp` | `--rothash2` one/two-byte + r1-pair |
+| `test-vectors/official-v2.json` | RotHash-2 KAT corpus (draft) |
 | `docs/*` | Program memory and results |
 
 ---
@@ -154,13 +164,12 @@ RotHash-1 structural facts still true:
 ## 7. Resume checklist (agent / human)
 
 - [ ] `git pull` and `git log -5 --oneline`  
-- [ ] Read this handoff + `TRUST_PATH_ROADMAP.md` § immediate actions  
-- [ ] Confirm S still:  
+- [ ] Read this handoff + `TRUST_PATH_ROADMAP.md` + `STAGE4_SMOKE_R2.md`  
+- [ ] Quick green:  
+  `ctest --test-dir build -R 'vectors-v2|stage4|pvc-tests' --output-on-failure`  
+- [ ] Confirm S still (if redesigning absorb):  
   `python3 scripts/controller_redesign_prototypes.py --variants S --deep`  
-  (optional full `--two-byte-full` if distrusting cache)  
-- [ ] Confirm smoke: `python3 scripts/stage2_smoke_s.py --skip-st2` for quick,  
-  or full ST2 when time allows  
-- [ ] Start **Stage 3**: candidate name + SPEC absorb=S + C++ port plan  
+- [ ] Continue **Stage 4 deep**: point attack tools at `R5-rothash2`  
 - [ ] If stuck on architecture: **consult outside** (do not H6-style thrash)
 
 ---
@@ -192,7 +201,7 @@ supplementary only; **do not rely on it as the sole resume source**.
 
 ## 10. Closing line for the next session
 
-> PVC-RotHash-2 is drafted in-tree (`RotHash2`, `SPECIFICATION_ROTHASH2.md`,
-> `official-v2.json`) with Controller S absorb. Resume at **Stage 3 polish +
-> Stage 4 deep attack**, without security marketing and without touching
-> RotHash-1 official vectors.
+> PVC-RotHash-2 draft is polished: dual-impl vectors (29), CTest v2 verify, and
+> Stage 4 **smoke PASS**. Resume at **Stage 4 deep falsification** (tools on
+> `R5-rothash2` / `systematic_absorb`), without security marketing and without
+> touching RotHash-1 official vectors.

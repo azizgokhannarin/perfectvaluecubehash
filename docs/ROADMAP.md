@@ -143,7 +143,9 @@ replace the completed-work log above.
   in `docs/CONTROLLER_REQUIREMENTS.md` (G1–G3 hard gates);
 - external G3 advice → systematic controller **S**: **G1∧G2∧G3 PASS**;
 - Stage 2 smoke with S full-hash path: **ST1–ST4 PASS** (`docs/STAGE2_SMOKE_S.md`);
-- Stage 3 draft: **PVC-RotHash-2** (`RotHash2`, `SPECIFICATION_ROTHASH2.md`,
-  `test-vectors/official-v2.json`) — see `docs/STAGE3_ROTHASH2.md`;
-- next: Stage 3 polish + Stage 4 deep attack on RotHash-2;
+- Stage 3 draft + polish: **PVC-RotHash-2** (`RotHash2`,
+  `SPECIFICATION_ROTHASH2.md`, 29× `official-v2.json`, CTest v2 verify) —
+  see `docs/STAGE3_ROTHASH2.md`;
+- Stage 4 **smoke PASS** (`docs/STAGE4_SMOKE_R2.md`); deep campaigns next;
+- next: Stage 4 deep attack tools on `R5-rothash2` / public challenge draft;
 - **Resume pointer:** [`docs/SESSION_HANDOFF.md`](SESSION_HANDOFF.md).

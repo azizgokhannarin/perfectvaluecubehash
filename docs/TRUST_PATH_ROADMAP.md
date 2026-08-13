@@ -283,15 +283,19 @@ outreach + silence — weak but honest).
 ## 4. Immediate next actions (this quarter)
 
 **Stage 1 status:** Controller **S** passed G1∧G2∧G3 (2026-08-02).  
-**Stage 2 status:** ST1–ST4 smoke **PASS** (2026-08-02) — `docs/STAGE2_SMOKE_S.md`.
+**Stage 2 status:** ST1–ST4 smoke **PASS** (2026-08-02) — `docs/STAGE2_SMOKE_S.md`.  
+**Stage 3 status:** PVC-RotHash-2 draft minted + polish (2026-08-13) —
+`docs/STAGE3_ROTHASH2.md` (optional freeze tag still open).  
+**Stage 4 status:** **smoke PASS** (2026-08-13) — `docs/STAGE4_SMOKE_R2.md`;
+deep campaigns still open.
 
 Ordered by dependency:
 
 1. ~~G1–G3 injectivity~~ **done (S)**.
 2. ~~ST1–ST4 smoke~~ **done** (research Python full-hash with S).
-3. **Stage 3:** draft new candidate ID (not RotHash-1) + SPEC absorb=S + dual
-   impl + official vectors + freeze tag.
-4. **Stage 4+:** deep falsification and public review.
+3. ~~Stage 3 draft mint + polish~~ **done** (dual impl, 29 v2 vectors, CTest);
+   optional freeze tag remaining.
+4. **Stage 4 deep:** point attack tools at `R5-rothash2` / public challenge.
 
 Parallel:
 

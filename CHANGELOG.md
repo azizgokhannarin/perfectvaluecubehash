@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased — Stage 3 polish + Stage 4 smoke (RotHash-2)
+
+Experimental path only. RotHash-1 official vectors unchanged.
+
+- expanded `test-vectors/official-v2.json` to 29 KATs;
+- added `scripts/verify_vectors_v2.py` and CTest
+  `pvc-cross-implementation-vectors-v2`;
+- `pvc-collision-probe --rothash2` (1/2/r1-pair modes);
+- added `scripts/stage4_smoke_r2.py` and CTest `pvc-stage4-smoke-rothash2`
+  (SF1–SF4 PASS); docs `docs/STAGE4_SMOKE_R2.md`;
+- production still prohibited; no security claim.
+
 ## Unreleased — PVC-RotHash-2 draft candidate (Stage 3)
 
 Experimental absorb path only. RotHash-1 official vectors unchanged.
