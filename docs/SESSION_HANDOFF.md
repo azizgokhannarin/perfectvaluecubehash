@@ -1,10 +1,11 @@
 # Session Handoff — Resume Here
 
-**Last updated:** 2026-08-13  
+**Last updated:** 2026-08-14  
 **Purpose:** Permanent memory of this work stream so any future session (human or
 agent) continues **exactly** from the current program state with no amnesia.  
-**Git tip of work:** check `git log -5 --oneline` on `main` (should include
-Stage 3 polish + Stage 4 smoke for RotHash-2).
+**Git tip of work:** `git log -5 --oneline` and tag `v0.2.0-rothash2-draft`
+(package commit ~`0ac5ed2`; main may be slightly ahead with checklist-only
+docs). Session chat is **not** durable memory — **this file + git are**.
 
 ---
 
