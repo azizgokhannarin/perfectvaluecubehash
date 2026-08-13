@@ -34,7 +34,7 @@
 ## Before / around GitHub tag
 
 - [x] Run `scripts/release_check.sh` on a clean tree before tagging
-- [ ] Tag `v0.2.0-rothash2-draft` at the freeze commit
-- [ ] Push tag to `origin`
+- [x] Tag `v0.2.0-rothash2-draft` at the freeze commit
+- [x] Push tag to `origin`
 - [ ] Open pinned public-review issue (text: `docs/PUBLIC_REVIEW_ISSUE_ROTHASH2.md`)
 - [ ] Announce experimental status (`docs/PUBLIC_REVIEW_ANNOUNCEMENT_ROTHASH2.md`)
