@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased — Stage 4 first deep campaigns (RotHash-2)
+
+Experimental path only. RotHash-1 official vectors unchanged.
+
+- added `scripts/stage4_deep_r2.sh` multi-tool runner for preset `R5-rothash2`;
+- standard campaign + full 2^24 three-byte forward/foldback: **0** exact state
+  pairs; multicollision/bridged seed pairs 0; return-alias surface 0;
+- logged as attack entry **A-R2-001** (`docs/ATTACK_LOG.md`,
+  `docs/STAGE4_DEEP_R2.md`, `results/stage4-r2/`);
+- production still prohibited; no security claim.
+
 ## Unreleased — Stage 3 polish + Stage 4 smoke (RotHash-2)
 
 Experimental path only. RotHash-1 official vectors unchanged.

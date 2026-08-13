@@ -1,0 +1,12 @@
+Dual return-alias search (Phase 1-b)
+preset=R5-rothash2 prefix_count=4096 suffix_bytes=0 suffix_domain=1 family_surface=no
+moves_per_symbol=6 diagonal_closure=64 orbit_closure=128 squeeze_bytes=32 squeeze_symbols_per_byte=4 foldback=on
+forward_collision_pairs=0
+direct_return_gate_cases=0
+direct_return_merges=0
+return_xor_delta_equals_message_delta=0
+suffix_domain_per_pair=1
+exact_after_foldback_merges=0
+minimum_direct_return_state_bits=18446744073709551615
+minimum_after_foldback_state_bits=18446744073709551615
+return_symbol_abs_delta,hits

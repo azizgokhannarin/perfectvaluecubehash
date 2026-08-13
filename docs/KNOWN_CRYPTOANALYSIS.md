@@ -85,6 +85,23 @@ birthday cost and are not security evidence.
 
 The evidence rules out a collection of simple distinguishers and bounded
 structural attacks. It does not prove collision or preimage resistance. The
-strongest known weakness is abundant forward multicollision structure; the
-strongest measured defenses are reverse foldback separation and the apparent
-loss of internal-distance information through closure and squeeze.
+strongest known weakness **of PVC-RotHash-1** is abundant forward multicollision
+structure; the strongest measured defenses on that design are reverse foldback
+separation and the apparent loss of internal-distance information through
+closure and squeeze.
+
+## PVC-RotHash-2 (experimental draft)
+
+RotHash-2 replaces the absorb controller with systematic Controller **S** while
+keeping the same finalization shape. Stage 4 entry campaigns
+(`docs/STAGE4_DEEP_R2.md`, attack log **A-R2-001**) report:
+
+- exhaustive two-byte digests and all recorded phases unique;
+- **zero** exact three-byte forward and after-foldback operational pairs on the
+  full `2^24` domain (contrast: RotHash-1 had 1,496 forward pairs);
+- zero seed pairs for multicollision / bridged / dual-return tools in tested
+  budgets;
+- truncated 24/32-bit collisions near birthday cost in small trial sets.
+
+**Status:** experimental; production prohibited; no security claim. Deep
+digest-surface and long truncated campaigns for RotHash-2 remain open.

@@ -1,0 +1,20 @@
+Reachable foldback-controller alias surface
+preset=R5-rothash2 messages=512 message_bytes=8
+moves_per_symbol=6 diagonal_closure=64 orbit_closure=128 squeeze_bytes=32 squeeze_symbols_per_byte=4 foldback=on
+reverse_depth=0 contexts=512 contexts_with_alias=0 alias_pairs=0 max_aliases_in_context=0
+reverse_depth=1 contexts=512 contexts_with_alias=0 alias_pairs=0 max_aliases_in_context=0
+reverse_depth=2 contexts=512 contexts_with_alias=0 alias_pairs=0 max_aliases_in_context=0
+reverse_depth=3 contexts=512 contexts_with_alias=0 alias_pairs=0 max_aliases_in_context=0
+reverse_depth=4 contexts=512 contexts_with_alias=0 alias_pairs=0 max_aliases_in_context=0
+reverse_depth=5 contexts=512 contexts_with_alias=0 alias_pairs=0 max_aliases_in_context=0
+reverse_depth=6 contexts=512 contexts_with_alias=0 alias_pairs=0 max_aliases_in_context=0
+reverse_depth=7 contexts=512 contexts_with_alias=0 alias_pairs=0 max_aliases_in_context=0
+reverse_depth=8 contexts=512 contexts_with_alias=0 alias_pairs=0 max_aliases_in_context=0
+total_contexts=4608
+contexts_with_alias=0
+context_alias_probability=0.00000000
+total_alias_pairs=0
+mean_alias_pairs_per_context=0.00000000
+maximum_alias_pairs_in_context=0
+alias_count,contexts
+delta,hits

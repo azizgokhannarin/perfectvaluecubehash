@@ -1,0 +1,9 @@
+Related-input and multiset probe
+preset=R5-rothash2 samples=256 message_bytes=16
+moves_per_symbol=6 diagonal_closure=64 orbit_closure=128 squeeze_bytes=32 squeeze_symbols_per_byte=4 foldback=on
+relation=reverse mean_digest_bits=127.4570 digest_matches=0 state_matches=0
+relation=complement mean_digest_bits=128.7266 digest_matches=0 state_matches=0
+relation=rotate-left-one mean_digest_bits=128.4141 digest_matches=0 state_matches=0
+permutation_domain=ABCDEFGH unique_messages=40320 digest_collisions=0 state_collisions=0
+permutation_domain=AABBCCDD unique_messages=2520 digest_collisions=0 state_collisions=0
+permutation_domain=00001111 unique_messages=70 digest_collisions=0 state_collisions=0

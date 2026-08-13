@@ -44,8 +44,8 @@ RotHash-1 anchors unchanged (`7f01…`, `f32b…`).
 ## Not done yet (continue later)
 
 - [ ] Optional tag e.g. `v0.2.0-rothash2-draft` when ready
-- [ ] Stage 4 **deep** falsification on RotHash-2 (multicollision / truncated /
-      beam tools with `systematic_absorb` / `R5-rothash2`)
+- [x] Stage 4 **first deep** tool suite on `R5-rothash2` (see
+      `docs/STAGE4_DEEP_R2.md`, attack log A-R2-001) — digest beam/LSH still open
 - [ ] Public challenge text for RotHash-2
 - [ ] Phase dumps for v2 (optional; absorb differs from RotHash-1 dump format)
 

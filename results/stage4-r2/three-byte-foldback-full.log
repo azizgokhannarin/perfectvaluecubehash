@@ -1,0 +1,26 @@
+Three-byte exact state collision scan
+phase=foldback
+preset=R5-rothash2 first_byte_count=256 domain=16777216 threads=12
+moves_per_symbol=6 diagonal_closure=64 orbit_closure=128 squeeze_bytes=32 squeeze_symbols_per_byte=4 foldback=on
+
+metric,value
+phase,foldback
+domain,16777216
+fingerprint_buckets,0
+fingerprint_candidate_messages,0
+exact_state_groups,0
+duplicate_messages,0
+exact_state_pairs,0
+inherited_pairs,0
+new_convergence_pairs,0
+delta42_pairs,0
+local_third_symbol_pairs,0
+local_identical_move_paths,0
+local_distinct_move_paths,0
+multi_position_pairs,0
+after_foldback_pairs,0
+local_third_absolute_delta,hits
+generation_seconds,3.951
+radix_sort_seconds,0.757
+verification_seconds,0.047
+elapsed=4,802

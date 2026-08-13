@@ -1,0 +1,4 @@
+Bridged forward multicollision construction
+preset=R5-rothash2 requested_levels=8 theoretical_messages=2^8 seed_pairs=0
+moves_per_symbol=6 diagonal_closure=64 orbit_closure=128 squeeze_bytes=32 squeeze_symbols_per_byte=4 foldback=on
+path_found=no

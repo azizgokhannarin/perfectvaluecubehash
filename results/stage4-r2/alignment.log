@@ -1,0 +1,14 @@
+Alignment probe
+preset=R5-rothash2 delta=42
+moves_per_symbol=6 diagonal_closure=64 orbit_closure=128 squeeze_bytes=32 squeeze_symbols_per_byte=4 foldback=on
+tested_pairs=54784
+pairs_with_at_least_one_equal_move=19200
+exact_transition_convergences=0
+equal_move_prefix,hits
+0,35584
+1,19200
+2,0
+3,0
+4,0
+5,0
+6,0

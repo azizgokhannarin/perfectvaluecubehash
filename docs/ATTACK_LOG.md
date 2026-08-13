@@ -303,3 +303,38 @@ Phase-to-digest correlations stayed close to zero.
 **Interpretation:** no measured sub-generic digest attack or useful linear
 state-to-digest gradient in these domains. This is bounded negative evidence,
 not a security proof.
+
+
+## A-R2-001 — Stage 4 deep tools on PVC-RotHash-2 (negative)
+
+**Affected design:** PVC-RotHash-2 draft (`R5-rothash2`, Controller S absorb)  
+**Date:** 2026-08-13  
+**Status:** no structural break in stated budgets (not a security claim)
+
+The in-house attack suite was pointed at RotHash-2 via
+`scripts/stage4_deep_r2.sh` (standard mode) plus full three-byte scans.
+
+**Positive for RotHash-1 that did not transfer:**
+
+| RotHash-1 fact | RotHash-2 observation |
+|---|---|
+| 3 two-byte forward pairs | 0 (exhaustive 2^16 digests + phases) |
+| 1,496 three-byte forward pairs | **0** exact state pairs on full **2^24** forward domain |
+| Bridged multi-level families | `path_found=no` (seed_pairs=0) |
+| Δ∈{42,126,196} controller aliases | return-alias surface 0/4608 contexts; Δ=42 alignment exact convergences 0 |
+
+**Other negatives (budget-limited):**
+
+- Exhaustive 1- and 2-byte digests unique under C++ `RotHash2`
+- Phase collisions: 0 at every recorded phase for 1- and 2-byte domains
+- Multicollision / foldback-aware / dual-return: zero seed forward pairs
+- Related-input reverse/complement/rotate: 0 digest matches (n=256)
+- Truncated 24/32-bit near birthday; 40-bit censored at 200k/trial
+- Differential single-bit: mean digest Hamming ~128.5; 0 exact matches
+
+**Commands:** `docs/STAGE4_DEEP_R2.md`, logs in `results/stage4-r2/`.
+
+**Interpretation:** Controller S removes the short-domain forward multicollision
+surface that dominated RotHash-1 cryptanalysis. Remaining work is longer
+domains, digest-surface search, and external review — not replaying R1 alias
+catalogues.

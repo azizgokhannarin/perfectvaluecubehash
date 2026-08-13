@@ -7,3 +7,7 @@
 
 __pycache__/
 *.pyc
+
+# Large local experiment dumps (keep text campaign logs under results/stage4-r2/)
+results/**/*.bin
+results/**/cache/

@@ -1,0 +1,11 @@
+Phase collision enumeration
+preset=R5-rothash2 message_bytes=2 domain=65536
+moves_per_symbol=6 diagonal_closure=64 orbit_closure=128 squeeze_bytes=32 squeeze_symbols_per_byte=4 foldback=on
+
+phase,collisions,distinct_fingerprints
+after-forward,0,65536
+after-foldback,0,65536
+after-diagonal-closure,0,65536
+after-orbit-closure,0,65536
+final,0,65536
+digest_collisions=0 distinct_digests=65536

@@ -146,6 +146,8 @@ replace the completed-work log above.
 - Stage 3 draft + polish: **PVC-RotHash-2** (`RotHash2`,
   `SPECIFICATION_ROTHASH2.md`, 29× `official-v2.json`, CTest v2 verify) —
   see `docs/STAGE3_ROTHASH2.md`;
-- Stage 4 **smoke PASS** (`docs/STAGE4_SMOKE_R2.md`); deep campaigns next;
-- next: Stage 4 deep attack tools on `R5-rothash2` / public challenge draft;
+- Stage 4 **smoke PASS** (`docs/STAGE4_SMOKE_R2.md`);
+- Stage 4 **first deep PASS** budget-limited (`docs/STAGE4_DEEP_R2.md`, A-R2-001):
+  full 2^24 three-byte forward/foldback = 0 pairs under `R5-rothash2`;
+- next: digest-surface / longer truncated Stage 4 + public challenge draft;
 - **Resume pointer:** [`docs/SESSION_HANDOFF.md`](SESSION_HANDOFF.md).

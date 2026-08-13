@@ -1,0 +1,14 @@
+Foldback-aware controller alias search
+preset=R5-rothash2 prefix_count=4096 suffix_bytes=0 suffix_domain=1
+moves_per_symbol=6 diagonal_closure=64 orbit_closure=128 squeeze_bytes=32 squeeze_symbols_per_byte=4 foldback=on
+forward_collision_pairs=0
+local_alias_pairs=0
+inherited_pairs=0
+extension_cases_tested=0
+return_transition_merges=0
+exact_after_foldback_merges=0
+minimum_return_cube_bit_distance=18446744073709551615
+minimum_return_cube_byte_distance=18446744073709551615
+minimum_left=
+minimum_right=
+symbol_delta,hits

@@ -1,0 +1,14 @@
+Forward multicollision-chain probe
+preset=R5-rothash2 prefix_count=4096 max_levels=4 suffix_bytes=0 suffix_domain=1
+moves_per_symbol=6 diagonal_closure=64 orbit_closure=128 squeeze_bytes=32 squeeze_symbols_per_byte=4 foldback=on
+three_byte_seed_pairs=0
+seeds_with_next_symbol_alias=0
+next_symbol_alias_pairs=0
+maximum_collision_levels=1
+four_way_extension_cases=0
+extension_cases_with_foldback_collision=0
+extension_cases_with_digest_collision=0
+minimum_foldback_pair_cube_bit_distance=18446744073709551615
+minimum_message_a=
+minimum_message_b=
+next_alias_delta,hits

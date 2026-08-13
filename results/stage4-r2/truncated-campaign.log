@@ -1,0 +1,7 @@
+Truncated collision multi-width campaign
+preset=R5-rothash2 trials=4 limit_per_trial=200000 message_bytes=16
+moves_per_symbol=6 diagonal_closure=64 orbit_closure=128 squeeze_bytes=32 squeeze_symbols_per_byte=4 foldback=on
+bits,found,censored,mean_messages,expected,mean_ratio,min,max
+24,4,0,3350.5000,5133.5747,0.6527,879,6926
+32,4,0,91628.7500,82137.1953,1.1156,68125,118576
+40,0,4,0.0000,1314195.1248,0.0000,NA,NA

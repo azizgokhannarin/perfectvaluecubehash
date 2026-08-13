@@ -1,0 +1,13 @@
+Unequal-length operational-state framing probe
+preset=R5-rothash2 maximum_length=64
+moves_per_symbol=6 diagonal_closure=64 orbit_closure=128 squeeze_bytes=32 squeeze_symbols_per_byte=4 foldback=on
+fixed_finalization_symbols=330
+tested_lengths=65
+unique_forward_symbol_indices=65
+unique_foldback_symbol_indices=65
+unique_final_symbol_indices=65
+forward_formula_mismatches=0
+foldback_formula_mismatches=0
+final_formula_mismatches=0
+identical_full_state_across_unequal_lengths_blocked_by_index=yes
+note=This blocks classic identical-operational-state expandable messages; it does not prove unequal-length digest collision resistance.

@@ -17,19 +17,18 @@ Stage 3 polish + Stage 4 smoke for RotHash-2).
 | **Stage 1** | **PASS** — Controller **S** G1∧G2∧G3 = 0 |
 | **Stage 2** | **PASS** — ST1–ST4 smoke with S full-hash path |
 | **Stage 3** | **PASS (draft mint + polish)** — PVC-RotHash-2 dual-impl + 29 official-v2 vectors + CTest |
-| **Stage 4** | **SMOKE PASS / deep NEXT** — entry smoke done; full campaigns remain |
+| **Stage 4** | **SMOKE + first deep PASS (budget-limited)** — see `STAGE4_DEEP_R2.md` |
 | **Production** | Still **forbidden** |
 | **Security claims** | **None** |
 
 **Exact next work when resuming:**
 
 ```text
-Stage 4 deep falsification on RotHash-2:
-  1. Point remaining attack tools at R5-rothash2 / systematic_absorb
-     (foldback-aware, bridged, dual-return, three-byte, truncated, beam/LSH)
-  2. Log findings; optional exhaustive C++ two-byte --rothash2 2
-  3. Optional tag v0.2.0-rothash2-draft
-  4. Draft public challenge text for RotHash-2
+Stage 4 deep (continued) on RotHash-2:
+  1. Digest beam / LSH / barrier campaigns with --preset R5-rothash2
+  2. Longer truncated (40–48+) with higher limits
+  3. Optional reduced-round systematic-absorb ladder
+  4. Optional tag v0.2.0-rothash2-draft + public challenge draft
   5. Do not claim security; production still forbidden
 ```
 
@@ -155,8 +154,10 @@ RotHash-1 structural facts still true:
 | `scripts/stage2_smoke_s.py` | Full-hash S path + ST1–ST4 |
 | `scripts/verify_vectors_v2.py` | Official v2 Python↔C++ verify |
 | `scripts/stage4_smoke_r2.py` | Stage 4 entry smoke (SF1–SF4) |
+| `scripts/stage4_deep_r2.sh` | Multi-tool deep campaign runner (`R5-rothash2`) |
 | `tools/collision_probe.cpp` | `--rothash2` one/two-byte + r1-pair |
 | `test-vectors/official-v2.json` | RotHash-2 KAT corpus (draft) |
+| `results/stage4-r2/` | Latest deep campaign logs + SUMMARY |
 | `docs/*` | Program memory and results |
 
 ---
@@ -201,7 +202,7 @@ supplementary only; **do not rely on it as the sole resume source**.
 
 ## 10. Closing line for the next session
 
-> PVC-RotHash-2 draft is polished: dual-impl vectors (29), CTest v2 verify, and
-> Stage 4 **smoke PASS**. Resume at **Stage 4 deep falsification** (tools on
-> `R5-rothash2` / `systematic_absorb`), without security marketing and without
-> touching RotHash-1 official vectors.
+> PVC-RotHash-2 Stage 4 first deep campaign set is done: tools on `R5-rothash2`,
+> full 2^24 three-byte forward/foldback = **0** pairs (A-R2-001). Resume at
+> **digest-surface / longer truncated** Stage 4 work, without security marketing
+> and without touching RotHash-1 official vectors.

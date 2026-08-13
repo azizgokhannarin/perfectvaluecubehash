@@ -1,0 +1,4 @@
+Transition collision search
+preset=R5-rothash2 depth=1 prefix=
+moves_per_symbol=6 diagonal_closure=64 orbit_closure=128 squeeze_bytes=32 squeeze_symbols_per_byte=4 foldback=on
+No exact state collision among 256 sequences from this start state.
