@@ -1,50 +1,82 @@
 # Candidate Freeze Policy
 
-## Frozen candidate
+This repository may hold **more than one** frozen candidate identifier. They
+must not be silently mixed.
 
-The public-review candidate is:
+---
+
+## Frozen candidate A — PVC-RotHash-1 (historical baseline)
 
 ```text
 Algorithm: PVC-RotHash-1
 Candidate: 1.0.0-rc1
+Tag:       v1.0.0-rc1
 Digest:    256 bits
+Role:      Historical baseline; known forward multicollisions
 ```
 
-The normative definition is `SPECIFICATION.md`. The official digest and phase
-vectors are under `test-vectors/`.
+Normative definition: `SPECIFICATION.md`. Official digest and phase vectors:
+`test-vectors/official-v1.json`, `phase-vectors-v1.json`.
 
-## What is frozen
+**Not the competitive product path.** Production use prohibited.
 
-The following are frozen for the independent-review period:
+### What is frozen (RotHash-1)
 
 - the 512-byte Perfect Value Cube constant;
 - coordinate and axis conventions;
 - six moves per absorbed symbol;
-- move-controller formulas;
+- **RotHash-1** move-controller formulas;
 - forward and reverse-foldback ordering;
 - length framing;
 - diagonal and orbit closures;
 - four-diagonal squeeze;
 - 32-byte output;
-- all official test vectors.
+- all official **v1** test vectors.
 
-## Allowed changes
+---
 
-The frozen branch may receive:
+## Frozen candidate B — PVC-RotHash-2 (draft public-attack freeze)
 
-- documentation clarifications that do not change test vectors;
-- build, portability, analysis, or tooling fixes that do not affect the
-  candidate digest;
+```text
+Algorithm: PVC-RotHash-2
+Candidate: 0.2.0-draft
+Tag:       v0.2.0-rothash2-draft
+Digest:    256 bits
+Role:      Active experimental successor (Controller S absorb)
+```
+
+Normative absorb: `SPECIFICATION_ROTHASH2.md`. Shared finalization shape:
+`SPECIFICATION.md` §§10–15. Official digests: `test-vectors/official-v2.json`.
+
+**Still experimental.** Production use prohibited. No security claim.
+
+### What is frozen (RotHash-2 0.2.0-draft)
+
+- systematic Controller **S** absorb equations as in `SPECIFICATION_ROTHASH2.md`;
+- finalization parameters as used by `pvc::RotHash2` (same counts as RotHash-1);
+- all official **v2** digest vectors;
+- algorithm identifier `PVC-RotHash-2`.
+
+---
+
+## Allowed changes (either candidate)
+
+While a candidate is frozen, the tree may receive:
+
+- documentation clarifications that do not change that candidate's vectors;
+- build, portability, analysis, or tooling fixes that do not affect its digests;
 - new attacks, negative results, and reproducibility data;
-- implementation bug fixes when the implementation conflicts with the frozen
+- implementation bug fixes when an implementation conflicts with its frozen
   specification.
 
-Any algorithmic change creates a new candidate. It must not silently replace
-PVC-RotHash-1.
+Any algorithmic change creates a **new** candidate identifier. It must not
+silently replace PVC-RotHash-1 or PVC-RotHash-2.
+
+---
 
 ## Break criteria
 
-The candidate is considered broken for its stated research target if a
+A frozen candidate is considered broken for its stated research target if a
 reproducible result demonstrates any of the following substantially below the
 corresponding generic cost:
 
@@ -56,5 +88,7 @@ corresponding generic cost:
   parameters;
 - a specification ambiguity that permits incompatible conforming digests.
 
-Forward-state equality alone is already known and is not a full collision.
-Reduced-round collisions are also known and must be reported with the preset.
+For **RotHash-1**, forward-state equality alone is already known and is not a
+full collision. For **RotHash-2**, short-domain forward merges were **not**
+found in-house; constructing one is a high-value result (see challenge R2-C5).
+Reduced-round collisions must name the research preset.

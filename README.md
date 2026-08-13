@@ -1,31 +1,46 @@
 # Perfect Value Cube Hash
 
-`PVC-RotHash-1 1.0.0-rc1` is a **frozen, falsification-oriented hash candidate
-published for independent cryptanalysis**. The algorithm is unchanged from the
-analyzed PVC-RotHash-1 line; this release adds a normative specification, an
-independent pure-Python implementation, official digest and phase vectors, and
-a public-review package.
+Two experimental 256-bit hash candidates live in this tree. **Neither is for
+production.** Neither makes a collision, preimage, or post-quantum security claim.
 
-It is not a production hash and makes no security claim.
+| Candidate | Role | Spec | Challenge | Tag |
+|---|---|---|---|---|
+| **PVC-RotHash-2** `0.2.0-draft` | **Active successor** (Controller S absorb) | [`SPECIFICATION_ROTHASH2.md`](SPECIFICATION_ROTHASH2.md) | [`CRYPTANALYSIS_CHALLENGE_ROTHASH2.md`](CRYPTANALYSIS_CHALLENGE_ROTHASH2.md) | `v0.2.0-rothash2-draft` |
+| PVC-RotHash-1 `1.0.0-rc1` | Frozen historical baseline (known forward multicollisions) | [`SPECIFICATION.md`](SPECIFICATION.md) | [`CRYPTANALYSIS_CHALLENGE.md`](CRYPTANALYSIS_CHALLENGE.md) | `v1.0.0-rc1` |
+
+RotHash-2 is the competitive-path candidate: same PVC finalization shape as
+RotHash-1, redesigned absorb. In-house Stage 4 campaigns report budget-limited
+negatives only — **not** a security proof.
 
 ## Public-review entry points
 
-- [`SPECIFICATION.md`](SPECIFICATION.md) — frozen normative candidate.
-- [`CRYPTANALYSIS_CHALLENGE.md`](CRYPTANALYSIS_CHALLENGE.md) — high-value attack targets.
+### RotHash-2 (start here for new work)
+
+- [`SPECIFICATION_ROTHASH2.md`](SPECIFICATION_ROTHASH2.md) — normative absorb (draft freeze).
+- [`CRYPTANALYSIS_CHALLENGE_ROTHASH2.md`](CRYPTANALYSIS_CHALLENGE_ROTHASH2.md) — targets R2-C1…R2-C9.
+- [`docs/RELEASE_NOTES_0.2.0_ROTHASH2_DRAFT.md`](docs/RELEASE_NOTES_0.2.0_ROTHASH2_DRAFT.md) — draft freeze notes.
+- [`docs/STAGE4_DEEP_R2.md`](docs/STAGE4_DEEP_R2.md) / [`STAGE4_DIGEST_R2.md`](docs/STAGE4_DIGEST_R2.md) — in-house Stage 4.
+- CLI: `./build/pvc-hash --rothash2 --text …` · Python: `reference/python/pvc_rothash2.py`
+- Vectors: [`test-vectors/official-v2.json`](test-vectors/official-v2.json)
+
+### Shared / RotHash-1 baseline
+
+- [`SPECIFICATION.md`](SPECIFICATION.md) — frozen RotHash-1 + shared finalization shape.
+- [`CRYPTANALYSIS_CHALLENGE.md`](CRYPTANALYSIS_CHALLENGE.md) — RotHash-1 targets C1–C8.
 - [`docs/INDEPENDENT_REVIEW.md`](docs/INDEPENDENT_REVIEW.md) — reviewer workflow.
 - [`docs/KNOWN_CRYPTOANALYSIS.md`](docs/KNOWN_CRYPTOANALYSIS.md) — consolidated findings.
 - [`docs/SECURITY_TARGET.md`](docs/SECURITY_TARGET.md) — targets and explicit non-claims.
-- [`docs/RESEARCH_GOAL.md`](docs/RESEARCH_GOAL.md) — competitive hash ambition; RotHash-1 is baseline, not the product.
-- [`docs/SESSION_HANDOFF.md`](docs/SESSION_HANDOFF.md) — **resume here** after a break (full program memory).
-- [`docs/TRUST_PATH_ROADMAP.md`](docs/TRUST_PATH_ROADMAP.md) — stage-by-stage path to a hash people can rationally trust.
-- [`docs/CONTROLLER_REQUIREMENTS.md`](docs/CONTROLLER_REQUIREMENTS.md) — hard injectivity gates G1–G3 for any successor.
-- [`docs/ACCEPTANCE_ROADMAP.md`](docs/ACCEPTANCE_ROADMAP.md) — public-review packaging and long-horizon gates.
-- [`test-vectors/`](test-vectors/) — official digest and phase vectors.
-- [`reference/python/`](reference/python/) — independent standard-library reference.
+- [`docs/RESEARCH_GOAL.md`](docs/RESEARCH_GOAL.md) — competitive hash ambition.
+- [`docs/SESSION_HANDOFF.md`](docs/SESSION_HANDOFF.md) — **resume here** after a break.
+- [`docs/TRUST_PATH_ROADMAP.md`](docs/TRUST_PATH_ROADMAP.md) — stage-by-stage trust path.
+- [`docs/CONTROLLER_REQUIREMENTS.md`](docs/CONTROLLER_REQUIREMENTS.md) — injectivity gates G1–G3.
+- [`docs/ACCEPTANCE_ROADMAP.md`](docs/ACCEPTANCE_ROADMAP.md) — long-horizon gates.
+- [`test-vectors/`](test-vectors/) — official digests (v1 and v2).
+- [`reference/python/`](reference/python/) — independent standard-library references.
 
-The candidate is frozen under [`docs/SPEC_FREEZE.md`](docs/SPEC_FREEZE.md).
-Algorithm changes require a new candidate identifier; analysis and portability
-improvements may continue without changing the official vectors.
+Freeze policy: [`docs/SPEC_FREEZE.md`](docs/SPEC_FREEZE.md). Algorithm changes
+require a new candidate identifier; analysis and portability work may continue
+without moving official vectors.
 
 The project studies whether the canonical Perfect Value Cube, a state-dependent
 chain of intersecting line rotations, and an original four-diagonal squeeze can

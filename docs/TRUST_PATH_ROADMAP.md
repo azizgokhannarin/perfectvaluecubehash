@@ -296,8 +296,8 @@ Ordered by dependency:
 2. ~~ST1–ST4 smoke~~ **done** (research Python full-hash with S).
 3. ~~Stage 3 draft mint + polish~~ **done** (dual impl, 29 v2 vectors, CTest);
    optional freeze tag remaining.
-4. **Stage 4 packaging:** public challenge draft for RotHash-2; optional freeze
-   tag; optional larger digest/truncated stress if EV justifies.
+4. ~~Stage 4 packaging~~ **done** (`0.2.0-draft`, challenge, tag).
+5. **Stage 5 entry:** open pinned review issue + announce; leave window open.
 
 Parallel:
 

@@ -1,18 +1,23 @@
-# Independent Python Reference
+# Independent Python References
 
-`pvc_rothash1.py` is a pure-Python implementation of the frozen
-PVC-RotHash-1 1.0.0-rc1 specification. It uses no third-party packages and is
-structured independently from the C++ engine.
+Intended for conformance and cryptanalysis, not performance or production.
+No third-party packages.
 
-It is intended for conformance and cryptanalysis, not performance or production.
+## PVC-RotHash-2 (active draft)
+
+```bash
+python3 pvc_rothash2.py --text abc
+python3 pvc_rothash2.py --hex 616263
+python3 ../../scripts/verify_vectors_v2.py --cpp ../../build/pvc-hash
+```
+
+## PVC-RotHash-1 (frozen baseline)
 
 ```bash
 python3 pvc_rothash1.py --text abc
 python3 pvc_rothash1.py --hex 616263
 python3 pvc_rothash1.py --file sample.bin
 ```
-
-Repository-level verification:
 
 ```bash
 python3 scripts/verify_vectors.py \

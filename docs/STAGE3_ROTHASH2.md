@@ -1,8 +1,8 @@
 # Stage 3 — PVC-RotHash-2 Candidate Mint (draft)
 
-**Date:** 2026-08-02  
+**Date:** 2026-08-02 (mint); public draft freeze 2026-08-13  
 **Algorithm:** `PVC-RotHash-2`  
-**Status:** Experimental draft candidate (not production; no security claim)  
+**Status:** **0.2.0-draft** public-attack freeze (not production; no security claim)  
 **Absorb:** Controller **S** (systematic mixed-radix injectivity)  
 **Finalization:** Same shape as PVC-RotHash-1 (foldback, closures, squeeze)
 
@@ -41,13 +41,14 @@ RotHash-1 anchors unchanged (`7f01…`, `f32b…`).
       `pvc-collision-probe --rothash2`, test `pvc-stage4-smoke-rothash2`)
       — details in `docs/STAGE4_SMOKE_R2.md`
 
-## Not done yet (continue later)
+## Public draft freeze
 
-- [ ] Optional tag e.g. `v0.2.0-rothash2-draft` when ready
-- [x] Stage 4 **first deep** tool suite on `R5-rothash2` (see
-      `docs/STAGE4_DEEP_R2.md`, attack log A-R2-001) — digest beam/LSH still open
-- [ ] Public challenge text for RotHash-2
-- [ ] Phase dumps for v2 (optional; absorb differs from RotHash-1 dump format)
+- [x] Stage 4 first deep + digest-surface (A-R2-001, A-R2-002)
+- [x] Public challenge `CRYPTANALYSIS_CHALLENGE_ROTHASH2.md`
+- [x] Announcement / issue drafts under `docs/PUBLIC_REVIEW_*_ROTHASH2.md`
+- [x] Tag `v0.2.0-rothash2-draft` (see release notes)
+- [ ] Phase dumps for v2 (optional)
+- [ ] Open pinned GitHub issue + external announce (human action)
 
 ## Policy
 

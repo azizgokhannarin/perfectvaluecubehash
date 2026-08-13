@@ -1,7 +1,9 @@
-# PVC-RotHash-2 Candidate Specification (draft freeze prep)
+# PVC-RotHash-2 Candidate Specification
 
-**Status:** Experimental Stage-3 candidate under construction  
+**Status:** Experimental **0.2.0-draft** public-attack freeze  
 **Algorithm identifier:** `PVC-RotHash-2`  
+**Candidate:** `0.2.0-draft`  
+**Tag:** `v0.2.0-rothash2-draft`  
 **Digest size:** 256 bits  
 **Relation to RotHash-1:** Same finalization shape; **different absorb controller**
 
@@ -11,6 +13,8 @@ length framing, diagonal closure, orbit closure, and four-diagonal squeeze are
 `ABSORB_SYMBOL` call uses the **systematic controller** below instead of §9.
 
 **Production use is prohibited.** No collision, preimage, or post-quantum claim.
+Official digests: `test-vectors/official-v2.json`. Public challenge:
+`CRYPTANALYSIS_CHALLENGE_ROTHASH2.md`.
 
 ---
 

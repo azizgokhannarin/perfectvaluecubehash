@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased — PVC-RotHash-2 0.2.0-draft public package
+
+Draft public-attack freeze. RotHash-1 vectors unchanged. Production prohibited.
+
+- candidate `0.2.0-draft`; tag `v0.2.0-rothash2-draft`;
+- `CRYPTANALYSIS_CHALLENGE_ROTHASH2.md` (R2-C1…R2-C9);
+- announcement / issue / release notes / dual freeze policy;
+- `release_check.sh` verifies both R1 and R2 anchors;
+- no security claim.
+
 ## Unreleased — Stage 4 digest-surface campaigns (RotHash-2)
 
 Experimental path only. RotHash-1 official vectors unchanged.

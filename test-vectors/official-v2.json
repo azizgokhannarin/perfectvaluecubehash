@@ -1,8 +1,8 @@
 {
   "algorithm": "PVC-RotHash-2",
-  "version": "0.1.0-draft",
+  "version": "0.2.0-draft",
   "digest_bits": 256,
-  "note": "Experimental Stage-3 candidate. Not production. Absorb = Controller S. Digests from dual C++/Python references.",
+  "note": "Experimental public-attack candidate. Not production. Absorb = Controller S. Dual C++/Python KATs.",
   "encoding": "message_hex is the exact byte string; digest_hex is lowercase hexadecimal",
   "vectors": [
     {

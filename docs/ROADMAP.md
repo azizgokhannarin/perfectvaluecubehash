@@ -151,5 +151,6 @@ replace the completed-work log above.
   three-byte forward/foldback = 0 pairs under `R5-rothash2`;
 - Stage 4 **digest-surface PASS** budget-limited (`docs/STAGE4_DIGEST_R2.md`,
   A-R2-002): near-generic minima; 40-bit truncated ~0.9× birthday;
-- next: public challenge draft / optional freeze tag / optional larger stress;
+- RotHash-2 **0.2.0-draft** public package + tag `v0.2.0-rothash2-draft`;
+- next: Stage 5 public review (pinned issue + announce); optional larger stress;
 - **Resume pointer:** [`docs/SESSION_HANDOFF.md`](SESSION_HANDOFF.md).

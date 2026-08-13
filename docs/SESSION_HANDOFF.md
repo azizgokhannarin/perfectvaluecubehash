@@ -16,19 +16,20 @@ Stage 3 polish + Stage 4 smoke for RotHash-2).
 | **Stage 0** | Program docs locked (trust path, goals, effort policy) |
 | **Stage 1** | **PASS** — Controller **S** G1∧G2∧G3 = 0 |
 | **Stage 2** | **PASS** — ST1–ST4 smoke with S full-hash path |
-| **Stage 3** | **PASS (draft mint + polish)** — PVC-RotHash-2 dual-impl + 29 official-v2 vectors + CTest |
-| **Stage 4** | **SMOKE + operational deep + digest-surface PASS (budget-limited)** |
+| **Stage 3** | **PASS** — dual-impl + 29 v2 vectors + CTest |
+| **Stage 4** | **In-house entry PASS** (operational + digest-surface, budget-limited) |
+| **Public package** | **0.2.0-draft freeze** — challenge + tag `v0.2.0-rothash2-draft` |
 | **Production** | Still **forbidden** |
 | **Security claims** | **None** |
 
 **Exact next work when resuming:**
 
 ```text
-Stage 4 packaging / further stress on RotHash-2:
-  1. Optional larger LSH/beam and 48-bit truncated (higher EV only if time)
-  2. Draft public challenge text for RotHash-2
-  3. Optional tag v0.2.0-rothash2-draft when packaging ready
-  4. Reduced-round ladder with systematic absorb (optional)
+Public review window (Stage 5 entry):
+  1. Open pinned GitHub issue (docs/PUBLIC_REVIEW_ISSUE_ROTHASH2.md)
+  2. Announce (docs/PUBLIC_REVIEW_ANNOUNCEMENT_ROTHASH2.md)
+  3. Optional larger stress only if EV justifies
+  4. Log external findings in ATTACK_LOG
   5. Do not claim security; production still forbidden
 ```
 
@@ -203,7 +204,6 @@ supplementary only; **do not rely on it as the sole resume source**.
 
 ## 10. Closing line for the next session
 
-> PVC-RotHash-2 Stage 4 has operational deep (A-R2-001) and digest-surface
-> (A-R2-002) budget-limited negatives. Resume at **public challenge / optional
-> freeze tag / larger optional stress**, without security marketing and without
-> touching RotHash-1 official vectors.
+> PVC-RotHash-2 **0.2.0-draft** is freeze-packaged (`v0.2.0-rothash2-draft`,
+> challenge R2-C1…). Resume at **Stage 5 public review** (pinned issue +
+> announce), without security marketing and without touching RotHash-1 vectors.
