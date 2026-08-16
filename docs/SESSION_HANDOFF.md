@@ -23,20 +23,25 @@ Session chat is **not** durable memory — **this file + git are**.
 | **Production** | Still **forbidden** |
 | **Security claims** | **None** |
 
+**Mode (2026-08-14+): WAIT / Stage 5 open.** In-house package is ready.
+Default is **not** thrash; wait for external tests and evaluation. Act only on
+reproducible findings, optional announce, or high-EV stress.
+
 **Exact next work when resuming:**
 
 ```text
-Stage 5 public review window (open):
-  1. Optional external announce (X / mail) using
-     docs/PUBLIC_REVIEW_ANNOUNCEMENT_ROTHASH2.md
-  2. Leave window open; log external findings in ATTACK_LOG
-  3. Optional larger stress only if EV justifies
-  4. Do not claim security; production still forbidden
+Default: nothing urgent — public review window is open.
+
+If/when activity:
+  1. External findings → verify → docs/ATTACK_LOG.md (+ credit)
+  2. Structural break → new candidate ID (do not silent-patch freeze)
+  3. Optional external announce (docs/PUBLIC_REVIEW_ANNOUNCEMENT_ROTHASH2.md)
+  4. Optional larger stress only if EV justifies
+  5. Production still forbidden; no security claims
 
 Rough forward map:
   Stage 5 window (months+) → optional deeper stress → independent writeups
   → only much later engineering / careful language (years).
-  No production; no thrash redesign of S without a structural break.
 ```
 
 Do **not** reopen H3–H5 residual whack-a-mole. Do **not** treat RotHash-1 as
