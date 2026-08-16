@@ -215,6 +215,6 @@ supplementary only; **do not rely on it as the sole resume source**.
 
 ## 10. Closing line for the next session
 
-> PVC-RotHash-2 **0.2.0-draft** is public: tag + pinned issue #1. Resume at
-> **Stage 5 window** (optional announce, log findings, optional deeper stress),
-> without security marketing and without touching RotHash-1 vectors.
+> PVC-RotHash-2 **0.2.0-draft** is public (tag + pinned issue #1). Default mode:
+> **wait for external cryptanalysis**. Resume only for findings, optional
+> announce, or high-EV work — no security marketing, no RotHash-1 vector edits.
