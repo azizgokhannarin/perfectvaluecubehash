@@ -3,9 +3,8 @@
 **Last updated:** 2026-08-14  
 **Purpose:** Permanent memory of this work stream so any future session (human or
 agent) continues **exactly** from the current program state with no amnesia.  
-**Git tip of work:** `git log -5 --oneline` and tag `v0.2.0-rothash2-draft`
-(package commit ~`0ac5ed2`; main may be slightly ahead with checklist-only
-docs). Session chat is **not** durable memory — **this file + git are**.
+**Git tip of work:** `git log -5 --oneline` and tag `v0.2.0-rothash2-draft`.
+Session chat is **not** durable memory — **this file + git are**.
 
 ---
 
@@ -19,26 +18,24 @@ docs). Session chat is **not** durable memory — **this file + git are**.
 | **Stage 2** | **PASS** — ST1–ST4 smoke with S full-hash path |
 | **Stage 3** | **PASS** — dual-impl + 29 v2 vectors + CTest |
 | **Stage 4** | **In-house entry PASS** (operational + digest-surface, budget-limited) |
-| **Public package** | **0.2.0-draft freeze** — challenge + tag `v0.2.0-rothash2-draft` |
+| **Public package** | **0.2.0-draft freeze** — tag `v0.2.0-rothash2-draft` |
+| **Stage 5** | **OPENED** — pinned issue [#1](https://github.com/azizgokhannarin/perfectvaluecubehash/issues/1) |
 | **Production** | Still **forbidden** |
 | **Security claims** | **None** |
-
-**Paused (2026-08-14):** User chose a clean stop after draft freeze + rough
-forward roadmap. Resume from Stage 5 entry, not from redesign.
 
 **Exact next work when resuming:**
 
 ```text
-Public review window (Stage 5 entry):
-  1. Open pinned GitHub issue (docs/PUBLIC_REVIEW_ISSUE_ROTHASH2.md)
-  2. Announce (docs/PUBLIC_REVIEW_ANNOUNCEMENT_ROTHASH2.md)
+Stage 5 public review window (open):
+  1. Optional external announce (X / mail) using
+     docs/PUBLIC_REVIEW_ANNOUNCEMENT_ROTHASH2.md
+  2. Leave window open; log external findings in ATTACK_LOG
   3. Optional larger stress only if EV justifies
-  4. Log external findings in ATTACK_LOG
-  5. Do not claim security; production still forbidden
+  4. Do not claim security; production still forbidden
 
-Rough forward map (agreed at pause):
-  Stage 5 social open → optional deeper Stage 4 stress → independent review
-  window (months+) → only much later engineering / careful language (years).
+Rough forward map:
+  Stage 5 window (months+) → optional deeper stress → independent writeups
+  → only much later engineering / careful language (years).
   No production; no thrash redesign of S without a structural break.
 ```
 
@@ -213,6 +210,6 @@ supplementary only; **do not rely on it as the sole resume source**.
 
 ## 10. Closing line for the next session
 
-> PVC-RotHash-2 **0.2.0-draft** is freeze-packaged (`v0.2.0-rothash2-draft`,
-> challenge R2-C1…). Resume at **Stage 5 public review** (pinned issue +
-> announce), without security marketing and without touching RotHash-1 vectors.
+> PVC-RotHash-2 **0.2.0-draft** is public: tag + pinned issue #1. Resume at
+> **Stage 5 window** (optional announce, log findings, optional deeper stress),
+> without security marketing and without touching RotHash-1 vectors.

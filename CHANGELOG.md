@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased — Stage 5 public review window opened
+
+Documentation / process only. Official digests unchanged.
+
+- opened and pinned GitHub issue #1 for independent review of RotHash-2
+  0.2.0-draft: https://github.com/azizgokhannarin/perfectvaluecubehash/issues/1
+- production still prohibited; no security claim.
+
 ## Unreleased — PVC-RotHash-2 0.2.0-draft public package
 
 Draft public-attack freeze. RotHash-1 vectors unchanged. Production prohibited.

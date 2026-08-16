@@ -152,5 +152,7 @@ replace the completed-work log above.
 - Stage 4 **digest-surface PASS** budget-limited (`docs/STAGE4_DIGEST_R2.md`,
   A-R2-002): near-generic minima; 40-bit truncated ~0.9× birthday;
 - RotHash-2 **0.2.0-draft** public package + tag `v0.2.0-rothash2-draft`;
-- next: Stage 5 public review (pinned issue + announce); optional larger stress;
+- Stage 5 **opened**: pinned issue
+  https://github.com/azizgokhannarin/perfectvaluecubehash/issues/1 ;
+- next: optional external announce; leave review window open; log findings;
 - **Resume pointer:** [`docs/SESSION_HANDOFF.md`](SESSION_HANDOFF.md).

@@ -1,6 +1,7 @@
 # Suggested pinned issue: Independent public review of PVC-RotHash-2 0.2.0-draft
 
-Use this text when opening a pinned GitHub issue or discussion.
+**Published:** https://github.com/azizgokhannarin/perfectvaluecubehash/issues/1  
+(use this text as the historical draft; live issue may have absolute links)
 
 ---
 

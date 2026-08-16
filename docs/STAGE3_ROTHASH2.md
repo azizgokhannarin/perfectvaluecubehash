@@ -48,7 +48,9 @@ RotHash-1 anchors unchanged (`7f01…`, `f32b…`).
 - [x] Announcement / issue drafts under `docs/PUBLIC_REVIEW_*_ROTHASH2.md`
 - [x] Tag `v0.2.0-rothash2-draft` (see release notes)
 - [ ] Phase dumps for v2 (optional)
-- [ ] Open pinned GitHub issue + external announce (human action)
+- [x] Open pinned GitHub issue:
+      https://github.com/azizgokhannarin/perfectvaluecubehash/issues/1
+- [ ] Optional external announce (X / mail / lists)
 
 ## Policy
 

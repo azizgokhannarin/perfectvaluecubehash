@@ -36,5 +36,7 @@
 - [x] Run `scripts/release_check.sh` on a clean tree before tagging
 - [x] Tag `v0.2.0-rothash2-draft` at the freeze commit
 - [x] Push tag to `origin`
-- [ ] Open pinned public-review issue (text: `docs/PUBLIC_REVIEW_ISSUE_ROTHASH2.md`)
-- [ ] Announce experimental status (`docs/PUBLIC_REVIEW_ANNOUNCEMENT_ROTHASH2.md`)
+- [x] Open pinned public-review issue:
+      https://github.com/azizgokhannarin/perfectvaluecubehash/issues/1
+- [ ] Optional external announce (X / mail / lists) using
+      `docs/PUBLIC_REVIEW_ANNOUNCEMENT_ROTHASH2.md`

@@ -297,7 +297,9 @@ Ordered by dependency:
 3. ~~Stage 3 draft mint + polish~~ **done** (dual impl, 29 v2 vectors, CTest);
    optional freeze tag remaining.
 4. ~~Stage 4 packaging~~ **done** (`0.2.0-draft`, challenge, tag).
-5. **Stage 5 entry:** open pinned review issue + announce; leave window open.
+5. ~~Stage 5 entry (issue)~~ **done** — pinned
+   [#1](https://github.com/azizgokhannarin/perfectvaluecubehash/issues/1);
+   optional external announce still open; leave review window open.
 
 Parallel:
 
